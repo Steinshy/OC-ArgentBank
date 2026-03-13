@@ -1,0 +1,50 @@
+{
+  "name": "ArgentBank",
+  "version": "1.0.0",
+  "description": "Argent Bank financial dashboard",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "lint": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
+    "format": "prettier --write \"src/**/*.{js,ts,tsx,css,scss}\"",
+    "format:check": "prettier --check \"src/**/*.{js,ts,tsx,css,scss}\""
+  },
+  "dependencies": {
+    "@reduxjs/toolkit": "^2.11.2",
+    "lucide-react": "^0.577.0",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "react-redux": "^9.2.0",
+    "react-router": "^7.13.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "@types/node": "^25.4.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.4.0",
+    "prettier": "^3.8.1",
+    "stylelint": "^17.4.0",
+    "stylelint-config-standard": "^40.0.0",
+    "stylelint-order": "^8.0.0",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.57.0",
+    "vite": "^7.3.1",
+    "vite-plugin-checker": "^0.12.0",
+    "vite-plugin-pwa": "^1.2.0",
+    "vite-tsconfig-paths": "^6.1.1"
+  },
+  "overrides": {
+    "serialize-javascript": "7.0.4"
+  }
+}
