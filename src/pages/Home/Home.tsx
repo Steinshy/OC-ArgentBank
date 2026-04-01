@@ -1,9 +1,16 @@
+import { Link } from 'react-router';
+
+import { ROUTES, BUTTONS, HOME_PAGE } from '@/constants';
+import './Home.css';
+
 export function Home() {
   return (
     <div className="home">
-      <h1>Welcome to Argent Bank</h1>
-      <p>Experience premium banking services with Argent Bank.</p>
-      <a href="/login" className="btn-primary">Sign In</a>
+      <h1>{HOME_PAGE.TITLE}</h1>
+      <p>{HOME_PAGE.SUBTITLE}</p>
+      <Link to={ROUTES.LOGIN} className="btn-primary">
+        {BUTTONS.SIGN_IN}
+      </Link>
     </div>
   );
 }
