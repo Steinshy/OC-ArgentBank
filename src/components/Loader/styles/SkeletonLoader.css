@@ -6,22 +6,22 @@
 }
 
 .skeleton {
+  animation: shimmer 2s infinite;
   background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
   background-size: 200% 100%;
-  animation: shimmer 2s infinite;
 }
 
 .skeleton-rectangular {
+  border-radius: 4px;
   height: 100px;
   width: 100%;
-  border-radius: 4px;
 }
 
 .skeleton-text {
-  height: 16px;
-  width: 100%;
   border-radius: 4px;
+  height: 16px;
   margin-bottom: 0.5rem;
+  width: 100%;
 }
 
 .skeleton-text:last-child {
@@ -29,16 +29,17 @@
 }
 
 .skeleton-circular {
-  width: 80px;
-  height: 80px;
   border-radius: 50%;
+  height: 80px;
   margin: 0 auto;
+  width: 80px;
 }
 
 @keyframes shimmer {
   0% {
     background-position: 200% 0;
   }
+
   100% {
     background-position: -200% 0;
   }
