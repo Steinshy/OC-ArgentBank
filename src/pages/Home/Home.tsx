@@ -1,7 +1,7 @@
 import { Link } from 'react-router';
 
 import { ROUTES, BUTTONS, HOME_PAGE } from '@/constants';
-import './Home.css';
+import './styles/Home.css';
 
 export function Home() {
   return (
