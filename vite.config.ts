@@ -1,9 +1,9 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import checker from 'vite-plugin-checker';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { VitePWA } from 'vite-plugin-pwa';
 import { visualizer } from 'rollup-plugin-visualizer';
+import { resolve } from 'path';
 
 export default defineConfig(({ mode }) => {
   const basePath = process.env.VITE_BASE_PATH || '/';
@@ -144,11 +144,20 @@ export default defineConfig(({ mode }) => {
     },
     rollupOptions: {
       output: {
-        manualChunks: {
+        manualChunks: (id) => {
           // Split vendors - optimize chunk strategy
-          'vendor-react': ['react', 'react-dom', 'react-router'],
-          'vendor-redux': ['@reduxjs/toolkit', 'react-redux'],
-          'vendor-ui': ['lucide-react'],
+          if (id.includes('node_modules')) {
+            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
+              return 'vendor-react';
+            }
+            if (id.includes('@reduxjs/toolkit') || id.includes('react-redux')) {
+              return 'vendor-redux';
+            }
+            if (id.includes('lucide-react')) {
+              return 'vendor-ui';
+            }
+            return 'vendor';
+          }
         },
       },
     },
@@ -165,7 +174,6 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [
       checker({ typescript: true }),
-      tsconfigPaths(),
       react(),
       vitePWA,
       mode === 'production' &&
@@ -176,6 +184,11 @@ export default defineConfig(({ mode }) => {
           filename: 'dist/stats.html',
         }),
     ].filter(Boolean),
+    resolve: {
+      alias: {
+        '@': resolve(__dirname, 'src')
+      }
+    },
     base: normalizedBasePath,
     publicDir: './public',
     build: buildOptions,
