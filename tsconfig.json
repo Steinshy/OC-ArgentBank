@@ -23,7 +23,6 @@
     "noUncheckedIndexedAccess": true,
     
     /* Path mapping */
-    "baseUrl": ".",
     "allowJs": true,
     "paths": {
       "@/*": ["./src/*"]
