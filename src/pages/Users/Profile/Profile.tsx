@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router';
 import { buildTransactionsRoute, MESSAGES, NAVIGATION } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
 import { RootState } from '@/store/store';
-import './Profile.css';
+import './styles/Profile.css';
 
 export function Profile() {
   const navigate = useNavigate();

@@ -7,7 +7,7 @@ import { clearError } from '@/features/Auth/authSlice';
 import { loginUser, fetchUserProfile } from '@/features/Auth/authThunks';
 import { AppDispatch, RootState } from '@/store/store';
 import { storage } from '@/utils/storage';
-import './Login.css';
+import './styles/Login.css';
 
 export function Login() {
   const [email, setEmail] = useState('');
