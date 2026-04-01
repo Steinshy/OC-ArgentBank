@@ -40,6 +40,7 @@ jobs:
       - name: Build for GitHub Pages
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
+          VITE_USE_MOCK: 'true'
         run: npm run build
 
       - name: Upload Pages artifact
