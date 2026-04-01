@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:all": "pkill -f \"vite\" || true; pkill -f \"nodemon app/index.js\" || true; concurrently \"npm run dev\" \"npm run dev --prefix Backend\"",
+    "dev:all": "pkill -f \"vite\" || true; pkill -f \"nodemon\" || true; concurrently \"npm run dev\" \"npm run dev:server --prefix Backend\"",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint src",

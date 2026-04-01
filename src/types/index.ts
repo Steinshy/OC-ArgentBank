@@ -1,6 +1,13 @@
-/**
- * API Response Types
- */
+// API Response Types
+
+export interface ApiErrorResponse {
+  status?: number;
+  message?: string;
+  error?: string;
+  body?: {
+    message?: string;
+  };
+}
 
 export interface LoginRequest {
   email: string;
@@ -36,6 +43,7 @@ export interface Transaction {
   balance: number;
   type: 'debit' | 'credit';
   category: string;
+  notes?: string;
 }
 
 export interface Account {
@@ -46,9 +54,7 @@ export interface Account {
   transactions?: Transaction[];
 }
 
-/**
- * Redux State Types
- */
+/* Redux State Types */
 
 export interface AuthState {
   token: string | null;
@@ -56,6 +62,13 @@ export interface AuthState {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
+}
+
+export interface TransactionState {
+  currentAccountId: string | null;
+  transactions: Transaction[];
+  loading: boolean;
+  error: string | null;
 }
 
 export interface ApiError {
