@@ -127,37 +127,37 @@ export default defineConfig(({ mode }) => {
     devOptions: { enabled: false, type: 'module' },
   });
 
-  // Common Build Options
   const buildOptions = {
     target: 'esnext',
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: mode === 'production' ? false : true,
     cssCodeSplit: true,
-    cssMinify: 'esbuild' as const,
+    cssMinify: 'lightningcss' as const,
     assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 1000,
-    minify: 'esbuild' as const,
+    minify: 'oxc' as const,
     reportCompressedSize: true,
     modulePreload: {
       polyfill: true,
     },
-    rollupOptions: {
+    rolldownOptions: {
       output: {
-        manualChunks: (id) => {
-          // Split vendors - optimize chunk strategy
-          if (id.includes('node_modules')) {
-            if (id.includes('react') || id.includes('react-dom') || id.includes('react-router')) {
-              return 'vendor-react';
-            }
-            if (id.includes('@reduxjs/toolkit') || id.includes('react-redux')) {
-              return 'vendor-redux';
-            }
-            if (id.includes('lucide-react')) {
-              return 'vendor-ui';
-            }
-            return 'vendor';
-          }
+        codeSplitting: {
+          groups: [
+            { name: 'vendor-ui', test: /node_modules[\\/]lucide-react[\\/]/, priority: 4 },
+            {
+              name: 'vendor-redux',
+              test: /node_modules[\\/]@reduxjs[\\/]toolkit[\\/]/,
+              priority: 3,
+            },
+            {
+              name: 'vendor-react',
+              test: /node_modules[\\/](react|react-dom|react-router|react-redux)[\\/]/,
+              priority: 2,
+            },
+            { name: 'vendor', test: /node_modules[\\/]/, priority: 1 },
+          ],
         },
       },
     },
@@ -172,6 +172,9 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    oxc: {
+      jsx: { runtime: 'automatic' },
+    },
     plugins: [
       checker({ typescript: true }),
       react(),
@@ -186,8 +189,8 @@ export default defineConfig(({ mode }) => {
     ].filter(Boolean),
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src')
-      }
+        '@': resolve(__dirname, 'src'),
+      },
     },
     base: normalizedBasePath,
     publicDir: './public',
