@@ -1,8 +1,3 @@
-/**
- * Transaction-related constants and configuration
- */
-
-// Table column widths for transaction table
 export const TABLE_STYLES = {
   ACTION_COLUMN_WIDTH: '30px',
   CATEGORY_COLUMN_WIDTH: '100px',
@@ -10,7 +5,6 @@ export const TABLE_STYLES = {
   DATE_COLUMN_WIDTH: '100px',
 } as const;
 
-// Button styles (reusable across components)
 export const BUTTON_STYLES = {
   UNSTYLED: {
     background: 'none',

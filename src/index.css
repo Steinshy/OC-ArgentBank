@@ -1,9 +1,45 @@
+:root {
+  /* Brand */
+  --color-primary: #00bc77;
+  --color-primary-hover: #00a964;
+  --color-dark: #12002b;
+
+  /* Text */
+  --color-text: #2c3e50;
+  --color-text-secondary: #555;
+  --color-text-muted: #666;
+  --color-text-disabled: #999;
+
+  /* Surfaces */
+  --color-bg: #f8f8f8;
+  --color-surface: #fff;
+  --color-border: #ddd;
+  --color-border-light: #eee;
+
+  /* Feedback */
+  --color-error: #d32f2f;
+  --color-error-bg: #ffebee;
+  --color-success: #2e7d32;
+  --color-success-bg: #e8f5e9;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px rgb(0 188 119 / 25%);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+
+  /*
+    Breakpoints (documented, used via media queries):
+    mobile: 600px, tablet: 768px, desktop: 920px
+  */
+}
+
 html {
-  color: #2c3e50;
+  color: var(--color-text);
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
 }
 
 body {
@@ -23,4 +59,14 @@ body {
   position: absolute !important;
   white-space: nowrap !important;
   width: 1px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

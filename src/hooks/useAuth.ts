@@ -10,10 +10,6 @@ interface UpdateProfileData {
   lastName: string;
 }
 
-/**
- * Custom hook for authentication state and actions
- * Provides access to auth state and dispatches auth-related thunks
- */
 export const useAuth = () => {
   const dispatch = useDispatch<AppDispatch>();
   const auth = useSelector((state: RootState) => state.auth);

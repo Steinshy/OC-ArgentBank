@@ -1,5 +1,14 @@
 import { Account } from '@/types';
 
+export const updateMockTransaction = (accountId: string, transactionId: string, data: { category?: string; notes?: string }) => {
+  const account = MOCK_ACCOUNTS.find((a) => a.id === accountId);
+  const tx = account?.transactions?.find((t) => t.id === transactionId);
+  if (tx) {
+    if (data.category !== undefined) tx.category = data.category;
+    if (data.notes !== undefined) tx.notes = data.notes;
+  }
+};
+
 export const MOCK_ACCOUNTS: Account[] = [
   {
     id: '1',

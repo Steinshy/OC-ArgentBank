@@ -1,8 +1,4 @@
-import { UserProfile } from '@/types';
-
-export interface MockUser extends UserProfile {
-  password: string;
-}
+import { MockUser } from '@/types';
 
 export const MOCK_USERS: MockUser[] = [
   {

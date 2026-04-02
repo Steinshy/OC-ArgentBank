@@ -9,7 +9,7 @@ import { AppDispatch, RootState } from '@/store/store';
 import { storage } from '@/utils/storage';
 import './styles/Login.css';
 
-export function Login() {
+export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -17,14 +17,12 @@ export function Login() {
   const navigate = useNavigate();
   const { loading, error, token } = useSelector((state: RootState) => state.auth);
 
-  // Redirect to profile if already authenticated
   useEffect(() => {
     if (token) {
       navigate(ROUTES.PROFILE);
     }
   }, [token, navigate]);
 
-  // Clear error message when user starts typing
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
     if (error) {
@@ -46,7 +44,6 @@ export function Login() {
       if (rememberMe) {
         storage.setRememberMe(email);
       }
-      // Fetch user profile after successful login
       await dispatch(fetchUserProfile(result.payload.token));
       navigate(ROUTES.PROFILE);
     }
@@ -54,7 +51,7 @@ export function Login() {
 
   return (
     <section className="sign-in-content">
-      <i className="fa fa-user-circle sign-in-icon"></i>
+      <i className="fa fa-user-circle sign-in-icon" aria-hidden="true"></i>
       <h1>{BUTTONS.SIGN_IN}</h1>
       <form onSubmit={handleSubmit}>
         <div className="input-wrapper">
@@ -72,8 +69,12 @@ export function Login() {
         <button type="submit" className="sign-in-button" disabled={loading}>
           {loading ? MESSAGES.SAVING : BUTTONS.SIGN_IN}
         </button>
-        {error && <p className="error-message">{error}</p>}
+        {error && (
+          <p className="error-message" role="alert">
+            {error}
+          </p>
+        )}
       </form>
     </section>
   );
-}
+};

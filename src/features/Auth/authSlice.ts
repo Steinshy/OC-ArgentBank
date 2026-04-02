@@ -73,6 +73,10 @@ const authSlice = createSlice({
       .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Failed to fetch profile';
+        state.token = null;
+        state.user = null;
+        state.isAuthenticated = false;
+        storage.removeAuthToken();
       });
 
     // Update profile thunk

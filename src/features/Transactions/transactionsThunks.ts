@@ -10,6 +10,7 @@ export const fetchTransactions = createAsyncThunk<{ accountId: string; transacti
     if (!account) {
       return rejectWithValue(`Account ${accountId} not found`);
     }
-    return { accountId, transactions: account.transactions ?? [] };
+    const transactions = structuredClone(account.transactions ?? []);
+    return { accountId, transactions };
   }
 );

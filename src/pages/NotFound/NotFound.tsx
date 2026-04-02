@@ -2,7 +2,7 @@ import { Link } from 'react-router';
 
 import { ROUTES } from '@/constants';
 
-export function NotFound() {
+export const NotFound = () => {
   return (
     <div className="not-found">
       <h1>404 - Page Not Found</h1>
@@ -10,4 +10,4 @@ export function NotFound() {
       <Link to={ROUTES.HOME}>Go back to home</Link>
     </div>
   );
-}
+};

@@ -1,7 +1,7 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { authApi } from '@/api/auth';
-import { LoginRequest, UserProfile, UserProfileResponse } from '@/types';
+import { LoginRequest, UserProfile } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { storage } from '@/utils/storage';
 
@@ -33,7 +33,7 @@ export const updateUserProfile = createAsyncThunk<UserProfile, { token: string; 
   'auth/updateUserProfile',
   async ({ token, firstName, lastName }, { rejectWithValue }) => {
     try {
-      const response = (await authApi.updateProfile(token, { firstName, lastName })) as UserProfileResponse;
+      const response = await authApi.updateProfile(token, { firstName, lastName });
       return response.body;
     } catch (error) {
       const errorMessage = extractErrorMessage(error, ERROR_MESSAGES.PROFILE_UPDATE_FAILED);

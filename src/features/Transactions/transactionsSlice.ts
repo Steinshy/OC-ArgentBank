@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { MESSAGES } from '@/constants';
 import { fetchTransactions } from '@/features/Transactions/transactionsThunks';
+import { updateMockTransaction } from '@/mocks/accounts';
 import { TransactionState } from '@/types';
 
 const initialState: TransactionState = {
@@ -26,6 +27,10 @@ const transactionsSlice = createSlice({
       if (tx) {
         if (category !== undefined) tx.category = category;
         if (notes !== undefined) tx.notes = notes;
+      }
+
+      if (state.currentAccountId) {
+        updateMockTransaction(state.currentAccountId, id, { category, notes });
       }
     },
   },
