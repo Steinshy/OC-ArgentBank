@@ -1,10 +1,9 @@
-import { ReactNode, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { ReactNode } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router';
 
-import { ROUTES, BUTTONS, MESSAGES, NAVIGATION, getCopyrightText } from '@/constants';
-import { updateUserProfile } from '@/features/Auth/authThunks';
-import { AppDispatch, RootState } from '@/store/store';
+import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText } from '@/constants';
+import { RootState } from '@/store/store';
 import { storage } from '@/utils/storage';
 import './styles/Layout.css';
 
@@ -12,34 +11,11 @@ interface LayoutProps {
   children: ReactNode;
 }
 
-export function Layout({ children }: LayoutProps) {
-  const dispatch = useDispatch<AppDispatch>();
-  const { user, isAuthenticated, token, loading } = useSelector((state: RootState) => state.auth);
+export const Layout = ({ children }: LayoutProps) => {
+  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
   const navigate = useNavigate();
   const location = useLocation();
   const isLoginPage = location.pathname === ROUTES.LOGIN;
-  const [isEditingName, setIsEditingName] = useState(false);
-  const [firstName, setFirstName] = useState(user?.firstName || '');
-  const [lastName, setLastName] = useState(user?.lastName || '');
-
-  const handleEditNameClick = () => {
-    setIsEditingName(true);
-  };
-
-  const handleSaveName = async () => {
-    if (token && user) {
-      const result = await dispatch(updateUserProfile({ token, firstName, lastName }));
-      if (updateUserProfile.fulfilled.match(result)) {
-        setIsEditingName(false);
-      }
-    }
-  };
-
-  const handleCancelEdit = () => {
-    setFirstName(user?.firstName || '');
-    setLastName(user?.lastName || '');
-    setIsEditingName(false);
-  };
 
   const handleLogout = () => {
     storage.removeAuthToken();
@@ -49,52 +25,30 @@ export function Layout({ children }: LayoutProps) {
 
   return (
     <div className="layout">
-      <nav className="main-nav">
+      <nav className="main-nav" aria-label="Main navigation">
         <Link className="main-nav-logo" to={ROUTES.HOME}>
           <img className="main-nav-logo-image" src="/assets/img/argentBankLogo.png" alt={NAVIGATION.HOME_LOGO_ALT} />
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
-        <div>
+        <div className="main-nav-items">
           {isAuthenticated && user ? (
             <>
-              <div className="profile-dropdown">
-                <button className="main-nav-item unstyled-button" onClick={handleEditNameClick}>
-                  <i className="fa fa-user-circle"></i>
-                  {user.firstName}
-                </button>
-                {isEditingName && (
-                  <div className="dropdown-menu">
-                    <div className="input-wrapper">
-                      <label htmlFor="firstName">First Name</label>
-                      <input type="text" id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
-                    </div>
-                    <div className="input-wrapper">
-                      <label htmlFor="lastName">Last Name</label>
-                      <input type="text" id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} />
-                    </div>
-                    <div className="dropdown-actions">
-                      <button type="button" className="edit-button" onClick={handleSaveName} disabled={loading}>
-                        {loading ? MESSAGES.SAVING : BUTTONS.SAVE}
-                      </button>
-                      <button type="button" className="edit-button cancel" onClick={handleCancelEdit} disabled={loading}>
-                        {BUTTONS.CANCEL}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
               <Link className="main-nav-item" to={ROUTES.PROFILE}>
-                <i className="fa fa-briefcase"></i>
-                Profile
+                <i className="fa fa-user-circle" aria-hidden="true"></i>
+                {user.firstName}
+              </Link>
+              <Link className="main-nav-item" to={ROUTES.SETTINGS}>
+                <i className="fa fa-gear" aria-hidden="true"></i>
+                Settings
               </Link>
               <button className="main-nav-item unstyled-button" onClick={handleLogout}>
-                <i className="fa fa-sign-out"></i>
-                Sign Out
+                <i className="fa fa-sign-out" aria-hidden="true"></i>
+                {BUTTONS.SIGN_OUT}
               </button>
             </>
           ) : (
             <Link className="main-nav-item" to={ROUTES.LOGIN}>
-              <i className="fa fa-user-circle"></i>
+              <i className="fa fa-user-circle" aria-hidden="true"></i>
               {BUTTONS.SIGN_IN}
             </Link>
           )}
@@ -106,4 +60,4 @@ export function Layout({ children }: LayoutProps) {
       </footer>
     </div>
   );
-}
+};

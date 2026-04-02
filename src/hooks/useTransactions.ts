@@ -8,10 +8,6 @@ interface UpdateTransactionData {
   notes?: string;
 }
 
-/**
- * Custom hook for transactions state and actions
- * Provides access to transactions state and dispatches transaction-related thunks
- */
 export const useTransactions = () => {
   const dispatch = useDispatch<AppDispatch>();
   const transactions = useSelector((state: RootState) => state.transactions);

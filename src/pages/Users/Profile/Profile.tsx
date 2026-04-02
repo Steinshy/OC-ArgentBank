@@ -1,17 +1,18 @@
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
+import { LoadingSpinner } from '@/components/Loader';
 import { buildTransactionsRoute, MESSAGES, NAVIGATION } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
 import { RootState } from '@/store/store';
 import './styles/Profile.css';
 
-export function Profile() {
+export const Profile = () => {
   const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.auth.user);
 
   if (!user) {
-    return <p>{MESSAGES.LOADING_PROFILE}</p>;
+    return <LoadingSpinner size="lg" label={MESSAGES.LOADING_PROFILE} />;
   }
 
   return (
@@ -39,4 +40,4 @@ export function Profile() {
       ))}
     </>
   );
-}
+};

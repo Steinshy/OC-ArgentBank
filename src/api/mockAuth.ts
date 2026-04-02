@@ -1,9 +1,3 @@
-/**
- * Mock Authentication API for GitHub Pages deployment
- * Simulates backend responses using local mock data
- * @module api/mockAuth
- */
-
 import { MOCK_USERS, MockUser } from '@/mocks';
 import { LoginRequest, LoginResponse, UserProfileResponse } from '@/types';
 
@@ -52,7 +46,9 @@ export const mockAuthApi = {
     const user = getUserFromToken(token);
 
     if (!user) {
-      throw new Error('Invalid token');
+      const error = new Error('Unauthorized - Invalid or expired token');
+      (error as Error & { status: number }).status = 403;
+      throw error;
     }
 
     return {
@@ -73,7 +69,9 @@ export const mockAuthApi = {
     const user = getUserFromToken(token);
 
     if (!user) {
-      throw new Error('Invalid token');
+      const error = new Error('Unauthorized - Invalid or expired token');
+      (error as Error & { status: number }).status = 403;
+      throw error;
     }
 
     user.firstName = data.firstName;

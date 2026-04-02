@@ -2,19 +2,24 @@ import { ReactNode } from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router';
 
-import { ROUTES } from '@/constants';
+import { LoadingSpinner } from '@/components/Loader';
+import { ROUTES, MESSAGES } from '@/constants';
 import { RootState } from '@/store/store';
 
 interface ProtectedRouteProps {
   children: ReactNode;
 }
 
-export function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const isAuthenticated = useSelector((state: RootState) => state.auth.isAuthenticated);
+export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
+  const { isAuthenticated, user } = useSelector((state: RootState) => state.auth);
 
   if (!isAuthenticated) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
+  if (!user) {
+    return <LoadingSpinner size="lg" label={MESSAGES.LOADING_PROFILE} />;
+  }
+
   return <>{children}</>;
-}
+};
