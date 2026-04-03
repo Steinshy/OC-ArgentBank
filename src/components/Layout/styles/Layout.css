@@ -78,14 +78,12 @@
 /* Footer */
 .layout .footer {
   background-color: var(--color-text);
-  border-top: none;
   color: var(--color-surface);
   margin-top: auto;
   padding: 2rem 0 1.5rem;
 }
 
 .layout .footer-text {
-  color: var(--color-surface);
   text-align: center;
 }
 

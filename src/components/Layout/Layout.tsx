@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router';
 
 import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText } from '@/constants';
-import { RootState } from '@/store/store';
-import { storage } from '@/utils/storage';
+import { logoutUser } from '@/features/Auth/authThunks';
+import { AppDispatch, RootState } from '@/store/store';
 import './styles/Layout.css';
 
 interface LayoutProps {
@@ -13,14 +13,14 @@ interface LayoutProps {
 
 export const Layout = ({ children }: LayoutProps) => {
   const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
   const isLoginPage = location.pathname === ROUTES.LOGIN;
 
   const handleLogout = () => {
-    storage.removeAuthToken();
+    dispatch(logoutUser());
     navigate(ROUTES.HOME);
-    window.location.reload();
   };
 
   return (

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { loginUser, fetchUserProfile } from '@/features/Auth/authThunks';
+import { validateEmail, validatePassword } from '@/helpers/validator';
 import { AppDispatch, RootState } from '@/store/store';
 import { storage } from '@/utils/storage';
 import './styles/Login.css';
@@ -13,6 +14,7 @@ export const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { loading, error, token } = useSelector((state: RootState) => state.auth);
@@ -25,6 +27,7 @@ export const Login = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+    setFormError(null);
     if (error) {
       dispatch(clearError());
     }
@@ -32,6 +35,7 @@ export const Login = () => {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    setFormError(null);
     if (error) {
       dispatch(clearError());
     }
@@ -39,6 +43,19 @@ export const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    const emailValidation = validateEmail(email);
+    if (!emailValidation.isValid) {
+      setFormError(emailValidation.error);
+      return;
+    }
+
+    const passwordValidation = validatePassword(password);
+    if (!passwordValidation.isValid) {
+      setFormError(passwordValidation.error);
+      return;
+    }
+
     const result = await dispatch(loginUser({ email, password }));
     if (loginUser.fulfilled.match(result)) {
       if (rememberMe) {
@@ -48,6 +65,8 @@ export const Login = () => {
       navigate(ROUTES.PROFILE);
     }
   };
+
+  const displayError = formError ?? error;
 
   return (
     <section className="sign-in-content">
@@ -69,9 +88,9 @@ export const Login = () => {
         <button type="submit" className="sign-in-button" disabled={loading}>
           {loading ? MESSAGES.SAVING : BUTTONS.SIGN_IN}
         </button>
-        {error && (
+        {displayError && (
           <p className="error-message" role="alert">
-            {error}
+            {displayError}
           </p>
         )}
       </form>
