@@ -5,7 +5,6 @@ import { API_ENDPOINTS } from '@/constants';
 import { LoginRequest, LoginResponse, UserProfileResponse } from '@/types';
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
-const DATA_TYPE = USE_MOCK ? 'mock' : 'api';
 
 export const authApi = {
   login: async (credentials: LoginRequest): Promise<LoginResponse> => {
@@ -15,7 +14,6 @@ export const authApi = {
           method: 'POST',
           body: JSON.stringify(credentials),
         });
-    console.log('Login response:', { ...response, data_type: DATA_TYPE });
     return response;
   },
 
@@ -26,7 +24,6 @@ export const authApi = {
           method: 'POST',
           token,
         });
-    console.log('Profile response:', { ...response, data_type: DATA_TYPE });
     return response;
   },
 
@@ -38,7 +35,6 @@ export const authApi = {
           body: JSON.stringify(data),
           token,
         });
-    console.log('Update profile response:', { ...response, data_type: DATA_TYPE });
     return response;
   },
 };

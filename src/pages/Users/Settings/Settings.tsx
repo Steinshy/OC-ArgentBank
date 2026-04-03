@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router';
 import { ToastContainer, useToast } from '@/components/Toast';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { updateUserProfile } from '@/features/Auth/authThunks';
+import { validateName } from '@/helpers/validator';
 import { AppDispatch, RootState } from '@/store/store';
 import { extractErrorMessage } from '@/utils/errorHandler';
 import './styles/Settings.css';
@@ -20,6 +21,18 @@ export const Settings = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!token) return;
+
+    const firstNameValidation = validateName(firstName, 'First name');
+    if (!firstNameValidation.isValid) {
+      toast.show('Validation error', firstNameValidation.error!, 'error');
+      return;
+    }
+
+    const lastNameValidation = validateName(lastName, 'Last name');
+    if (!lastNameValidation.isValid) {
+      toast.show('Validation error', lastNameValidation.error!, 'error');
+      return;
+    }
 
     const result = await dispatch(updateUserProfile({ token, firstName, lastName }));
     if (updateUserProfile.fulfilled.match(result)) {

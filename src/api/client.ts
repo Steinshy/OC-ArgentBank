@@ -1,4 +1,4 @@
-import { API_BASE_URL } from '@/constants';
+import { API_BASE_URL, API_CONFIG } from '@/constants';
 import { handleHttpError } from '@/utils/errorHandler';
 
 export const apiCall = async <T>(endpoint: string, options: RequestInit & { token?: string } = {}): Promise<T> => {
@@ -10,15 +10,23 @@ export const apiCall = async <T>(endpoint: string, options: RequestInit & { toke
     headers.set('Authorization', `Bearer ${token}`);
   }
 
-  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-    ...fetchOptions,
-    headers,
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.TIMEOUT);
 
-  if (!response.ok) {
-    const errorMessage = await handleHttpError(response);
-    throw new Error(errorMessage);
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      ...fetchOptions,
+      headers,
+      signal: controller.signal,
+    });
+
+    if (!response.ok) {
+      const errorMessage = await handleHttpError(response);
+      throw new Error(errorMessage);
+    }
+
+    return response.json();
+  } finally {
+    clearTimeout(timeoutId);
   }
-
-  return response.json();
 };
