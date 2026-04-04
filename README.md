@@ -41,6 +41,7 @@ Argent Bank is a full-stack financial dashboard providing users with secure acce
 ## 🛠️ Tech Stack
 
 ### Frontend
+
 - **Framework:** React 19 with TypeScript
 - **Build Tool:** Vite 7.3
 - **State Management:** Redux Toolkit
@@ -50,6 +51,7 @@ Argent Bank is a full-stack financial dashboard providing users with secure acce
 - **Code Quality:** ESLint, Prettier, StyleLint
 
 ### Backend
+
 - **Runtime:** Node.js
 - **Framework:** Express.js
 - **Database:** MongoDB
@@ -74,12 +76,6 @@ cd ArgentBank
 
 # Install dependencies
 npm install
-
-# Create environment file
-cp .env.example .env.local
-
-# Edit .env.local and set API_BASE_URL if needed
-# VITE_API_BASE_URL=http://localhost:3001
 ```
 
 ### Backend Setup
@@ -90,13 +86,6 @@ cd Backend
 
 # Install dependencies
 npm install
-
-# Create environment file
-cp .env.example .env
-
-# Edit .env with your configuration
-# DATABASE_URL=mongodb://localhost/argentBankDB
-# JWT_SECRET=your_secret_key_here
 
 # Start the server
 npm run dev:server
@@ -135,44 +124,29 @@ npm run format        # Format code with Prettier
 npm run format:check  # Check formatting
 ```
 
-## 📁 Project Structure
-
-```
-ArgentBank/
-├── Frontend
-│   ├── src/
-│   │   ├── pages/              # Page components
-│   │   ├── components/         # Reusable components
-│   │   ├── features/           # Redux feature slices
-│   │   ├── services/           # API clients
-│   │   ├── store/              # Redux configuration
-│   │   ├── types/              # TypeScript types
-│   │   ├── App.tsx             # Root component
-│   │   └── main.tsx            # Entry point
-│   ├── public/                 # Static assets
-│   ├── vite.config.ts          # Vite configuration
-│   └── package.json
-│
-├── Backend/
-│   ├── controllers/            # Request handlers
-│   ├── routes/                 # API routes
-│   ├── middleware/             # Express middleware
-│   ├── services/               # Business logic
-│   ├── database/               # MongoDB schemas
-│   ├── server.js               # Server entry point
-│   ├── swagger.yaml            # API documentation
-│   └── package.json
-│
-├── README.md                   # This file (English)
-├── README.fr.md                # Documentation (French)
-└── .env.example                # Environment template
-```
-
 ## 📚 API Documentation
 
 The backend API documentation is available via Swagger at:
+
 ```
 http://localhost:3001/api-docs
+```
+
+### Testing with HTTPie
+
+For command-line API testing, see [Backend/API_TESTING.md](./Backend/API_TESTING.md) for complete HTTPie examples.
+
+Quick test:
+
+```bash
+# Source helper functions
+source Backend/httpie-examples.sh
+
+# Login and save token
+TOKEN=$(ab_login "tony@stark.com" "password123" | jq -r '.body.token')
+
+# Get profile
+ab_profile "$TOKEN"
 ```
 
 ### Main Endpoints
@@ -202,33 +176,56 @@ This project follows strict code quality standards:
 4. Add API calls to `src/services/`
 5. Define types in `src/types/index.ts`
 
-### Git Workflow
-
-```bash
-# Create feature branch
-git checkout -b feature/feature-name
-
-# Make changes and commit
-git add .
-git commit -m "feat: description of changes"
-
-# Push and create pull request
-git push origin feature/feature-name
-```
+````
 
 ## 🧪 Testing
+
+### HTTPie Desktop - API Testing
+
+You can test the API using HTTPie Desktop:
+
+1. **Import Collection**: Open HTTPie Desktop → **+** → **Import** → Select `Backend/argent-bank-postman-collection.json`
+2. **Start Backend**: `cd Backend && npm run dev:server`
+3. **Login**: Expand "Authentication" folder → Run "Login - Tony Stark" (token auto-saves)
+4. **Test**: Try other requests like "Get User Profile", "Get All Accounts"
+
+See [Backend/HTTPIE_DESKTOP.md](./Backend/HTTPIE_DESKTOP.md) for complete guide.
+
+### Test Credentials
+
+To test the application, use these test user accounts:
+
+| Email              | Password      | Name         |
+| ------------------ | ------------- | ------------ |
+| `tony@stark.com`   | `password123` | Tony Stark   |
+| `steve@rogers.com` | `password456` | Steve Rogers |
+
+To populate the database with test users:
+
+```bash
+# Navigate to backend directory
+cd Backend
+
+# Run the populate script
+npm run populate-db
+````
 
 ### Manual Testing
 
 ```bash
-# Start dev server
+# Start backend server
+cd Backend
+npm run dev:server
+
+# In another terminal, start frontend dev server
 npm run dev
 
 # Open browser and test:
 # 1. Home page navigation
-# 2. Login functionality
+# 2. Login with test credentials above
 # 3. Profile access (protected route)
 # 4. Navigation between pages
+# 5. Transaction history
 ```
 
 ### Linting Tests
@@ -248,20 +245,6 @@ Contributions are welcome! Please follow these steps:
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📝 License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
-
-## 👤 Author
-
-- **Name:** steinshy
-- **Email:** your.email@example.com
-- **GitHub:** [@steinshy](https://github.com/steinshy)
-
-## 📞 Support
-
-For support, email your-email@example.com or open an issue on GitHub.
-
 ## 🔗 Links
 
 - [Repository](https://github.com/steinshy/ArgentBank)
@@ -270,4 +253,4 @@ For support, email your-email@example.com or open an issue on GitHub.
 
 ---
 
-**Last Updated:** March 2024
+https://redux-toolkit.js.org/rtk-query/usage/automated-refetching

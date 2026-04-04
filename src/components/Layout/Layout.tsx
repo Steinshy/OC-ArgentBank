@@ -16,7 +16,7 @@ export const Layout = ({ children }: LayoutProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const location = useLocation();
-  const isLoginPage = location.pathname === ROUTES.LOGIN;
+  const isSignInPage = location.pathname === ROUTES.LOGIN;
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -54,7 +54,7 @@ export const Layout = ({ children }: LayoutProps) => {
           )}
         </div>
       </nav>
-      <main className={`main ${isLoginPage ? 'bg-dark' : ''}`}>{children}</main>
+      <main className={`main ${isSignInPage ? 'bg-dark' : ''}`}>{children}</main>
       <footer className="footer">
         <p className="footer-text">{getCopyrightText()}</p>
       </footer>

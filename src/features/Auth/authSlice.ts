@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { loginUser, fetchUserProfile, updateUserProfile, logoutUser } from '@/features/Auth/authThunks';
+import { signInUser, fetchUserProfile, updateUserProfile, logoutUser } from '@/features/Auth/authThunks';
 import { AuthState, UserProfile } from '@/types';
 import { storage } from '@/utils/storage';
 
@@ -42,21 +42,21 @@ const authSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Login thunk
+    // Sign-in thunk
     builder
-      .addCase(loginUser.pending, (state) => {
+      .addCase(signInUser.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(signInUser.fulfilled, (state, action) => {
         state.loading = false;
         state.token = action.payload.token;
         state.isAuthenticated = true;
         storage.setAuthToken(action.payload.token);
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(signInUser.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload || 'Login failed';
+        state.error = action.payload || 'Sign in failed';
         state.isAuthenticated = false;
       });
 

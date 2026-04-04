@@ -49,6 +49,27 @@ body {
   min-height: 100vh;
 }
 
+.btn-primary {
+  background-color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  color: var(--color-surface);
+  display: inline-block;
+  font-weight: bold;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
+
+.btn-primary:focus-visible {
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
 .sr-only {
   border: 0 !important;
   clip-path: inset(50%) !important;

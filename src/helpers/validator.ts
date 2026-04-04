@@ -6,7 +6,8 @@ export interface ValidationResult {
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_REGEX = /^[\p{L}\s'-]+$/u;
 
-export const validateEmail = (value: string): ValidationResult => {
+/** Registration / profile: explicit requirements for UX and API alignment. */
+export const validateRegisterEmail = (value: string): ValidationResult => {
   const v = value.trim();
   if (!v) return { isValid: false, error: 'Email is required' };
   if (!EMAIL_REGEX.test(v)) return { isValid: false, error: 'Please enter a valid email address' };
@@ -14,13 +15,13 @@ export const validateEmail = (value: string): ValidationResult => {
   return { isValid: true, error: null };
 };
 
-export const validatePassword = (value: string): ValidationResult => {
+export const validateRegisterPassword = (value: string): ValidationResult => {
   if (!value) return { isValid: false, error: 'Password is required' };
   if (value.length < 6) return { isValid: false, error: 'Password must be at least 6 characters' };
   return { isValid: true, error: null };
 };
 
-export const validateName = (value: string, fieldLabel: string): ValidationResult => {
+export const validateRegisterName = (value: string, fieldLabel: string): ValidationResult => {
   const v = value.trim();
   if (!v) return { isValid: false, error: `${fieldLabel} is required` };
   if (v.length < 2) return { isValid: false, error: `${fieldLabel} must be at least 2 characters` };

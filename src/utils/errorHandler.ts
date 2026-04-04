@@ -37,20 +37,20 @@ export const extractErrorMessage = (error: unknown, defaultMessage: string = 'An
 export const handleHttpError = async (response: Response): Promise<string> => {
   try {
     const data: unknown = await response.json();
-    return extractErrorMessage(data, `Error: ${response.statusText}`);
+    return extractErrorMessage(data, `${response.statusText}`);
   } catch {
-    return `Error: ${response.statusText}`;
+    return `${response.statusText}`;
   }
 };
 
 export const ERROR_MESSAGES = {
   INVALID_CREDENTIALS: 'Invalid email or password',
   NETWORK_ERROR: 'Network error. Please check your connection.',
-  SESSION_EXPIRED: 'Your session has expired. Please log in again.',
+  SESSION_EXPIRED: 'Your session has expired. Please sign in again.',
   UNAUTHORIZED: 'You are not authorized to perform this action',
   SERVER_ERROR: 'Server error. Please try again later.',
   VALIDATION_ERROR: 'Please check your input and try again',
-  LOGIN_FAILED: 'Login failed. Please try again.',
+  SIGN_IN_FAILED: 'Sign in failed. Please try again.',
   PROFILE_UPDATE_FAILED: 'Failed to update profile. Please try again.',
   PROFILE_FETCH_FAILED: 'Failed to load profile. Please try again.',
 } as const;

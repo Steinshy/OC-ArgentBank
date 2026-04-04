@@ -48,7 +48,14 @@ const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, onSaveEdi
           <div className="detail-value">
             {editingField?.id === tx.id && editingField?.field === 'category' ? (
               <div className="edit-controls">
-                <select className="edit-inline-select" value={editValue} onChange={(e) => onEditValueChange(e.target.value)} aria-labelledby={`category-label-${tx.id}`}>
+                <select
+                  id={`transaction-category-${tx.id}`}
+                  name={`transaction-category-${tx.id}`}
+                  className="edit-inline-select"
+                  value={editValue}
+                  onChange={(e) => onEditValueChange(e.target.value)}
+                  aria-labelledby={`category-label-${tx.id}`}
+                >
                   {TRANSACTION_CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat}
@@ -81,6 +88,8 @@ const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, onSaveEdi
             {editingField?.id === tx.id && editingField?.field === 'notes' ? (
               <div className="edit-controls">
                 <input
+                  id={`transaction-notes-${tx.id}`}
+                  name={`transaction-notes-${tx.id}`}
                   type="text"
                   className="edit-inline-input"
                   value={editValue}

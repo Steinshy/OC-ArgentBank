@@ -1,5 +1,6 @@
+import { SIGN_IN_PASSWORD_INVALID, SIGN_IN_USER_NOT_FOUND } from '@/helpers/signInServerMessages';
 import { MOCK_USERS, MockUser } from '@/mocks';
-import { LoginRequest, LoginResponse, UserProfileResponse } from '@/types';
+import { SignInRequest, SignInResponse, UserProfileResponse } from '@/types';
 
 const MOCK_DELAY = 500;
 
@@ -22,18 +23,22 @@ const getUserFromToken = (token: string): MockUser | null => {
 };
 
 export const mockAuthApi = {
-  login: async (credentials: LoginRequest): Promise<LoginResponse> => {
+  signIn: async (credentials: SignInRequest): Promise<SignInResponse> => {
     await delay(MOCK_DELAY);
 
-    const user = MOCK_USERS.find((u) => u.email === credentials.email && u.password === credentials.password);
+    const user = MOCK_USERS.find((u) => u.email === credentials.email);
 
     if (!user) {
-      throw new Error('Invalid email or password');
+      throw new Error(SIGN_IN_USER_NOT_FOUND);
+    }
+
+    if (user.password !== credentials.password) {
+      throw new Error(SIGN_IN_PASSWORD_INVALID);
     }
 
     return {
       status: 200,
-      message: 'User successfully logged in',
+      message: 'User successfully signed in',
       body: {
         token: generateMockToken(user.id),
       },
