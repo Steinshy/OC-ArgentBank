@@ -8,7 +8,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ROUTES } from '@/constants';
 import { fetchUserProfile } from '@/features/Auth/authThunks';
 import { Home } from '@/pages/Home/Home';
-import { Login } from '@/pages/Login/Login';
+import { SignIn } from '@/pages/SignIn/SignIn';
 import { NotFound } from '@/pages/NotFound/NotFound';
 import { Profile } from '@/pages/Users/Profile/Profile';
 import { Settings } from '@/pages/Users/Settings/Settings';
@@ -30,7 +30,7 @@ const AppRoutes = () => {
     <Layout>
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
-        <Route path={ROUTES.LOGIN} element={<Login />} />
+        <Route path={ROUTES.LOGIN} element={<SignIn />} />
         <Route
           path={ROUTES.PROFILE}
           element={

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router';
 import { ToastContainer, useToast } from '@/components/Toast';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { updateUserProfile } from '@/features/Auth/authThunks';
-import { validateName } from '@/helpers/validator';
+import { validateRegisterName } from '@/helpers/validator';
 import { AppDispatch, RootState } from '@/store/store';
 import { extractErrorMessage } from '@/utils/errorHandler';
 import './styles/Settings.css';
@@ -22,13 +22,13 @@ export const Settings = () => {
     e.preventDefault();
     if (!token) return;
 
-    const firstNameValidation = validateName(firstName, 'First name');
+    const firstNameValidation = validateRegisterName(firstName, 'First name');
     if (!firstNameValidation.isValid) {
       toast.show('Validation error', firstNameValidation.error!, 'error');
       return;
     }
 
-    const lastNameValidation = validateName(lastName, 'Last name');
+    const lastNameValidation = validateRegisterName(lastName, 'Last name');
     if (!lastNameValidation.isValid) {
       toast.show('Validation error', lastNameValidation.error!, 'error');
       return;
@@ -70,7 +70,7 @@ export const Settings = () => {
 
         <div className="settings-field settings-field-full">
           <label htmlFor="email">Email</label>
-          <input type="email" id="email" value={user.email} disabled aria-describedby="email-hint" />
+          <input type="email" id="email" name="email" value={user.email} disabled aria-describedby="email-hint" autoComplete="email" />
           <span className="settings-hint" id="email-hint">
             Email cannot be changed
           </span>
@@ -79,11 +79,11 @@ export const Settings = () => {
         <div className="settings-name-row">
           <div className="settings-field">
             <label htmlFor="settings-firstName">First Name</label>
-            <input type="text" id="settings-firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+            <input type="text" id="settings-firstName" name="firstName" autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
           </div>
           <div className="settings-field">
             <label htmlFor="settings-lastName">Last Name</label>
-            <input type="text" id="settings-lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+            <input type="text" id="settings-lastName" name="lastName" autoComplete="family-name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
           </div>
         </div>
 

@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 
-import { loginUser, logoutUser, fetchUserProfile, updateUserProfile } from '@/features/Auth/authThunks';
+import { signInUser, logoutUser, fetchUserProfile, updateUserProfile } from '@/features/Auth/authThunks';
 import { AppDispatch, RootState } from '@/store/store';
-import { LoginRequest } from '@/types';
+import { SignInRequest } from '@/types';
 
 interface UpdateProfileData {
   token: string;
@@ -16,7 +16,7 @@ export const useAuth = () => {
 
   return {
     ...auth,
-    login: (credentials: LoginRequest) => dispatch(loginUser(credentials)),
+    signIn: (credentials: SignInRequest) => dispatch(signInUser(credentials)),
     logout: () => dispatch(logoutUser()),
     fetchProfile: (token: string) => dispatch(fetchUserProfile(token)),
     updateProfile: (data: UpdateProfileData) => dispatch(updateUserProfile(data)),

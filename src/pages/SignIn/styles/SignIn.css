@@ -12,6 +12,7 @@
 
 .sign-in-icon {
   color: var(--color-text);
+  font-size: 4rem;
   margin-bottom: 1rem;
 }
 
@@ -78,6 +79,11 @@
   cursor: pointer;
   font-weight: normal;
   margin: 0;
+  transition: color 0.2s;
+}
+
+.input-remember label:hover {
+  color: var(--color-primary);
 }
 
 .sign-in-content .sign-in-button {
@@ -109,14 +115,19 @@
   opacity: 0.6;
 }
 
-.error-message {
+.field-error {
   background-color: var(--color-error-bg);
   border-radius: var(--radius-sm);
   color: var(--color-error);
-  font-size: 0.95rem;
-  margin-top: 1rem;
-  padding: 1rem;
-  text-align: center;
+  font-size: 0.9rem;
+  margin: 0.5rem 0 0;
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.field-error-server {
+  margin-bottom: 0.5rem;
+  margin-top: 0;
 }
 
 /* Responsive */

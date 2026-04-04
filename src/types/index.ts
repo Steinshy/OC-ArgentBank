@@ -9,12 +9,12 @@ export interface ApiErrorResponse {
   };
 }
 
-export interface LoginRequest {
+export interface SignInRequest {
   email: string;
   password: string;
 }
 
-export interface LoginResponse {
+export interface SignInResponse {
   status: number;
   message: string;
   body: {
