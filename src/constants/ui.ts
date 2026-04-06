@@ -1,10 +1,38 @@
+import type { ComponentType } from 'react';
+import { Lock, Zap, BarChart3 } from 'lucide-react';
+
+interface Feature {
+  icon: ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+}
+
 export const APP = {
   NAME: 'Argent Bank',
   COPYRIGHT_START_YEAR: 2020,
 } as const;
 
+export const FEATURES: Feature[] = [
+  {
+    icon: Lock,
+    title: 'Bank-Grade Security',
+    description: 'Military encryption protects your data 24/7',
+  },
+  {
+    icon: Zap,
+    title: 'Instant Transfers',
+    description: 'Money moves at lightning speed',
+  },
+  {
+    icon: BarChart3,
+    title: 'Smart Analytics',
+    description: 'Understand your spending patterns',
+  },
+];
+
 export const BUTTONS = {
   SIGN_IN: 'Sign In',
+  REGISTER: 'Register',
   SIGN_OUT: 'Sign Out',
   VIEW_PROFILE: 'View Profile',
   SAVE: 'Save',
@@ -15,7 +43,7 @@ export const BUTTONS = {
 export const MESSAGES = {
   LOADING_PROFILE: 'Loading profile...',
   LOADING_TRANSACTIONS: 'Loading transactions...',
-  SAVING: 'Saving...',
+  SIGNING_IN: 'Signing in...',
   ACCOUNT_NOT_FOUND: 'Account not found.',
   NO_TRANSACTIONS: 'No transactions found for this account.',
   PROFILE_UPDATED: 'Profile updated successfully.',

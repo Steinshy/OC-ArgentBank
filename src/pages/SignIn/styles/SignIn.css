@@ -1,52 +1,120 @@
-.sign-in-content {
+/* ===== LAYOUT ===== */
+.sign-in-page {
+  display: flex;
+  flex: 1;
+  width: 100%;
+  min-width: 0;
+}
+
+/* ===== FORM PANEL ===== */
+.sign-in-panel {
   align-items: center;
+  box-sizing: border-box;
+  display: flex;
+  flex: 1;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  min-width: 0;
+}
+
+.sign-in-content {
   background-color: var(--color-surface);
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  margin: 0 auto;
-  max-width: 500px;
+  max-width: min(500px, 100%);
   padding: 2rem;
   width: 100%;
 }
 
-.sign-in-icon {
-  color: var(--color-text);
-  font-size: 4rem;
-  margin-bottom: 1rem;
+.sign-in-content h2 {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--color-dark);
+  margin: 0 0 0.5rem;
+  text-align: center;
 }
 
-.sign-in-content h1 {
-  font-size: 1.5rem;
+@media (width > 600px) {
+  .sign-in-panel {
+    padding: 2.5rem clamp(1.5rem, 5vw, 3rem);
+  }
+
+  .sign-in-content {
+    border-radius: var(--radius-md);
+    box-shadow: 0 4px 24px rgb(18 0 43 / 6%);
+    max-width: min(680px, calc(100vw - 3rem));
+    padding: clamp(2.25rem, 4vw, 3rem) clamp(2rem, 4vw, 3.5rem);
+  }
+
+  .sign-in-content h2 {
+    font-size: clamp(1.75rem, 2.5vw, 2.125rem);
+  }
+
+  .sign-in-content .sign-in-button {
+    font-size: 1.0625rem;
+    min-height: 3.25rem;
+    padding: 1rem;
+  }
+
+  .sign-in-content form {
+    max-width: min(26rem, 100%);
+  }
+}
+
+@media (width >= 1100px) {
+  .sign-in-content {
+    max-width: min(760px, calc(100vw - 4rem));
+    padding: 3rem 3.75rem;
+  }
+}
+
+.sign-in-sub {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
   margin: 0 0 2rem;
+  text-align: center;
 }
 
 .sign-in-content form {
+  margin-inline: auto;
+  text-align: left;
   width: 100%;
 }
 
+/* ===== INPUTS ===== */
 .input-wrapper {
   display: flex;
   flex-direction: column;
-  margin-bottom: 1.5rem;
-  text-align: left;
+  margin-bottom: 1.25rem;
 }
 
 .input-wrapper label {
   color: var(--color-text);
-  font-size: 0.95rem;
-  font-weight: bold;
+  font-size: 0.875rem;
+  font-weight: 600;
   margin-bottom: 0.5rem;
+  letter-spacing: 0.01em;
 }
 
 .input-wrapper input[type='email'],
 .input-wrapper input[type='password'] {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
   font-family: inherit;
   font-size: 1rem;
-  padding: 0.625rem 0.75rem;
-  transition: border-color 0.2s;
+  line-height: 1.35;
+  padding: 0.5rem 0.875rem;
+  text-align: left;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-wrapper input[type='email']::placeholder,
+.input-wrapper input[type='password']::placeholder {
+  color: var(--color-text-disabled);
 }
 
 .input-wrapper input[type='email']:focus,
@@ -54,19 +122,41 @@
   border-color: var(--color-primary);
   box-shadow: var(--focus-ring);
   outline: none;
+  background: var(--color-surface);
 }
 
+.input-wrapper input[aria-invalid='true'] {
+  border-color: var(--color-error);
+}
+
+/* ===== REMEMBER ME ===== */
 .input-remember {
   align-items: center;
   display: flex;
   margin-bottom: 1.5rem;
-  text-align: left;
 }
 
 .input-remember input[type='checkbox'] {
-  accent-color: var(--color-primary);
+  appearance: none;
+  -webkit-appearance: none;
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-sm);
   cursor: pointer;
+  flex-shrink: 0;
+  height: 17px;
   margin-right: 0.5rem;
+  width: 17px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.input-remember input[type='checkbox']:checked {
+  background-color: var(--color-primary);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.5 6l2.5 3 4.5-5.5'/%3E%3C/svg%3E");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 10px 10px;
+  border-color: var(--color-primary);
 }
 
 .input-remember input[type='checkbox']:focus-visible {
@@ -75,9 +165,9 @@
 }
 
 .input-remember label {
-  color: var(--color-text);
+  color: var(--color-text-secondary);
   cursor: pointer;
-  font-weight: normal;
+  font-size: 0.875rem;
   margin: 0;
   transition: color 0.2s;
 }
@@ -86,23 +176,27 @@
   color: var(--color-primary);
 }
 
+/* ===== SUBMIT BUTTON ===== */
 .sign-in-content .sign-in-button {
-  background-color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-md);
   color: var(--color-surface);
   cursor: pointer;
   display: block;
-  font-size: 1.1rem;
-  font-weight: bold;
-  margin-top: 0.5rem;
-  padding: 0.75rem;
-  transition: background-color 0.2s;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  padding: 0.875rem;
+  text-align: center;
+  transition: all 0.2s ease;
   width: 100%;
+  letter-spacing: 0.02em;
 }
 
 .sign-in-content .sign-in-button:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 188, 119, 0.35);
 }
 
 .sign-in-content .sign-in-button:focus-visible {
@@ -115,60 +209,38 @@
   opacity: 0.6;
 }
 
+/* ===== ERRORS ===== */
 .field-error {
   background-color: var(--color-error-bg);
+  border-left: 3px solid var(--color-error);
   border-radius: var(--radius-sm);
   color: var(--color-error);
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   margin: 0.5rem 0 0;
   padding: 0.5rem 0.75rem;
-  text-align: left;
 }
 
 .field-error-server {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
   margin-top: 0;
 }
 
-/* Responsive */
+/* ===== RESPONSIVE ===== */
 @media (width <= 600px) {
+  .sign-in-panel {
+    padding: 1.5rem 1rem;
+    align-items: flex-start;
+    padding-top: 2rem;
+  }
+
   .sign-in-content {
-    max-width: 100%;
-    padding: 1.5rem;
+    padding: 2rem 1.5rem;
+    border-radius: var(--radius-md);
+    box-shadow: none;
+    border-top-width: 3px;
   }
 
-  .sign-in-content h1 {
-    font-size: 1.25rem;
-  }
-
-  .sign-in-icon {
-    font-size: 3rem;
-  }
-}
-
-@media (width <= 375px) {
-  .sign-in-content {
-    padding: 1.25rem 0.875rem;
-  }
-
-  .sign-in-content h1 {
-    font-size: 1.1rem;
-    margin: 0 0 1.5rem;
-  }
-
-  .sign-in-icon {
-    font-size: 2.5rem;
-    margin-bottom: 0.75rem;
-  }
-
-  .input-wrapper input[type='email'],
-  .input-wrapper input[type='password'] {
-    font-size: 0.9rem;
-    padding: 0.5rem 0.625rem;
-  }
-
-  .sign-in-content .sign-in-button {
-    font-size: 1rem;
-    padding: 0.625rem;
+  .sign-in-content h2 {
+    font-size: 1.5rem;
   }
 }

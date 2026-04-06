@@ -61,59 +61,67 @@ export const SignIn = () => {
   const passwordDescribedBy = joinDescribedBy(passwordServerError && 'sign-in-password-error', generalServerError && 'sign-in-server-error');
 
   return (
-    <section className="sign-in-content">
-      <i className="fa fa-user-circle sign-in-icon" aria-hidden="true"></i>
-      <h1>{BUTTONS.SIGN_IN}</h1>
-      <form noValidate onSubmit={handleSubmit}>
-        <div className="input-wrapper">
-          <label htmlFor="email">Email</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            autoComplete="email"
-            value={email}
-            onChange={handleEmailChange}
-            aria-invalid={emailServerError || generalServerError ? true : undefined}
-            aria-describedby={emailDescribedBy}
-          />
-          {emailServerError && (
-            <p className="field-error" id="sign-in-email-error" role="alert">
-              {emailServerError}
-            </p>
-          )}
-        </div>
-        <div className="input-wrapper">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={handlePasswordChange}
-            aria-invalid={passwordServerError || generalServerError ? true : undefined}
-            aria-describedby={passwordDescribedBy}
-          />
-          {passwordServerError && (
-            <p className="field-error" id="sign-in-password-error" role="alert">
-              {passwordServerError}
-            </p>
-          )}
-        </div>
-        {generalServerError && (
-          <p className="field-error field-error-server" id="sign-in-server-error" role="alert">
-            {generalServerError}
-          </p>
-        )}
-        <div className="input-remember">
-          <input type="checkbox" id="remember-me" name="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-          <label htmlFor="remember-me">Remember me</label>
-        </div>
-        <button type="submit" className="sign-in-button" disabled={loading}>
-          {loading ? MESSAGES.SAVING : BUTTONS.SIGN_IN}
-        </button>
-      </form>
-    </section>
+    <div className="sign-in-page">
+      <div className="sign-in-panel">
+        <section className="sign-in-content">
+          <h2>Welcome back</h2>
+          <p className="sign-in-sub">Sign in to your account</p>
+
+          <form noValidate onSubmit={handleSubmit}>
+            <div className="input-wrapper">
+              <label htmlFor="email">Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                autoComplete="email"
+                placeholder="you@example.com"
+                value={email}
+                onChange={handleEmailChange}
+                aria-invalid={emailServerError || generalServerError ? true : undefined}
+                aria-describedby={emailDescribedBy}
+              />
+              {emailServerError && (
+                <p className="field-error" id="sign-in-email-error" role="alert">
+                  {emailServerError}
+                </p>
+              )}
+            </div>
+            <div className="input-wrapper">
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                autoComplete="current-password"
+                placeholder="••••••••"
+                value={password}
+                onChange={handlePasswordChange}
+                aria-invalid={passwordServerError || generalServerError ? true : undefined}
+                aria-describedby={passwordDescribedBy}
+              />
+              {passwordServerError && (
+                <p className="field-error" id="sign-in-password-error" role="alert">
+                  {passwordServerError}
+                </p>
+              )}
+            </div>
+            {generalServerError && (
+              <p className="field-error field-error-server" id="sign-in-server-error" role="alert">
+                {generalServerError}
+              </p>
+            )}
+            <div className="input-remember">
+              <input type="checkbox" id="remember-me" name="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+              <label htmlFor="remember-me">Remember me</label>
+            </div>
+            <button type="submit" className="sign-in-button" disabled={loading}>
+              {loading ? MESSAGES.SIGNING_IN : BUTTONS.SIGN_IN}
+            </button>
+          </form>
+        </section>
+      </div>
+    </div>
   );
+
 };
