@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
 import { LoadingSpinner } from '@/components/Loader';
 import { ROUTES, MESSAGES, TRANSACTION_CATEGORIES, TRANSACTION_TYPES, BUTTONS, FORMS } from '@/constants';
-import { fetchTransactions, updateTransaction } from '@/features/Transactions';
+import { useGetTransactionsQuery, usePatchTransactionMutation } from '@/api/argentBankApi';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
-import { AppDispatch, RootState } from '@/store/store';
 import { Account, Transaction } from '@/types';
+import { extractErrorMessage } from '@/utils/errorHandler';
+import { logoutUser } from '@/features/Auth/authThunks';
+import type { AppDispatch } from '@/store/store';
 import './styles/Transactions.css';
 
 interface TransactionHeaderProps {
@@ -126,14 +128,18 @@ interface TransactionContentProps {
 const TransactionContent = ({ accountId }: TransactionContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { transactions, loading, error } = useSelector((state: RootState) => state.transactions);
+  const { data: transactions = [], isLoading: loading, error, isError } = useGetTransactionsQuery(accountId, { refetchOnFocus: true });
+  const [patchTransaction] = usePatchTransactionMutation();
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [editingField, setEditingField] = useState<{ id: string; field: 'category' | 'notes' } | null>(null);
   const [editValue, setEditValue] = useState('');
 
   useEffect(() => {
-    dispatch(fetchTransactions(accountId));
-  }, [accountId, dispatch]);
+    if (isError) {
+      dispatch(logoutUser());
+      navigate(ROUTES.LOGIN);
+    }
+  }, [isError, dispatch, navigate]);
 
   const handleToggleRow = (id: string) => {
     setExpandedRowId((prev) => (prev === id ? null : id));
@@ -153,7 +159,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
   };
 
   const handleSaveEdit = (id: string, field: 'category' | 'notes') => {
-    dispatch(updateTransaction({ id, [field]: editValue }));
+    patchTransaction({ accountId, transactionId: id, data: { [field]: editValue } });
     setEditingField(null);
     setEditValue('');
   };
@@ -172,7 +178,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
       {loading && <LoadingSpinner size="md" label={MESSAGES.LOADING_TRANSACTIONS} />}
       {error && (
         <p className="transaction-error" role="alert">
-          {error}
+          {extractErrorMessage(error, 'Failed to load transactions. Please try again.')}
         </p>
       )}
 

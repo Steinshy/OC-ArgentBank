@@ -1,10 +1,10 @@
 import { ReactNode } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router';
 
 import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText } from '@/constants';
 import { logoutUser } from '@/features/Auth/authThunks';
-import { AppDispatch, RootState } from '@/store/store';
+import { useGetProfileQuery } from '@/api/argentBankApi';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import './styles/Layout.css';
 
 interface LayoutProps {
@@ -12,8 +12,9 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  const { user, isAuthenticated } = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch<AppDispatch>();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { data: user } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const isSignInPage = location.pathname === ROUTES.LOGIN;

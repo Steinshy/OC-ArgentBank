@@ -1,17 +1,28 @@
-import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { LoadingSpinner } from '@/components/Loader';
-import { buildTransactionsRoute, MESSAGES, NAVIGATION } from '@/constants';
+import { useGetProfileQuery } from '@/api/argentBankApi';
+import { buildTransactionsRoute, ROUTES, MESSAGES, NAVIGATION } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
-import { RootState } from '@/store/store';
+import { logoutUser } from '@/features/Auth/authThunks';
+import type { AppDispatch } from '@/store/store';
 import './styles/Profile.css';
 
-export const Profile = () => {
-  const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth.user);
+const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
-  if (!user) {
+export const Profile = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const navigate = useNavigate();
+  const { data: user, isLoading, isError } = useGetProfileQuery();
+
+  if (isError) {
+    dispatch(logoutUser());
+    navigate(ROUTES.LOGIN);
+    return null;
+  }
+
+  if (isLoading || !user) {
     return <LoadingSpinner size="lg" label={MESSAGES.LOADING_PROFILE} />;
   }
 
@@ -32,7 +43,12 @@ export const Profile = () => {
             <p className="account-amount-description">{account.description}</p>
           </div>
           <div className="account-content-wrapper cta">
-            <button className="transaction-button" onClick={() => navigate(buildTransactionsRoute(account.id))}>
+            <button
+              className="transaction-button"
+              onClick={() => navigate(buildTransactionsRoute(account.id))}
+              disabled={!USE_MOCK}
+              title={!USE_MOCK ? 'Transactions API not yet implemented' : undefined}
+            >
               {NAVIGATION.VIEW_TRANSACTIONS}
             </button>
           </div>

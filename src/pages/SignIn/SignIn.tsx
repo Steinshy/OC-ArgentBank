@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
-import { signInUser, fetchUserProfile } from '@/features/Auth/authThunks';
+import { signInUser } from '@/features/Auth/authThunks';
 import { SIGN_IN_PASSWORD_INVALID, SIGN_IN_USER_NOT_FOUND } from '@/helpers/signInServerMessages';
-import { AppDispatch, RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { storage } from '@/utils/storage';
 import './styles/SignIn.css';
 
@@ -19,9 +18,9 @@ export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { loading, error, token } = useSelector((state: RootState) => state.auth);
+  const { loading, error, token } = useAppSelector((state) => state.auth);
 
   useEffect(() => {
     if (token) {
@@ -50,7 +49,6 @@ export const SignIn = () => {
       if (rememberMe) {
         storage.setRememberMe(email.trim());
       }
-      await dispatch(fetchUserProfile(result.payload.token));
       navigate(ROUTES.PROFILE);
     }
   };

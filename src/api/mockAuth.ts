@@ -2,7 +2,7 @@ import { SIGN_IN_PASSWORD_INVALID, SIGN_IN_USER_NOT_FOUND } from '@/helpers/sign
 import { MOCK_USERS, MockUser } from '@/mocks';
 import { SignInRequest, SignInResponse, UserProfileResponse } from '@/types';
 
-const MOCK_DELAY = 500;
+const MOCK_DELAY = 1000;
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 

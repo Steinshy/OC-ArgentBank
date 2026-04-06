@@ -1,24 +1,27 @@
-import { useDispatch, useSelector } from 'react-redux';
-
-import { signInUser, logoutUser, fetchUserProfile, updateUserProfile } from '@/features/Auth/authThunks';
-import { AppDispatch, RootState } from '@/store/store';
+import { signInUser, logoutUser } from '@/features/Auth/authThunks';
+import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { SignInRequest } from '@/types';
 
 interface UpdateProfileData {
-  token: string;
   firstName: string;
   lastName: string;
 }
 
 export const useAuth = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const auth = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
+  const { token, loading, error, isAuthenticated } = useAppSelector((state) => state.auth);
+  const { data: user } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
+  const [updateProfile] = useUpdateProfileMutation();
 
   return {
-    ...auth,
+    token,
+    loading,
+    error,
+    isAuthenticated,
+    user: user ?? null,
     signIn: (credentials: SignInRequest) => dispatch(signInUser(credentials)),
     logout: () => dispatch(logoutUser()),
-    fetchProfile: (token: string) => dispatch(fetchUserProfile(token)),
-    updateProfile: (data: UpdateProfileData) => dispatch(updateUserProfile(data)),
+    updateProfile: (data: UpdateProfileData) => updateProfile(data),
   };
 };

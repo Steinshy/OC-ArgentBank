@@ -1,26 +1,41 @@
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { ToastContainer, useToast } from '@/components/Toast';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
-import { updateUserProfile } from '@/features/Auth/authThunks';
+import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { validateRegisterName } from '@/helpers/validator';
-import { AppDispatch, RootState } from '@/store/store';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import { extractErrorMessage } from '@/utils/errorHandler';
+import { logoutUser } from '@/features/Auth/authThunks';
 import './styles/Settings.css';
 
 export const Settings = () => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, token } = useSelector((state: RootState) => state.auth);
-  const [firstName, setFirstName] = useState(user?.firstName ?? '');
-  const [lastName, setLastName] = useState(user?.lastName ?? '');
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const { data: user, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [updateProfile] = useUpdateProfileMutation();
   const toast = useToast();
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(logoutUser());
+      navigate(ROUTES.LOGIN);
+    }
+  }, [isError, dispatch, navigate]);
+
+  useEffect(() => {
+    if (user) {
+      setFirstName(user.firstName);
+      setLastName(user.lastName);
+    }
+  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!token) return;
 
     const firstNameValidation = validateRegisterName(firstName, 'First name');
     if (!firstNameValidation.isValid) {
@@ -34,11 +49,12 @@ export const Settings = () => {
       return;
     }
 
-    const result = await dispatch(updateUserProfile({ token, firstName, lastName }));
-    if (updateUserProfile.fulfilled.match(result)) {
+    const result = await updateProfile({ firstName, lastName });
+    if ('data' in result) {
       toast.show('Profile updated', MESSAGES.PROFILE_UPDATED);
+      setTimeout(() => navigate(ROUTES.PROFILE), 500);
     } else {
-      const message = extractErrorMessage(result.payload, 'Failed to update profile');
+      const message = extractErrorMessage(result.error, 'Failed to update profile');
       toast.show('Error', message, 'error');
     }
   };

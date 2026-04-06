@@ -62,7 +62,6 @@ export interface Account {
 
 export interface AuthState {
   token: string | null;
-  user: UserProfile | null;
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
@@ -70,9 +69,6 @@ export interface AuthState {
 
 export interface TransactionState {
   currentAccountId: string | null;
-  transactions: Transaction[];
-  loading: boolean;
-  error: string | null;
 }
 
 export interface ApiError {
