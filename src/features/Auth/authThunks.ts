@@ -1,9 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { authApi } from '@/api/auth';
-import { SignInRequest, UserProfile } from '@/types';
+import { argentBankApi } from '@/api/argentBankApi';
+import { SignInRequest } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { storage } from '@/utils/storage';
+import type { AppDispatch } from '@/store/store';
 
 export const signInUser = createAsyncThunk<{ token: string }, SignInRequest, { rejectValue: string }>('auth/signInUser', async (credentials, { rejectWithValue }) => {
   try {
@@ -15,34 +17,7 @@ export const signInUser = createAsyncThunk<{ token: string }, SignInRequest, { r
   }
 });
 
-export const fetchUserProfile = createAsyncThunk<
-  UserProfile,
-  string, // token
-  { rejectValue: string }
->('auth/fetchUserProfile', async (token, { rejectWithValue }) => {
-  try {
-    const response = await authApi.getProfile(token);
-    return response.body;
-  } catch (error) {
-    const errorMessage = extractErrorMessage(error, ERROR_MESSAGES.PROFILE_FETCH_FAILED);
-    return rejectWithValue(errorMessage);
-  }
-});
-
-export const updateUserProfile = createAsyncThunk<UserProfile, { token: string; firstName: string; lastName: string }, { rejectValue: string }>(
-  'auth/updateUserProfile',
-  async ({ token, firstName, lastName }, { rejectWithValue }) => {
-    try {
-      const response = await authApi.updateProfile(token, { firstName, lastName });
-      return response.body;
-    } catch (error) {
-      const errorMessage = extractErrorMessage(error, ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
-      return rejectWithValue(errorMessage);
-    }
-  }
-);
-
-export const logoutUser = createAsyncThunk<void>('auth/logoutUser', async () => {
-  // Perform any cleanup if needed
+export const logoutUser = createAsyncThunk<void, void, { dispatch: AppDispatch }>('auth/logoutUser', async (_arg, { dispatch }) => {
   storage.removeAuthToken();
+  dispatch(argentBankApi.util.resetApiState());
 });

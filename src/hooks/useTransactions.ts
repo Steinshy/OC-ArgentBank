@@ -1,21 +1,33 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
-import { fetchTransactions, updateTransaction, clearTransactions } from '@/features/Transactions';
-import { AppDispatch, RootState } from '@/store/store';
+import { clearTransactions, setCurrentAccountId } from '@/features/Transactions';
+import { useGetTransactionsQuery, usePatchTransactionMutation } from '@/api/argentBankApi';
+import { AppDispatch } from '@/store/store';
 
 interface UpdateTransactionData {
   category?: string;
   notes?: string;
 }
 
-export const useTransactions = () => {
+export const useTransactions = (accountId?: string) => {
   const dispatch = useDispatch<AppDispatch>();
-  const transactions = useSelector((state: RootState) => state.transactions);
+  const { data: transactions = [], isLoading: loading, error } = useGetTransactionsQuery(accountId ?? '', { skip: !accountId });
+  const [patchTransaction] = usePatchTransactionMutation();
 
   return {
-    ...transactions,
-    fetch: (accountId: string) => dispatch(fetchTransactions(accountId)),
-    update: (id: string, data: UpdateTransactionData) => dispatch(updateTransaction({ id, ...data })),
+    transactions,
+    loading,
+    error: error ? 'Failed to load transactions' : null,
+    currentAccountId: accountId ?? null,
+    fetch: (newAccountId: string) => {
+      dispatch(setCurrentAccountId(newAccountId));
+    },
+    update: (id: string, data: UpdateTransactionData) =>
+      patchTransaction({
+        accountId: accountId ?? '',
+        transactionId: id,
+        data,
+      }),
     clear: () => dispatch(clearTransactions()),
   };
 };

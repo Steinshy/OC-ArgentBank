@@ -1,30 +1,23 @@
-import { useEffect } from 'react';
-import { Provider, useDispatch, useSelector } from 'react-redux';
+import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Layout } from '@/components/Layout/Layout';
 import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ROUTES } from '@/constants';
-import { fetchUserProfile } from '@/features/Auth/authThunks';
+import { useGetProfileQuery } from '@/api/argentBankApi';
 import { Home } from '@/pages/Home/Home';
 import { SignIn } from '@/pages/SignIn/SignIn';
 import { NotFound } from '@/pages/NotFound/NotFound';
 import { Profile } from '@/pages/Users/Profile/Profile';
 import { Settings } from '@/pages/Users/Settings/Settings';
 import { Transactions } from '@/pages/Users/Transactions/Transactions';
-import { AppDispatch, RootState, store } from '@/store/store';
+import { store, useAppSelector } from '@/store/store';
 import '@/index.css';
 
 const AppRoutes = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const { token, user } = useSelector((state: RootState) => state.auth);
-
-  useEffect(() => {
-    if (token && !user) {
-      dispatch(fetchUserProfile(token));
-    }
-  }, [dispatch, token, user]);
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  useGetProfileQuery(undefined, { skip: !isAuthenticated });
 
   return (
     <Layout>

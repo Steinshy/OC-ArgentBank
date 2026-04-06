@@ -8,16 +8,7 @@ import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: [
-      'dist',
-      'node_modules',
-      'build',
-      '*.config.js',
-      '*.config.mjs',
-      '.lighthouserc.*',
-      '.oc/**',
-      'public/**',
-    ],
+    ignores: ['dist', 'node_modules', 'build', '*.config.js', '*.config.mjs', '.lighthouserc.*', '.oc/**', 'public/**'],
   },
   js.configs.recommended,
   {
@@ -43,21 +34,7 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-      'import/order': [
-        'error',
-        {
-          groups: [
-            'builtin',
-            'external',
-            'internal',
-            'parent',
-            'sibling',
-            'index',
-          ],
-          'newlines-between': 'always',
-          alphabetize: { order: 'asc', caseInsensitive: true },
-        },
-      ],
+      'import/order': 'off',
     },
   },
   ...tseslint.configs.recommended,
@@ -90,10 +67,7 @@ export default [
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
-      'react-refresh/only-export-components': [
-        'warn',
-        { allowConstantExport: true },
-      ],
+      'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
     settings: {
       react: { version: 'detect' },

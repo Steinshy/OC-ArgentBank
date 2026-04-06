@@ -1,2 +1,2 @@
 export * from './authSlice';
-export { signInUser, logoutUser, fetchUserProfile } from './authThunks';
+export { signInUser, logoutUser } from './authThunks';
