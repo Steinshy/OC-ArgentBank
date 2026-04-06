@@ -15,8 +15,8 @@ export const Settings = () => {
   const navigate = useNavigate();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: user, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState(user?.firstName ?? '');
+  const [lastName, setLastName] = useState(user?.lastName ?? '');
   const [updateProfile] = useUpdateProfileMutation();
   const toast = useToast();
 
@@ -26,13 +26,6 @@ export const Settings = () => {
       navigate(ROUTES.LOGIN);
     }
   }, [isError, dispatch, navigate]);
-
-  useEffect(() => {
-    if (user) {
-      setFirstName(user.firstName);
-      setLastName(user.lastName);
-    }
-  }, [user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -81,7 +74,7 @@ export const Settings = () => {
         </div>
       </div>
 
-      <form className="settings-form" onSubmit={handleSubmit}>
+      <form key={user?.id} className="settings-form" onSubmit={handleSubmit}>
         <h2 className="settings-section-title">Profile Information</h2>
 
         <div className="settings-field settings-field-full">

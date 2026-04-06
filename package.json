@@ -8,6 +8,7 @@
     "dev:all": "pkill -f \"vite\" || true; pkill -f \"nodemon\" || true; concurrently \"npm run dev\" \"npm run dev:server --prefix Backend\"",
     "build": "vite build",
     "preview": "vite preview",
+    "type-check": "tsc --noEmit",
     "lint": "eslint src",
     "lint:fix": "eslint src --fix",
     "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
@@ -42,8 +43,7 @@
     "stylelint-order": "^8.0.0",
     "typescript": "^6.0.2",
     "typescript-eslint": "^8.58.0",
-    "vite": "^8.0.3",
-    "vite-plugin-checker": "^0.12.0",
-    "vite-plugin-pwa": "^1.2.0"
+    "vite": "^8.0.5",
+    "vite-plugin-checker": "^0.12.0"
   }
 }
