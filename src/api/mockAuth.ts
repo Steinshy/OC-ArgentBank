@@ -1,6 +1,7 @@
 import { SIGN_IN_PASSWORD_INVALID, SIGN_IN_USER_NOT_FOUND } from '@/helpers/signInServerMessages';
+import { SIGN_UP_EMAIL_EXISTS } from '@/helpers/signUpServerMessages';
 import { MOCK_USERS, MockUser } from '@/mocks';
-import { SignInRequest, SignInResponse, UserProfileResponse } from '@/types';
+import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse, UserProfileResponse } from '@/types';
 
 const MOCK_DELAY = 1000;
 
@@ -42,6 +43,26 @@ export const mockAuthApi = {
       body: {
         token: generateMockToken(user.id),
       },
+    };
+  },
+
+  signUp: async (data: SignUpRequest): Promise<SignUpResponse> => {
+    await delay(MOCK_DELAY);
+    if (MOCK_USERS.find((u) => u.email === data.email)) {
+      throw new Error(SIGN_UP_EMAIL_EXISTS);
+    }
+    const newUser: MockUser = {
+      id: String(Date.now()),
+      email: data.email,
+      password: data.password,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    };
+    MOCK_USERS.push(newUser);
+    return {
+      status: 200,
+      message: 'User successfully created',
+      body: { token: generateMockToken(newUser.id) },
     };
   },
 

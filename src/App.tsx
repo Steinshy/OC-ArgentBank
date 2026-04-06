@@ -7,6 +7,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute';
 import { ROUTES } from '@/constants';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { Home } from '@/pages/Home/Home';
+import { Register } from '@/pages/Register/Register';
 import { SignIn } from '@/pages/SignIn/SignIn';
 import { NotFound } from '@/pages/NotFound/NotFound';
 import { Profile } from '@/pages/Users/Profile/Profile';
@@ -24,6 +25,7 @@ const AppRoutes = () => {
       <Routes>
         <Route path={ROUTES.HOME} element={<Home />} />
         <Route path={ROUTES.LOGIN} element={<SignIn />} />
+        <Route path={ROUTES.REGISTER} element={<Register />} />
         <Route
           path={ROUTES.PROFILE}
           element={

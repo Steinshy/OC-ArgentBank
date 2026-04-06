@@ -17,7 +17,7 @@ export const Layout = ({ children }: LayoutProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const isSignInPage = location.pathname === ROUTES.LOGIN;
+  const isAuthPage = location.pathname === ROUTES.LOGIN || location.pathname === ROUTES.REGISTER;
 
   const handleLogout = () => {
     dispatch(logoutUser());
@@ -52,14 +52,14 @@ export const Layout = ({ children }: LayoutProps) => {
               <Link className="main-nav-link-sign-in" to={ROUTES.LOGIN}>
                 {BUTTONS.SIGN_IN}
               </Link>
-              <button type="button" className="main-nav-cta-pill">
+              <Link className="main-nav-cta-pill" to={ROUTES.REGISTER}>
                 {BUTTONS.REGISTER}
-              </button>
+              </Link>
             </div>
           )}
         </div>
       </nav>
-      <main className={`main ${isSignInPage ? 'bg-dark' : ''}`}>{children}</main>
+      <main className={`main ${isAuthPage ? 'bg-dark' : ''}`}>{children}</main>
       <footer className="footer">
         <p className="footer-text">{getCopyrightText()}</p>
       </footer>

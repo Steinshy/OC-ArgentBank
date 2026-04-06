@@ -2,7 +2,7 @@ import { apiCall } from './client';
 import { mockAuthApi } from './mockAuth';
 
 import { API_ENDPOINTS } from '@/constants';
-import { SignInRequest, SignInResponse, UserProfileResponse } from '@/types';
+import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse, UserProfileResponse } from '@/types';
 
 const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
@@ -15,6 +15,15 @@ export const authApi = {
           body: JSON.stringify(credentials),
         });
     return response;
+  },
+
+  signUp: async (data: SignUpRequest): Promise<SignUpResponse> => {
+    return USE_MOCK
+      ? mockAuthApi.signUp(data)
+      : apiCall<SignUpResponse>(API_ENDPOINTS.AUTH_SIGNUP, {
+          method: 'POST',
+          body: JSON.stringify(data),
+        });
   },
 
   getProfile: async (token: string): Promise<UserProfileResponse> => {

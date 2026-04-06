@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { signInUser, logoutUser } from '@/features/Auth/authThunks';
+import { signInUser, signUpUser, logoutUser } from '@/features/Auth/authThunks';
 import { AuthState } from '@/types';
 import { storage } from '@/utils/storage';
 
@@ -51,6 +51,21 @@ const authSlice = createSlice({
       .addCase(signInUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload || 'Sign in failed';
+        state.isAuthenticated = false;
+      })
+      .addCase(signUpUser.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(signUpUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.token = action.payload.token;
+        state.isAuthenticated = true;
+        storage.setAuthToken(action.payload.token);
+      })
+      .addCase(signUpUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload || 'Registration failed';
         state.isAuthenticated = false;
       })
       .addCase(logoutUser.fulfilled, (state) => {

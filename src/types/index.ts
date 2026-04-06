@@ -22,6 +22,19 @@ export interface SignInResponse {
   };
 }
 
+export interface SignUpRequest {
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
+export interface SignUpResponse {
+  status: number;
+  message: string;
+  body: { token: string };
+}
+
 export interface UserProfile {
   id: string;
   email: string;
