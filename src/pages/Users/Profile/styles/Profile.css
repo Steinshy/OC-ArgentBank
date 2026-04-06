@@ -150,3 +150,35 @@
     font-size: 2rem;
   }
 }
+
+@media (width <= 375px) {
+  .account {
+    padding: 0.75rem;
+    width: 98%;
+  }
+
+  .account-amount {
+    font-size: 1.75rem;
+  }
+
+  .account-amount-description {
+    font-size: 0.875rem;
+  }
+
+  .account-title {
+    font-size: 0.875rem;
+  }
+
+  .header {
+    padding: 1rem;
+  }
+
+  .header h1 {
+    font-size: 1.25rem;
+  }
+
+  .transaction-button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+  }
+}

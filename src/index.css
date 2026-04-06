@@ -30,14 +30,18 @@
   --radius-md: 8px;
 
   /*
-    Breakpoints (documented, used via media queries):
-    mobile: 600px, tablet: 768px, desktop: 920px
+    Breakpoints:
+    xs (small mobile): 375px
+    sm (mobile):       600px
+    md (tablet):       768px
+    lg (desktop):      920px
   */
 }
 
 html {
   color: var(--color-text);
   font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-size: clamp(14px, 1.5vw, 16px);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

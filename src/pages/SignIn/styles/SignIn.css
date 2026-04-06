@@ -145,3 +145,30 @@
     font-size: 3rem;
   }
 }
+
+@media (width <= 375px) {
+  .sign-in-content {
+    padding: 1.25rem 0.875rem;
+  }
+
+  .sign-in-content h1 {
+    font-size: 1.1rem;
+    margin: 0 0 1.5rem;
+  }
+
+  .sign-in-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .input-wrapper input[type='email'],
+  .input-wrapper input[type='password'] {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.625rem;
+  }
+
+  .sign-in-content .sign-in-button {
+    font-size: 1rem;
+    padding: 0.625rem;
+  }
+}

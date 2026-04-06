@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
 import { LoadingSpinner } from '@/components/Loader';
+import { ToastContainer, useToast } from '@/components/Toast';
 import { ROUTES, MESSAGES, TRANSACTION_CATEGORIES, TRANSACTION_TYPES, BUTTONS, FORMS } from '@/constants';
 import { useGetTransactionsQuery, usePatchTransactionMutation } from '@/api/argentBankApi';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
@@ -133,6 +134,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [editingField, setEditingField] = useState<{ id: string; field: 'category' | 'notes' } | null>(null);
   const [editValue, setEditValue] = useState('');
+  const toast = useToast();
 
   useEffect(() => {
     if (isError) {
@@ -228,6 +230,8 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
           </tbody>
         </table>
       )}
+
+      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismiss} onPause={toast.pause} onResume={toast.resume} />
     </div>
   );
 };

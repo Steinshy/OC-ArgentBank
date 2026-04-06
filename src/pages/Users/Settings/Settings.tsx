@@ -106,7 +106,7 @@ export const Settings = () => {
         </div>
       </form>
 
-      <ToastContainer toasts={toast.toasts} />
+      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismiss} onPause={toast.pause} onResume={toast.resume} />
     </div>
   );
 };
