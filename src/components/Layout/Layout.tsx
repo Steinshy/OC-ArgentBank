@@ -34,24 +34,28 @@ export const Layout = ({ children }: LayoutProps) => {
         <div className="main-nav-items">
           {isAuthenticated && user ? (
             <>
-              <Link className="main-nav-item" to={ROUTES.PROFILE}>
-                <i className="fa fa-user-circle" aria-hidden="true"></i>
+              <Link className="main-nav-user-cta" to={ROUTES.PROFILE}>
+                <i className="fa fa-user-circle" aria-hidden="true" />
                 {user.firstName}
               </Link>
-              <Link className="main-nav-item" to={ROUTES.SETTINGS}>
-                <i className="fa fa-gear" aria-hidden="true"></i>
+              <Link className="main-nav-user-cta" to={ROUTES.SETTINGS}>
+                <i className="fa fa-gear" aria-hidden="true" />
                 Settings
               </Link>
-              <button className="main-nav-item unstyled-button" onClick={handleLogout}>
-                <i className="fa fa-sign-out" aria-hidden="true"></i>
+              <button type="button" className="main-nav-user-cta main-nav-user-cta--logout" onClick={handleLogout}>
+                <i className="fa fa-sign-out main-nav-user-cta__icon--danger" aria-hidden="true" />
                 {BUTTONS.SIGN_OUT}
               </button>
             </>
           ) : (
-            <Link className="main-nav-item" to={ROUTES.LOGIN}>
-              <i className="fa fa-user-circle" aria-hidden="true"></i>
-              {BUTTONS.SIGN_IN}
-            </Link>
+            <div className="main-nav-auth">
+              <Link className="main-nav-link-sign-in" to={ROUTES.LOGIN}>
+                {BUTTONS.SIGN_IN}
+              </Link>
+              <button type="button" className="main-nav-cta-pill">
+                {BUTTONS.REGISTER}
+              </button>
+            </div>
           )}
         </div>
       </nav>

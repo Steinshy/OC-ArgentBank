@@ -13,6 +13,8 @@
   /* Surfaces */
   --color-bg: #f8f8f8;
   --color-surface: #fff;
+  --nav-cta-pill-bg: color-mix(in srgb, var(--color-primary) 20%, white);
+  --nav-cta-pill-bg-hover: color-mix(in srgb, var(--color-primary) 32%, white);
   --color-border: #ddd;
   --color-border-light: #eee;
 
