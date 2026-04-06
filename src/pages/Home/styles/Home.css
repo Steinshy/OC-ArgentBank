@@ -1,6 +1,6 @@
 .home {
   flex: 1;
-  padding: 3rem 2rem;
+  padding: 2rem 1rem;
 }
 
 .home h1 {
@@ -44,6 +44,10 @@
 }
 
 @media (width >= 920px) {
+  .home {
+    padding: 3rem 2rem;
+  }
+
   .hero {
     background-position: 0% 33%;
     height: 400px;
@@ -94,4 +98,53 @@
   font-size: 1.25rem;
   font-weight: bold;
   margin-bottom: 0.5rem;
+}
+
+@media (width <= 600px) {
+  .hero {
+    background-position: center;
+    height: 260px;
+  }
+
+  .hero-content {
+    padding: 1.5rem;
+    width: 180px;
+  }
+
+  .feature-item {
+    padding: 2rem 1.5rem;
+  }
+}
+
+@media (width <= 375px) {
+  .hero {
+    background-position: center;
+    height: 220px;
+  }
+
+  .hero-content {
+    padding: 1.25rem;
+    top: 1rem;
+    width: 170px;
+  }
+
+  .hero-content .subtitle {
+    font-size: 0.875rem;
+  }
+
+  .hero-content .text {
+    font-size: 0.8rem;
+  }
+
+  .feature-icon {
+    width: 80px;
+  }
+
+  .feature-item {
+    padding: 1.5rem 1rem;
+  }
+
+  .feature-item-title {
+    font-size: 1rem;
+  }
 }
