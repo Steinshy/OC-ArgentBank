@@ -51,6 +51,7 @@ export const ERROR_MESSAGES = {
   SERVER_ERROR: 'Server error. Please try again later.',
   VALIDATION_ERROR: 'Please check your input and try again',
   SIGN_IN_FAILED: 'Sign in failed. Please try again.',
+  SIGN_UP_FAILED: 'Registration failed. Please try again.',
   PROFILE_UPDATE_FAILED: 'Failed to update profile. Please try again.',
   PROFILE_FETCH_FAILED: 'Failed to load profile. Please try again.',
 } as const;

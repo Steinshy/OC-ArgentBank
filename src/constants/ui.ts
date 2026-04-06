@@ -44,6 +44,8 @@ export const MESSAGES = {
   LOADING_PROFILE: 'Loading profile...',
   LOADING_TRANSACTIONS: 'Loading transactions...',
   SIGNING_IN: 'Signing in...',
+  REGISTERING: 'Creating account...',
+  REGISTER_SUCCESS: 'Account created! Welcome to Argent Bank.',
   ACCOUNT_NOT_FOUND: 'Account not found.',
   NO_TRANSACTIONS: 'No transactions found for this account.',
   PROFILE_UPDATED: 'Profile updated successfully.',

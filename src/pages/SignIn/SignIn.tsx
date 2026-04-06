@@ -1,12 +1,11 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { signInUser } from '@/features/Auth/authThunks';
 import { SIGN_IN_PASSWORD_INVALID, SIGN_IN_USER_NOT_FOUND } from '@/helpers/signInServerMessages';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { storage } from '@/utils/storage';
 import './styles/SignIn.css';
 
 const joinDescribedBy = (...ids: (string | undefined | null | false)[]): string | undefined => {
@@ -17,7 +16,6 @@ const joinDescribedBy = (...ids: (string | undefined | null | false)[]): string 
 export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { loading, error, token } = useAppSelector((state) => state.auth);
@@ -46,9 +44,6 @@ export const SignIn = () => {
     e.preventDefault();
     const result = await dispatch(signInUser({ email: email.trim(), password }));
     if (signInUser.fulfilled.match(result)) {
-      if (rememberMe) {
-        storage.setRememberMe(email.trim());
-      }
       navigate(ROUTES.PROFILE);
     }
   };
@@ -111,17 +106,15 @@ export const SignIn = () => {
                 {generalServerError}
               </p>
             )}
-            <div className="input-remember">
-              <input type="checkbox" id="remember-me" name="rememberMe" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
-              <label htmlFor="remember-me">Remember me</label>
-            </div>
             <button type="submit" className="sign-in-button" disabled={loading}>
               {loading ? MESSAGES.SIGNING_IN : BUTTONS.SIGN_IN}
             </button>
+            <p className="register-link">
+              Don't have an account? <Link to={ROUTES.REGISTER}>Register</Link>
+            </p>
           </form>
         </section>
       </div>
     </div>
   );
-
 };
