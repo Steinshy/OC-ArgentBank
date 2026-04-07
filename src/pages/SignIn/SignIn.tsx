@@ -4,18 +4,16 @@ import { Link, useNavigate } from 'react-router';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { signInUser } from '@/features/Auth/authThunks';
-import { SIGN_IN_PASSWORD_INVALID, SIGN_IN_USER_NOT_FOUND } from '@/helpers/signInServerMessages';
+import { classifySignInError } from '@/utils/errorHandler';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { joinDescribedBy } from '@/utils/aria';
 import './styles/SignIn.css';
-
-const joinDescribedBy = (...ids: (string | undefined | null | false)[]): string | undefined => {
-  const joined = ids.filter(Boolean).join(' ');
-  return joined || undefined;
-};
 
 export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [emailValidationError, setEmailValidationError] = useState('');
+  const [passwordValidationError, setPasswordValidationError] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { loading, error, token } = useAppSelector((state) => state.auth);
@@ -28,6 +26,9 @@ export const SignIn = () => {
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
+    if (emailValidationError) {
+      setEmailValidationError('');
+    }
     if (error) {
       dispatch(clearError());
     }
@@ -35,25 +36,44 @@ export const SignIn = () => {
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
+    if (passwordValidationError) {
+      setPasswordValidationError('');
+    }
     if (error) {
       dispatch(clearError());
     }
   };
 
+  const validateForm = (): boolean => {
+    let isValid = true;
+    if (!email.trim()) {
+      setEmailValidationError('Email is required');
+      isValid = false;
+    }
+    if (!password) {
+      setPasswordValidationError('Password is required');
+      isValid = false;
+    }
+    return isValid;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
     const result = await dispatch(signInUser({ email: email.trim(), password }));
     if (signInUser.fulfilled.match(result)) {
       navigate(ROUTES.PROFILE);
     }
   };
 
-  const emailServerError = error === SIGN_IN_USER_NOT_FOUND ? error : null;
-  const passwordServerError = error === SIGN_IN_PASSWORD_INVALID ? error : null;
-  const generalServerError = error && !emailServerError && !passwordServerError ? error : null;
+  const { emailError: emailServerError, passwordError: passwordServerError, generalError: generalServerError } = classifySignInError(error);
+  const emailError = emailValidationError || emailServerError;
+  const passwordError = passwordValidationError || passwordServerError;
 
-  const emailDescribedBy = joinDescribedBy(emailServerError && 'sign-in-email-error', generalServerError && 'sign-in-server-error');
-  const passwordDescribedBy = joinDescribedBy(passwordServerError && 'sign-in-password-error', generalServerError && 'sign-in-server-error');
+  const emailDescribedBy = joinDescribedBy(emailError && 'sign-in-email-error', generalServerError && 'sign-in-server-error');
+  const passwordDescribedBy = joinDescribedBy(passwordError && 'sign-in-password-error', generalServerError && 'sign-in-server-error');
 
   return (
     <div className="sign-in-page">
@@ -73,12 +93,12 @@ export const SignIn = () => {
                 placeholder="you@example.com"
                 value={email}
                 onChange={handleEmailChange}
-                aria-invalid={emailServerError || generalServerError ? true : undefined}
+                aria-invalid={emailError || generalServerError ? true : undefined}
                 aria-describedby={emailDescribedBy}
               />
-              {emailServerError && (
+              {emailError && (
                 <p className="field-error" id="sign-in-email-error" role="alert">
-                  {emailServerError}
+                  {emailError}
                 </p>
               )}
             </div>
@@ -92,12 +112,12 @@ export const SignIn = () => {
                 placeholder="••••••••"
                 value={password}
                 onChange={handlePasswordChange}
-                aria-invalid={passwordServerError || generalServerError ? true : undefined}
+                aria-invalid={passwordError || generalServerError ? true : undefined}
                 aria-describedby={passwordDescribedBy}
               />
-              {passwordServerError && (
+              {passwordError && (
                 <p className="field-error" id="sign-in-password-error" role="alert">
-                  {passwordServerError}
+                  {passwordError}
                 </p>
               )}
             </div>

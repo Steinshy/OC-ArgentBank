@@ -1,7 +1,7 @@
 import { createPortal } from 'react-dom';
 import { AlertTriangle, CheckCircle2, Info, X, XCircle } from 'lucide-react';
 
-import type { ToastItem } from './useToast';
+import type { ToastItem } from '@/types';
 import './styles/Toast.css';
 
 const ICONS = {

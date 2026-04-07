@@ -1,7 +1,6 @@
-import { SIGN_IN_PASSWORD_INVALID, SIGN_IN_USER_NOT_FOUND } from '@/helpers/signInServerMessages';
-import { SIGN_UP_EMAIL_EXISTS } from '@/helpers/signUpServerMessages';
-import { MOCK_USERS, MockUser } from '@/mocks';
-import { SignInRequest, SignInResponse, SignUpRequest, SignUpResponse, UserProfileResponse } from '@/types';
+import { SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
+import { MOCK_USERS } from './users';
+import { MockUser, SignInRequest, SignInResponse, SignUpRequest, SignUpResponse, UserProfileResponse } from '@/types';
 
 const MOCK_DELAY = 1000;
 
@@ -30,11 +29,11 @@ export const mockAuthApi = {
     const user = MOCK_USERS.find((u) => u.email === credentials.email);
 
     if (!user) {
-      throw new Error(SIGN_IN_USER_NOT_FOUND);
+      throw new Error(SERVER_ERROR_MESSAGES.SIGN_IN_USER_NOT_FOUND);
     }
 
     if (user.password !== credentials.password) {
-      throw new Error(SIGN_IN_PASSWORD_INVALID);
+      throw new Error(SERVER_ERROR_MESSAGES.SIGN_IN_PASSWORD_INVALID);
     }
 
     return {
@@ -49,7 +48,7 @@ export const mockAuthApi = {
   signUp: async (data: SignUpRequest): Promise<SignUpResponse> => {
     await delay(MOCK_DELAY);
     if (MOCK_USERS.find((u) => u.email === data.email)) {
-      throw new Error(SIGN_UP_EMAIL_EXISTS);
+      throw new Error(SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS);
     }
     const newUser: MockUser = {
       id: String(Date.now()),

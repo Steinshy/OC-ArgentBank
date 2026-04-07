@@ -1,3 +1,54 @@
+import type { ComponentType } from 'react';
+
+// Validation Types
+
+export interface ValidationResult {
+  isValid: boolean;
+  error: string | null;
+}
+
+// Form Types
+
+export interface FieldErrors {
+  email: string | null;
+  password: string | null;
+  firstName: string | null;
+  lastName: string | null;
+}
+
+// UI Component Types
+
+export type ToastType = 'success' | 'error' | 'warning' | 'info';
+
+export interface ToastAction {
+  label: string;
+  onClick: () => void;
+}
+
+export interface ToastItem {
+  id: number;
+  title: string;
+  message: string;
+  type: ToastType;
+  dismissing: boolean;
+  paused: boolean;
+  duration: number;
+  action?: ToastAction;
+}
+
+export interface Feature {
+  icon: ComponentType<{ className?: string }>;
+  title: string;
+  description: string;
+}
+
+// API Contract Types
+
+export interface UpdateProfileData {
+  firstName: string;
+  lastName: string;
+}
+
 // API Response Types
 
 export interface ApiErrorResponse {
@@ -78,10 +129,6 @@ export interface AuthState {
   loading: boolean;
   error: string | null;
   isAuthenticated: boolean;
-}
-
-export interface TransactionState {
-  currentAccountId: string | null;
 }
 
 export interface ApiError {

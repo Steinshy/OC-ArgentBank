@@ -1,9 +1,9 @@
 import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 import { Layout } from '@/components/Layout/Layout';
-import { ProtectedRoute } from '@/components/ProtectedRoute';
+import { ProtectedRoute } from '@/components/ProtectedRoute/ProtectedRoute';
 import { ROUTES } from '@/constants';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { Home } from '@/pages/Home/Home';

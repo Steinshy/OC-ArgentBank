@@ -1,26 +1,17 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
-import { ToastContainer, useToast } from '@/components/Toast';
+import { ToastContainer } from '@/components/Toast/Toast';
+import { useToast } from '@/components/Toast/useToast';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { signUpUser } from '@/features/Auth/authThunks';
-import { SIGN_UP_EMAIL_EXISTS } from '@/helpers/signUpServerMessages';
+import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
 import { validateRegisterEmail, validateRegisterPassword, validateRegisterName } from '@/helpers/validator';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { joinDescribedBy } from '@/utils/aria';
+import { FieldErrors } from '@/types';
 import './styles/Register.css';
-
-const joinDescribedBy = (...ids: (string | undefined | null | false)[]): string | undefined => {
-  const joined = ids.filter(Boolean).join(' ');
-  return joined || undefined;
-};
-
-interface FieldErrors {
-  email: string | null;
-  password: string | null;
-  firstName: string | null;
-  lastName: string | null;
-}
 
 const initialFieldErrors: FieldErrors = { email: null, password: null, firstName: null, lastName: null };
 
@@ -45,13 +36,11 @@ export const Register = () => {
     setFieldErrors((prev) => ({ ...prev, [field]: null }));
   };
 
-  const handleChange =
-    (setter: React.Dispatch<React.SetStateAction<string>>, field: keyof FieldErrors) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      setter(e.target.value);
-      clearFieldError(field);
-      if (error) dispatch(clearError());
-    };
+  const handleChange = (setter: React.Dispatch<React.SetStateAction<string>>, field: keyof FieldErrors) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setter(e.target.value);
+    clearFieldError(field);
+    if (error) dispatch(clearError());
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,13 +67,13 @@ export const Register = () => {
     if (signUpUser.fulfilled.match(result)) {
       toast.show('Account created', MESSAGES.REGISTER_SUCCESS, 'success');
       navigate(ROUTES.PROFILE);
-    } else if (signUpUser.rejected.match(result) && result.payload === SIGN_UP_EMAIL_EXISTS) {
-      setFieldErrors((prev) => ({ ...prev, email: SIGN_UP_EMAIL_EXISTS }));
+    } else if (signUpUser.rejected.match(result) && result.payload === SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS) {
+      setFieldErrors((prev) => ({ ...prev, email: SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS }));
       dispatch(clearError());
     }
   };
 
-  const generalServerError = error && error !== SIGN_UP_EMAIL_EXISTS ? error : null;
+  const { generalError: generalServerError } = classifySignUpError(error);
 
   const emailDescribedBy = joinDescribedBy(fieldErrors.email && 'register-email-error', generalServerError && 'register-server-error');
   const passwordDescribedBy = joinDescribedBy(fieldErrors.password && 'register-password-error', generalServerError && 'register-server-error');

@@ -1,12 +1,7 @@
 import { signInUser, logoutUser } from '@/features/Auth/authThunks';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { SignInRequest } from '@/types';
-
-interface UpdateProfileData {
-  firstName: string;
-  lastName: string;
-}
+import { SignInRequest, UpdateProfileData } from '@/types';
 
 export const useAuth = () => {
   const dispatch = useAppDispatch();

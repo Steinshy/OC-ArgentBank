@@ -1,7 +1,4 @@
-export interface ValidationResult {
-  isValid: boolean;
-  error: string | null;
-}
+import { ValidationResult } from '@/types';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_REGEX = /^[\p{L}\s'-]+$/u;
@@ -17,7 +14,9 @@ export const validateRegisterEmail = (value: string): ValidationResult => {
 
 export const validateRegisterPassword = (value: string): ValidationResult => {
   if (!value) return { isValid: false, error: 'Password is required' };
-  if (value.length < 6) return { isValid: false, error: 'Password must be at least 6 characters' };
+  if (value.length < 8) return { isValid: false, error: 'Password must be at least 8 characters' };
+  if (!/[A-Z]/.test(value)) return { isValid: false, error: 'Password must contain at least one uppercase letter' };
+  if (!/[0-9]/.test(value)) return { isValid: false, error: 'Password must contain at least one number' };
   return { isValid: true, error: null };
 };
 
