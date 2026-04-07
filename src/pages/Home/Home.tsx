@@ -13,13 +13,8 @@ export const Home = () => {
         <div className="hero-content-wrapper">
           <div className="hero-text">
             <h1 className="hero-title">Argent Bank</h1>
-            <p className="hero-subtitle">
-              Experience the future of digital banking with Argent Bank. Secure, fast, and designed for you.
-            </p>
-            <Link
-              to={isAuthenticated ? ROUTES.PROFILE : ROUTES.LOGIN}
-              className="cta-button"
-            >
+            <p className="hero-subtitle">Experience the future of digital banking with Argent Bank. Secure, fast, and designed for you.</p>
+            <Link to={isAuthenticated ? ROUTES.PROFILE : ROUTES.LOGIN} className="cta-button">
               {isAuthenticated ? BUTTONS.VIEW_PROFILE : BUTTONS.SIGN_IN}
             </Link>
           </div>

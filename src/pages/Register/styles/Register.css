@@ -11,7 +11,9 @@
   line-height: 1.35;
   padding: 0.5rem 0.875rem;
   text-align: left;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .input-wrapper input[type='text']::placeholder {
