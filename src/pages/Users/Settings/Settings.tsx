@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-import { ToastContainer, useToast } from '@/components/Toast';
+import { ToastContainer } from '@/components/Toast/Toast';
+import { useToast } from '@/components/Toast/useToast';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { validateRegisterName } from '@/helpers/validator';

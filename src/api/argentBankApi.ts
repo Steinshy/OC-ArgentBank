@@ -1,14 +1,11 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { authApi } from './auth';
-import { transactionsApi } from './transactions';
-import { mockAuthApi } from './mockAuth';
+import { apiCall } from './client';
+import { mockAuthApi } from '@/mocks';
 import { updateMockTransaction, MOCK_ACCOUNTS } from '@/mocks/accounts';
-import { UserProfile, Transaction } from '@/types';
+import { UserProfile, UserProfileResponse, Transaction } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
-import type { RootState } from '@/store/store';
-
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
+import { USE_MOCK, API_ENDPOINTS } from '@/constants';
 
 export const argentBankApi = createApi({
   reducerPath: 'argentBankApi',
@@ -18,14 +15,14 @@ export const argentBankApi = createApi({
     getProfile: builder.query<UserProfile, void>({
       queryFn: async (_arg, { getState }) => {
         try {
-          const token = (getState() as RootState).auth.token ?? '';
+          const token = (getState() as { auth: { token: string | null } }).auth.token ?? '';
 
           if (USE_MOCK) {
             const response = await mockAuthApi.getProfile(token);
             return { data: response.body };
           }
 
-          const response = await authApi.getProfile(token);
+          const response = await apiCall<UserProfileResponse>(API_ENDPOINTS.USER_PROFILE, { method: 'POST', token });
           return { data: response.body };
         } catch (error) {
           const errorMessage = extractErrorMessage(error, ERROR_MESSAGES.PROFILE_FETCH_FAILED);
@@ -38,14 +35,18 @@ export const argentBankApi = createApi({
     updateProfile: builder.mutation<UserProfile, { firstName: string; lastName: string }>({
       queryFn: async (args, { getState }) => {
         try {
-          const token = (getState() as RootState).auth.token ?? '';
+          const token = (getState() as { auth: { token: string | null } }).auth.token ?? '';
 
           if (USE_MOCK) {
             const response = await mockAuthApi.updateProfile(token, args);
             return { data: response.body };
           }
 
-          const response = await authApi.updateProfile(token, args);
+          const response = await apiCall<UserProfileResponse>(API_ENDPOINTS.USER_PROFILE, {
+            method: 'PUT',
+            body: JSON.stringify(args),
+            token,
+          });
           return { data: response.body };
         } catch (error) {
           const errorMessage = extractErrorMessage(error, ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
@@ -58,21 +59,19 @@ export const argentBankApi = createApi({
     getTransactions: builder.query<Transaction[], string>({
       queryFn: async (accountId, { getState }) => {
         try {
-          const token = (getState() as RootState).auth.token ?? '';
+          const token = (getState() as { auth: { token: string | null } }).auth.token ?? '';
 
           if (USE_MOCK) {
             const account = MOCK_ACCOUNTS.find((a) => a.id === accountId);
             if (!account) {
-              return {
-                error: `Account ${accountId} not found`,
-              };
+              return { error: `Account ${accountId} not found` };
             }
             const transactions = structuredClone(account.transactions ?? []);
             return { data: transactions };
           }
 
-          const response = await transactionsApi.getTransactions(token, accountId);
-          return { data: response };
+          const data = await apiCall<Transaction[]>(API_ENDPOINTS.ACCOUNT_TRANSACTIONS(accountId), { method: 'GET', token });
+          return { data };
         } catch (error) {
           const errorMessage = extractErrorMessage(error, 'Failed to load transactions. Please try again.');
           return { error: errorMessage };
@@ -90,14 +89,18 @@ export const argentBankApi = createApi({
     patchTransaction: builder.mutation<void, { accountId: string; transactionId: string; data: { category?: string; notes?: string } }>({
       queryFn: async ({ accountId, transactionId, data }, { getState }) => {
         try {
-          const token = (getState() as RootState).auth.token ?? '';
+          const token = (getState() as { auth: { token: string | null } }).auth.token ?? '';
 
           if (USE_MOCK) {
             updateMockTransaction(accountId, transactionId, data);
             return { data: undefined };
           }
 
-          await transactionsApi.updateTransaction(token, accountId, transactionId, data);
+          await apiCall(API_ENDPOINTS.TRANSACTION_DETAIL(accountId, transactionId), {
+            method: 'PATCH',
+            body: JSON.stringify(data),
+            token,
+          });
           return { data: undefined };
         } catch (error) {
           const errorMessage = extractErrorMessage(error, 'Failed to update transaction');

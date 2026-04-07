@@ -1,22 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
-
-export interface ToastAction {
-  label: string;
-  onClick: () => void;
-}
-
-export interface ToastItem {
-  id: number;
-  title: string;
-  message: string;
-  type: ToastType;
-  dismissing: boolean;
-  paused: boolean;
-  duration: number;
-  action?: ToastAction;
-}
+import { ToastType, ToastAction, ToastItem } from '@/types';
 
 const DISMISS_ANIMATION_DURATION = 250;
 const DEFAULT_DURATIONS: Record<ToastType, number> = {

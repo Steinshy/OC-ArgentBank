@@ -1,15 +1,13 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { LoadingSpinner } from '@/components/Loader';
+import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
 import { useGetProfileQuery } from '@/api/argentBankApi';
-import { buildTransactionsRoute, ROUTES, MESSAGES, NAVIGATION } from '@/constants';
+import { buildTransactionsRoute, ROUTES, MESSAGES, NAVIGATION, USE_MOCK } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
 import { logoutUser } from '@/features/Auth/authThunks';
 import type { AppDispatch } from '@/store/store';
 import './styles/Profile.css';
-
-const USE_MOCK = import.meta.env.VITE_USE_MOCK === 'true';
 
 export const Profile = () => {
   const dispatch = useDispatch<AppDispatch>();

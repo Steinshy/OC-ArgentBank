@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router';
 
-import { LoadingSpinner } from '@/components/Loader';
+import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { ROUTES, MESSAGES } from '@/constants';
 import { useAppDispatch, useAppSelector } from '@/store/store';

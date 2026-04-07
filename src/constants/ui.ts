@@ -1,11 +1,5 @@
-import type { ComponentType } from 'react';
 import { Lock, Zap, BarChart3 } from 'lucide-react';
-
-interface Feature {
-  icon: ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
-}
+import { Feature } from '@/types';
 
 export const APP = {
   NAME: 'Argent Bank',

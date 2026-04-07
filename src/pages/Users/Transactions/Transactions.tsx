@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
-import { LoadingSpinner } from '@/components/Loader';
-import { ToastContainer, useToast } from '@/components/Toast';
+import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
+import { ToastContainer } from '@/components/Toast/Toast';
+import { useToast } from '@/components/Toast/useToast';
 import { ROUTES, MESSAGES, TRANSACTION_CATEGORIES, TRANSACTION_TYPES, BUTTONS, FORMS } from '@/constants';
 import { useGetTransactionsQuery, usePatchTransactionMutation } from '@/api/argentBankApi';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
@@ -200,7 +201,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((tx) => (
+            {transactions.map((tx: Transaction) => (
               <React.Fragment key={tx.id}>
                 <tr className="transaction-row" onClick={() => handleToggleRow(tx.id)} onKeyDown={(e) => handleRowKeyDown(e, tx.id)} tabIndex={0} role="button" aria-expanded={expandedRowId === tx.id}>
                   <td>

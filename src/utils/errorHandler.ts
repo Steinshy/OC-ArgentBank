@@ -56,6 +56,24 @@ export const ERROR_MESSAGES = {
   PROFILE_FETCH_FAILED: 'Failed to load profile. Please try again.',
 } as const;
 
+/** Server response messages — matched to backend error messages */
+export const SERVER_ERROR_MESSAGES = {
+  SIGN_IN_USER_NOT_FOUND: 'User not found!',
+  SIGN_IN_PASSWORD_INVALID: 'Password is invalid',
+  SIGN_UP_EMAIL_EXISTS: 'Email already exists',
+} as const;
+
+export const classifySignInError = (error: string | null) => ({
+  emailError: error === SERVER_ERROR_MESSAGES.SIGN_IN_USER_NOT_FOUND ? error : null,
+  passwordError: error === SERVER_ERROR_MESSAGES.SIGN_IN_PASSWORD_INVALID ? error : null,
+  generalError: error && error !== SERVER_ERROR_MESSAGES.SIGN_IN_USER_NOT_FOUND && error !== SERVER_ERROR_MESSAGES.SIGN_IN_PASSWORD_INVALID ? error : null,
+});
+
+export const classifySignUpError = (error: string | null) => ({
+  emailError: error === SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS ? error : null,
+  generalError: error && error !== SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS ? error : null,
+});
+
 export const getErrorMessageByStatus = (status: number): string => {
   switch (status) {
     case 400:
