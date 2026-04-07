@@ -1,4 +1,4 @@
-@import '../../SignIn/styles/SignIn.css';
+@import url('../../SignIn/styles/SignIn.css');
 
 /* ===== REGISTER-SPECIFIC INPUT STYLES ===== */
 .input-wrapper input[type='text'] {
@@ -23,8 +23,8 @@
 }
 
 .input-wrapper input[type='text']:focus {
+  background: var(--color-surface);
   border-color: var(--color-primary);
   box-shadow: var(--focus-ring);
   outline: none;
-  background: var(--color-surface);
 }
