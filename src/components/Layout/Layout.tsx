@@ -26,6 +26,9 @@ export const Layout = ({ children }: LayoutProps) => {
 
   return (
     <div className="layout">
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <nav className="main-nav" aria-label="Main navigation">
         <Link className="main-nav-logo" to={ROUTES.HOME}>
           <img className="main-nav-logo-image" src="/assets/img/argentBankLogo.png" alt={NAVIGATION.HOME_LOGO_ALT} />
@@ -59,7 +62,9 @@ export const Layout = ({ children }: LayoutProps) => {
           )}
         </div>
       </nav>
-      <main className={`main ${isAuthPage ? 'bg-dark' : ''}`}>{children}</main>
+      <main id="main-content" className={`main ${isAuthPage ? 'bg-dark' : ''}`}>
+        {children}
+      </main>
       <footer className="footer">
         <p className="footer-text">{getCopyrightText()}</p>
       </footer>
