@@ -257,9 +257,7 @@
 /* ===== RESPONSIVE ===== */
 @media (width <= 600px) {
   .sign-in-panel {
-    align-items: flex-start;
     padding: 1.5rem 1rem;
-    padding-top: 2rem;
   }
 
   .sign-in-content {
