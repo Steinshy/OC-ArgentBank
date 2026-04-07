@@ -210,10 +210,7 @@
 /* ── Responsive ──────────────────────────────────────────────── */
 @media (width <= 600px) {
   .toast-container {
-    bottom: auto;
-    left: 1rem;
-    right: 1rem;
-    top: 1rem;
+    inset: 1rem 1rem auto;
     width: auto;
   }
 
