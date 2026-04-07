@@ -121,7 +121,9 @@
   line-height: 1.2;
   padding: 0.55rem 1.5rem;
   text-decoration: none;
-  transition: background-color 0.2s, color 0.2s;
+  transition:
+    background-color 0.2s,
+    color 0.2s;
   white-space: nowrap;
 }
 
@@ -152,7 +154,11 @@
   line-height: 1.2;
   padding: 0.65rem 1.35rem;
   text-decoration: none;
-  transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease,
+    transform 0.3s ease;
   white-space: nowrap;
 }
 
