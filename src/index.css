@@ -23,9 +23,13 @@
   --color-error-bg: #ffebee;
   --color-success: #2e7d32;
   --color-success-bg: #e8f5e9;
+  --color-warning: #d97706;
+  --color-warning-bg: #fef3c7;
+  --color-info: #2563eb;
+  --color-info-bg: #dbeafe;
 
   /* Focus */
-  --focus-ring: 0 0 0 2px rgb(0 188 119 / 25%);
+  --focus-ring: 0 0 0 2px #00bc77;
 
   /* Radius */
   --radius-sm: 4px;

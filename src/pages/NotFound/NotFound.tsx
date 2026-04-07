@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 
 import { ROUTES } from '@/constants';
+import './styles/NotFound.css';
 
 export const NotFound = () => {
   return (
