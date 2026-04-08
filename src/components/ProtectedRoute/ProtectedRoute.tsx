@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { Navigate } from 'react-router';
 
 import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
@@ -13,15 +13,20 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-  const { data: user, isLoading, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
+  const { isAuthenticated, token } = useAppSelector((state) => state.auth);
+  const { data: user, isLoading, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated || !token });
+
+  useEffect(() => {
+    if (isError && isAuthenticated) {
+      void dispatch(logoutUser());
+    }
+  }, [dispatch, isAuthenticated, isError]);
 
   if (!isAuthenticated) {
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 
   if (isError) {
-    dispatch(logoutUser());
     return <Navigate to={ROUTES.LOGIN} replace />;
   }
 

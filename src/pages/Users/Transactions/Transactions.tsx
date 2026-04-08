@@ -1,127 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
 import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
-import { ToastContainer } from '@/components/Toast/Toast';
-import { useToast } from '@/components/Toast/useToast';
-import { ROUTES, MESSAGES, TRANSACTION_CATEGORIES, TRANSACTION_TYPES, BUTTONS, FORMS } from '@/constants';
-import { useGetTransactionsQuery, usePatchTransactionMutation } from '@/api/argentBankApi';
+import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS } from '@/constants';
+import { useGetTransactionsQuery } from '@/api/argentBankApi';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
-import { Account, Transaction } from '@/types';
+import { Transaction } from '@/types';
 import { extractErrorMessage } from '@/utils/errorHandler';
 import { logoutUser } from '@/features/Auth/authThunks';
 import type { AppDispatch } from '@/store/store';
+import { TransactionHeader } from './TransactionHeader';
+import { TransactionDetail } from './TransactionDetail';
+import { useTransactionEdit } from './useTransactionEdit';
 import './styles/Transactions.css';
-
-interface TransactionHeaderProps {
-  account: Account;
-}
-
-const TransactionHeader = ({ account }: TransactionHeaderProps) => (
-  <div className="transaction-header">
-    <h2>{account.title}</h2>
-    <p className="transaction-balance">${account.amount.toFixed(2)}</p>
-    <p className="transaction-balance-label">{account.description}</p>
-  </div>
-);
-
-interface TransactionDetailProps {
-  tx: Transaction;
-  editingField: { id: string; field: 'category' | 'notes' } | null;
-  editValue: string;
-  onStartEdit: (id: string, field: 'category' | 'notes', currentValue: string) => void;
-  onSaveEdit: (id: string, field: 'category' | 'notes') => void;
-  onCancelEdit: () => void;
-  onEditValueChange: (value: string) => void;
-}
-
-const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, onSaveEdit, onCancelEdit, onEditValueChange }: TransactionDetailProps) => (
-  <tr className="transaction-detail-row">
-    <td colSpan={5}>
-      <div className="transaction-detail-content">
-        <div className="detail-row">
-          <div className="detail-label">Transaction Type:</div>
-          <div className="detail-value">{tx.type}</div>
-        </div>
-
-        <div className="detail-row">
-          <div className="detail-label" id={`category-label-${tx.id}`}>
-            Category:
-          </div>
-          <div className="detail-value">
-            {editingField?.id === tx.id && editingField?.field === 'category' ? (
-              <div className="edit-controls">
-                <select
-                  id={`transaction-category-${tx.id}`}
-                  name={`transaction-category-${tx.id}`}
-                  className="edit-inline-select"
-                  value={editValue}
-                  onChange={(e) => onEditValueChange(e.target.value)}
-                  aria-labelledby={`category-label-${tx.id}`}
-                >
-                  {TRANSACTION_CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
-                    </option>
-                  ))}
-                </select>
-                <button className="edit-save-btn" onClick={() => onSaveEdit(tx.id, 'category')}>
-                  {BUTTONS.SAVE}
-                </button>
-                <button className="edit-cancel-btn" onClick={onCancelEdit}>
-                  {BUTTONS.CANCEL}
-                </button>
-              </div>
-            ) : (
-              <>
-                {tx.category}
-                <button className="edit-pencil" onClick={() => onStartEdit(tx.id, 'category', tx.category)} aria-label={FORMS.EDIT_CATEGORY_TITLE}>
-                  ✎
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-
-        <div className="detail-row">
-          <div className="detail-label" id={`notes-label-${tx.id}`}>
-            Notes:
-          </div>
-          <div className="detail-value">
-            {editingField?.id === tx.id && editingField?.field === 'notes' ? (
-              <div className="edit-controls">
-                <input
-                  id={`transaction-notes-${tx.id}`}
-                  name={`transaction-notes-${tx.id}`}
-                  type="text"
-                  className="edit-inline-input"
-                  value={editValue}
-                  onChange={(e) => onEditValueChange(e.target.value)}
-                  aria-labelledby={`notes-label-${tx.id}`}
-                  placeholder={FORMS.ADD_NOTE_PLACEHOLDER}
-                />
-                <button className="edit-save-btn" onClick={() => onSaveEdit(tx.id, 'notes')}>
-                  {BUTTONS.SAVE}
-                </button>
-                <button className="edit-cancel-btn" onClick={onCancelEdit}>
-                  {BUTTONS.CANCEL}
-                </button>
-              </div>
-            ) : (
-              <>
-                {tx.notes || '-'}
-                <button className="edit-pencil" onClick={() => onStartEdit(tx.id, 'notes', tx.notes || '')} aria-label={FORMS.EDIT_NOTES_TITLE}>
-                  ✎
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-    </td>
-  </tr>
-);
 
 interface TransactionContentProps {
   accountId: string;
@@ -131,11 +23,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { data: transactions = [], isLoading: loading, error, isError } = useGetTransactionsQuery(accountId, { refetchOnFocus: true });
-  const [patchTransaction] = usePatchTransactionMutation();
-  const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
-  const [editingField, setEditingField] = useState<{ id: string; field: 'category' | 'notes' } | null>(null);
-  const [editValue, setEditValue] = useState('');
-  const toast = useToast();
+  const { expandedRowId, editingField, editValue, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit } = useTransactionEdit(accountId);
 
   useEffect(() => {
     if (isError) {
@@ -144,32 +32,11 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
     }
   }, [isError, dispatch, navigate]);
 
-  const handleToggleRow = (id: string) => {
-    setExpandedRowId((prev) => (prev === id ? null : id));
-    setEditingField(null);
-  };
-
   const handleRowKeyDown = (e: React.KeyboardEvent, id: string) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      handleToggleRow(id);
+      toggleRow(id);
     }
-  };
-
-  const handleStartEdit = (id: string, field: 'category' | 'notes', currentValue: string) => {
-    setEditingField({ id, field });
-    setEditValue(currentValue || '');
-  };
-
-  const handleSaveEdit = (id: string, field: 'category' | 'notes') => {
-    patchTransaction({ accountId, transactionId: id, data: { [field]: editValue } });
-    setEditingField(null);
-    setEditValue('');
-  };
-
-  const handleCancelEdit = () => {
-    setEditingField(null);
-    setEditValue('');
   };
 
   return (
@@ -203,7 +70,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
           <tbody>
             {transactions.map((tx: Transaction) => (
               <React.Fragment key={tx.id}>
-                <tr className="transaction-row" onClick={() => handleToggleRow(tx.id)} onKeyDown={(e) => handleRowKeyDown(e, tx.id)} tabIndex={0} role="button" aria-expanded={expandedRowId === tx.id}>
+                <tr className="transaction-row" onClick={() => toggleRow(tx.id)} onKeyDown={(e) => handleRowKeyDown(e, tx.id)} tabIndex={0} role="button" aria-expanded={expandedRowId === tx.id}>
                   <td>
                     <span className={`arrow ${expandedRowId === tx.id ? 'arrow-up' : 'arrow-down'}`} aria-hidden="true" />
                   </td>
@@ -220,9 +87,9 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
                     tx={tx}
                     editingField={editingField}
                     editValue={editValue}
-                    onStartEdit={handleStartEdit}
-                    onSaveEdit={handleSaveEdit}
-                    onCancelEdit={handleCancelEdit}
+                    onStartEdit={startEdit}
+                    onSaveEdit={saveEdit}
+                    onCancelEdit={cancelEdit}
                     onEditValueChange={setEditValue}
                   />
                 )}
@@ -231,8 +98,6 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
           </tbody>
         </table>
       )}
-
-      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismiss} onPause={toast.pause} onResume={toast.resume} />
     </div>
   );
 };

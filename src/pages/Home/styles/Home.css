@@ -13,19 +13,6 @@
   position: relative;
 }
 
-.hero-section::before {
-  animation: float 6s ease-in-out infinite;
-  background: radial-gradient(circle, rgb(0 188 119 / 10%) 0%, transparent 70%);
-  border-radius: 50%;
-  content: '';
-  display: none;
-  height: 600px;
-  position: absolute;
-  right: -10%;
-  top: -50%;
-  width: 600px;
-}
-
 .hero-content-wrapper {
   align-items: center;
   display: grid;
@@ -243,17 +230,6 @@
 }
 
 /* ===== ANIMATIONS ===== */
-@keyframes float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-20px);
-  }
-}
-
 @keyframes pulse {
   0%,
   100% {

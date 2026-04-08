@@ -37,8 +37,8 @@ export const BUTTONS = {
 export const MESSAGES = {
   LOADING_PROFILE: 'Loading profile...',
   LOADING_TRANSACTIONS: 'Loading transactions...',
-  SIGNING_IN: 'Signing in...',
-  REGISTERING: 'Creating account...',
+  SIGNIN_PENDING: 'Signing in...',
+  SIGNUP_PENDING: 'Creating account...',
   REGISTER_SUCCESS: 'Account created! Welcome to Argent Bank.',
   ACCOUNT_NOT_FOUND: 'Account not found.',
   NO_TRANSACTIONS: 'No transactions found for this account.',
@@ -62,6 +62,8 @@ export const TRANSACTION_TYPES = {
   DEBIT: 'debit',
   CREDIT: 'credit',
 } as const;
+
+export type TransactionType = (typeof TRANSACTION_TYPES)[keyof typeof TRANSACTION_TYPES];
 
 export const getCopyrightText = (): string => {
   const currentYear = new Date().getFullYear();

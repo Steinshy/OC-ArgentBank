@@ -127,7 +127,7 @@ export const SignIn = () => {
               </p>
             )}
             <button type="submit" className="sign-in-button" disabled={loading}>
-              {loading ? MESSAGES.SIGNING_IN : BUTTONS.SIGN_IN}
+              {loading ? MESSAGES.SIGNIN_PENDING : BUTTONS.SIGN_IN}
             </button>
             <p className="register-link">
               Don't have an account? <Link to={ROUTES.REGISTER}>Register</Link>

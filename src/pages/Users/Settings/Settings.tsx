@@ -1,11 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
-import { ToastContainer } from '@/components/Toast/Toast';
-import { useToast } from '@/components/Toast/useToast';
+import { useToast } from '@/components/Toast/ToastContext';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
-import { validateRegisterName } from '@/helpers/validator';
+import { validateName } from '@/helpers/validator';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { extractErrorMessage } from '@/utils/errorHandler';
 import { logoutUser } from '@/features/Auth/authThunks';
@@ -31,13 +30,13 @@ export const Settings = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const firstNameValidation = validateRegisterName(firstName, 'First name');
+    const firstNameValidation = validateName(firstName, 'First name');
     if (!firstNameValidation.isValid) {
       toast.show('Validation error', firstNameValidation.error!, 'error');
       return;
     }
 
-    const lastNameValidation = validateRegisterName(lastName, 'Last name');
+    const lastNameValidation = validateName(lastName, 'Last name');
     if (!lastNameValidation.isValid) {
       toast.show('Validation error', lastNameValidation.error!, 'error');
       return;
@@ -106,8 +105,6 @@ export const Settings = () => {
           </button>
         </div>
       </form>
-
-      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismiss} onPause={toast.pause} onResume={toast.resume} />
     </div>
   );
 };
