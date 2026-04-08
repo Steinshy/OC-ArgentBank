@@ -186,6 +186,18 @@ body {
   outline: none;
 }
 
+/* ===== ELEVATED BUTTON (Gradient + Shadow) ===== */
+.btn-elevated,
+.btn.btn-elevated {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
+}
+
+.btn-elevated:hover:not(:disabled),
+.btn.btn-elevated:hover:not(:disabled) {
+  box-shadow: var(--shadow-button-hover);
+  transform: translateY(-2px);
+}
+
 /* ===== TERTIARY BUTTON (Text-only) ===== */
 .btn-tertiary,
 .btn.btn-tertiary {

@@ -189,54 +189,13 @@
 }
 
 /* ===== SUBMIT BUTTON ===== */
-.sign-in-content .sign-in-button {
-  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
-  border: none;
-  border-radius: var(--radius-md);
-  color: var(--color-surface);
-  cursor: pointer;
-  display: block;
-  font-family: inherit;
-  font-size: 1rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
+/* Button styling moved to global system: .btn, .btn-primary, .btn-full, .btn-elevated */
+.sign-in-content button {
   margin-top: 2rem;
-  padding: 0.875rem;
-  text-align: center;
-  transition: all 0.2s ease;
-  width: 100%;
-}
-
-.sign-in-content .sign-in-button:hover:not(:disabled) {
-  box-shadow: 0 8px 20px rgb(0 188 119 / 35%);
-  transform: translateY(-2px);
-}
-
-.sign-in-content .sign-in-button:focus-visible {
-  box-shadow: var(--focus-ring);
-  outline: none;
-}
-
-.sign-in-content .sign-in-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
 }
 
 /* ===== ERRORS ===== */
-.field-error {
-  background-color: var(--color-error-bg);
-  border-left: 3px solid var(--color-error);
-  border-radius: var(--radius-sm);
-  color: var(--color-error);
-  font-size: 0.875rem;
-  margin: 0.5rem 0 0;
-  padding: 0.5rem 0.75rem;
-}
-
-.field-error-server {
-  margin-bottom: 0.75rem;
-  margin-top: 0;
-}
+/* Error styling moved to global system: .form-error, .form-error--server */
 
 /* ===== REGISTER LINK ===== */
 .register-link {
