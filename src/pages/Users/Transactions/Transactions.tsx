@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
 import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
+import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS } from '@/constants';
 import { useGetTransactionsQuery } from '@/api/argentBankApi';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
@@ -45,16 +46,17 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
         {BUTTONS.BACK_TO_ACCOUNTS}
       </button>
 
-      {loading && <LoadingSpinner size="md" label={MESSAGES.LOADING_TRANSACTIONS} />}
       {error && (
         <p className="transaction-error" role="alert">
           {extractErrorMessage(error, 'Failed to load transactions. Please try again.')}
         </p>
       )}
 
-      {!loading && transactions.length === 0 && <p>{MESSAGES.NO_TRANSACTIONS}</p>}
-
-      {!loading && transactions.length > 0 && (
+      {loading ? (
+        <SkeletonLoader variant="transaction" count={5} label="Loading transactions" />
+      ) : transactions.length === 0 ? (
+        <p>{MESSAGES.NO_TRANSACTIONS}</p>
+      ) : (
         <table className="transaction-table">
           <thead>
             <tr>

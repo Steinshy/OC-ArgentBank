@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useToast } from '@/components/Toast/ToastContext';
+import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { validateName } from '@/helpers/validator';
@@ -56,7 +57,20 @@ export const Settings = () => {
     navigate(ROUTES.PROFILE);
   };
 
-  if (!user) return null;
+  if (!user) {
+    return (
+      <div className="settings-page">
+        <div className="settings-header">
+          <div className="skeleton skeleton-avatar" />
+          <div className="settings-header-info">
+            <div style={{ height: '1.5rem', width: '60%' }} className="skeleton" />
+            <div style={{ height: '1rem', width: '40%', marginTop: '0.5rem' }} className="skeleton" />
+          </div>
+        </div>
+        <SkeletonLoader variant="form-field" count={3} label="Loading profile form" />
+      </div>
+    );
+  }
 
   const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
 
