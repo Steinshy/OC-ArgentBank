@@ -38,7 +38,8 @@
   text-align: center;
 }
 
-@media (width > 600px) {
+/* Tablet and up */
+@media (width >= 768px) {
   .sign-in-panel {
     padding: 2.5rem clamp(1.5rem, 5vw, 3rem);
   }
@@ -65,7 +66,8 @@
   }
 }
 
-@media (width >= 1100px) {
+/* Large desktop */
+@media (width >= 1280px) {
   .sign-in-content {
     max-width: min(760px, calc(100vw - 4rem));
     padding: 3rem 3.75rem;
