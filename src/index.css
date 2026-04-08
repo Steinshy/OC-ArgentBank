@@ -84,22 +84,18 @@
   --z-skip-link: 9999;
 
   /* ===== RESPONSIVE BREAKPOINTS ===== */
-  /*
-    Mobile-first approach (base styles apply to all, breakpoints add/override)
-
-    Standard breakpoints (matching Tailwind/Bootstrap conventions):
-    sm: 640px   - small tablets/landscape phones
-    md: 768px   - tablets
-    lg: 1024px  - small laptops/desktops
-    xl: 1280px  - desktops
-    2xl: 1536px - large screens
-
-    Media query pattern (use consistently):
-    @media (width >= 640px)  { /* tablet and up */ }
-    @media (width >= 768px)  { /* tablet+ */ }
-    @media (width >= 1024px) { /* desktop and up */ }
-    @media (width >= 1280px) { /* large desktop */ }
-  */
+  /* Mobile-first approach (base styles apply to all, breakpoints add/override)
+     Standard breakpoints (matching Tailwind/Bootstrap conventions):
+     sm: 640px   - small tablets/landscape phones
+     md: 768px   - tablets
+     lg: 1024px  - small laptops/desktops
+     xl: 1280px  - desktops
+     2xl: 1536px - large screens
+     Media query pattern (use consistently):
+     @media (width >= 640px)  - tablet and up
+     @media (width >= 768px)  - tablet+
+     @media (width >= 1024px) - desktop and up
+     @media (width >= 1280px) - large desktop */
 }
 
 html {
