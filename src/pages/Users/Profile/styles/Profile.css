@@ -69,39 +69,10 @@
   margin-top: 1rem;
 }
 
+/* Button styling moved to global system: .btn, .btn-primary */
 .transaction-button {
-  background-color: var(--color-primary);
-  border: none;
-  border-radius: var(--radius-sm);
-  color: var(--color-surface);
-  cursor: pointer;
-  display: block;
-  font-size: 1rem;
-  font-weight: bold;
   max-width: 200px;
-  padding: 0.625rem 1.25rem;
-  transition: background-color 0.2s;
   width: 100%;
-}
-
-.transaction-button:hover {
-  background-color: var(--color-primary-hover);
-}
-
-.transaction-button:focus-visible {
-  box-shadow: var(--focus-ring);
-  outline: none;
-}
-
-.transaction-button:disabled {
-  background-color: var(--color-border);
-  color: var(--color-text-muted);
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.transaction-button:disabled:hover {
-  background-color: var(--color-border);
 }
 
 /* Responsive */
