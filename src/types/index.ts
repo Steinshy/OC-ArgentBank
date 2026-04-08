@@ -1,4 +1,5 @@
 import type { ComponentType } from 'react';
+import type { TransactionType } from '@/constants';
 
 // Validation Types
 
@@ -109,7 +110,7 @@ export interface Transaction {
   description: string;
   amount: number;
   balance: number;
-  type: 'debit' | 'credit';
+  type: TransactionType;
   category: string;
   notes?: string;
 }

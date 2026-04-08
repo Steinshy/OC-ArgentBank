@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from 'react-router';
 
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 import { Layout } from '@/components/Layout/Layout';
+import { ToastProvider } from '@/components/Toast/ToastProvider';
 import { ProtectedRoute } from '@/components/ProtectedRoute/ProtectedRoute';
 import { ROUTES } from '@/constants';
 import { useGetProfileQuery } from '@/api/argentBankApi';
@@ -17,8 +18,8 @@ import { store, useAppSelector } from '@/store/store';
 import '@/index.css';
 
 const AppRoutes = () => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
-  useGetProfileQuery(undefined, { skip: !isAuthenticated });
+  const { isAuthenticated, token } = useAppSelector((state) => state.auth);
+  useGetProfileQuery(undefined, { skip: !isAuthenticated || !token });
 
   return (
     <Layout>
@@ -61,7 +62,9 @@ const App = () => {
     <ErrorBoundary>
       <Provider store={store}>
         <BrowserRouter basename={import.meta.env.BASE_URL}>
-          <AppRoutes />
+          <ToastProvider>
+            <AppRoutes />
+          </ToastProvider>
         </BrowserRouter>
       </Provider>
     </ErrorBoundary>

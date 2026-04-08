@@ -30,10 +30,10 @@ export const Home = () => {
           <p>Everything you need for modern money management</p>
         </div>
         <div className="features-grid">
-          {FEATURES.map((feature, index) => {
+          {FEATURES.map((feature) => {
             const FeatureIcon = feature.icon;
             return (
-              <div key={index} className="feature-card">
+              <div key={feature.title} className="feature-card">
                 <div className="feature-icon-wrapper">
                   <FeatureIcon className="feature-icon" />
                 </div>

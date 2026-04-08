@@ -45,15 +45,11 @@ export const handleHttpError = async (response: Response): Promise<string> => {
 
 export const ERROR_MESSAGES = {
   INVALID_CREDENTIALS: 'Invalid email or password',
-  NETWORK_ERROR: 'Network error. Please check your connection.',
   SESSION_EXPIRED: 'Your session has expired. Please sign in again.',
-  UNAUTHORIZED: 'You are not authorized to perform this action',
-  SERVER_ERROR: 'Server error. Please try again later.',
-  VALIDATION_ERROR: 'Please check your input and try again',
-  SIGN_IN_FAILED: 'Sign in failed. Please try again.',
-  SIGN_UP_FAILED: 'Registration failed. Please try again.',
+  SIGNIN_FAILED: 'Sign in failed. Please try again.',
+  SIGNUP_FAILED: 'Registration failed. Please try again.',
   PROFILE_UPDATE_FAILED: 'Failed to update profile. Please try again.',
-  PROFILE_FETCH_FAILED: 'Failed to load profile. Please try again.',
+  PROFILE_LOAD_FAILED: 'Failed to load profile. Please try again.',
 } as const;
 
 /** Server response messages — matched to backend error messages */
@@ -63,34 +59,23 @@ export const SERVER_ERROR_MESSAGES = {
   SIGN_UP_EMAIL_EXISTS: 'Email already exists',
 } as const;
 
-export const classifySignInError = (error: string | null) => ({
-  emailError: error === SERVER_ERROR_MESSAGES.SIGN_IN_USER_NOT_FOUND ? error : null,
-  passwordError: error === SERVER_ERROR_MESSAGES.SIGN_IN_PASSWORD_INVALID ? error : null,
-  generalError: error && error !== SERVER_ERROR_MESSAGES.SIGN_IN_USER_NOT_FOUND && error !== SERVER_ERROR_MESSAGES.SIGN_IN_PASSWORD_INVALID ? error : null,
-});
-
-export const classifySignUpError = (error: string | null) => ({
-  emailError: error === SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS ? error : null,
-  generalError: error && error !== SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS ? error : null,
-});
-
-export const getErrorMessageByStatus = (status: number): string => {
-  switch (status) {
-    case 400:
-      return ERROR_MESSAGES.VALIDATION_ERROR;
-    case 401:
-      return ERROR_MESSAGES.UNAUTHORIZED;
-    case 403:
-      return ERROR_MESSAGES.UNAUTHORIZED;
-    case 404:
-      return 'Resource not found';
-    case 500:
-    case 502:
-    case 503:
-      return ERROR_MESSAGES.SERVER_ERROR;
-    case 0:
-      return ERROR_MESSAGES.NETWORK_ERROR;
-    default:
-      return 'An error occurred. Please try again.';
-  }
+const classifyErrorByFields = (error: string | null, fieldToMessageMap: Record<string, string>): Record<string, string | null> => {
+  const result: Record<string, string | null> = {};
+  Object.entries(fieldToMessageMap).forEach(([field, message]) => {
+    result[field] = error === message ? error : null;
+  });
+  const matchedMessages = Object.values(fieldToMessageMap);
+  result.generalError = error && !matchedMessages.includes(error) ? error : null;
+  return result;
 };
+
+export const classifySignInError = (error: string | null) =>
+  classifyErrorByFields(error, {
+    emailError: SERVER_ERROR_MESSAGES.SIGN_IN_USER_NOT_FOUND,
+    passwordError: SERVER_ERROR_MESSAGES.SIGN_IN_PASSWORD_INVALID,
+  });
+
+export const classifySignUpError = (error: string | null) =>
+  classifyErrorByFields(error, {
+    emailError: SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS,
+  });

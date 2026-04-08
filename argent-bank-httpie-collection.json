@@ -1,8 +1,8 @@
 {
 	"info": {
 		"_postman_id": "argent-bank-api-collection",
-		"name": "Argent Bank API",
-		"description": "Complete collection of Argent Bank API endpoints for testing. Import this into HTTPie Desktop for instant access to all endpoints.",
+		"name": "Argent Bank API - HTTPie",
+		"description": "Argent Bank API collection for HTTPie Desktop. Includes auth/profile endpoints and Phase 2 mock-ready transaction endpoints used by the project.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -41,7 +41,7 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/login",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "login"]
+							"path": ["api", "v1", "user", "login"]
 						},
 						"description": "Login with Tony Stark test credentials. The token will be automatically saved to the environment variable 'token'."
 					},
@@ -79,7 +79,7 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/login",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "login"]
+							"path": ["api", "v1", "user", "login"]
 						},
 						"description": "Login with Steve Rogers test credentials. The token will be automatically saved to the environment variable 'token'."
 					},
@@ -102,7 +102,7 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/signup",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "signup"]
+							"path": ["api", "v1", "user", "signup"]
 						},
 						"description": "Create a new user account with email, password, first name, and last name."
 					},
@@ -131,7 +131,7 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/profile",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "profile"]
+							"path": ["api", "v1", "user", "profile"]
 						},
 						"description": "Fetch authenticated user profile. Requires valid JWT token in {{token}} variable."
 					},
@@ -158,7 +158,7 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/profile",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "profile"]
+							"path": ["api", "v1", "user", "profile"]
 						},
 						"description": "Update user's first and last name. Requires valid JWT token."
 					},
@@ -168,29 +168,10 @@
 			"description": "User profile management endpoints"
 		},
 		{
-			"name": "Accounts & Transactions (Phase 2 - Not Yet Implemented)",
+			"name": "Accounts & Transactions (Phase 2 Mock)",
 			"item": [
 				{
-					"name": "❌ Get All Accounts",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/api/v1/user/accounts",
-							"host": ["{{baseUrl}}"],
-							"path": ["user", "accounts"]
-						},
-						"description": "[PHASE 2 - NOT YET IMPLEMENTED] Retrieve all bank accounts for the authenticated user. Requires valid JWT token."
-					},
-					"response": []
-				},
-				{
-					"name": "❌ Get Account Transactions",
+					"name": "Get Account Transactions",
 					"request": {
 						"method": "GET",
 						"header": [
@@ -202,33 +183,14 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/accounts/{{accountId}}/transactions",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "accounts", "{{accountId}}", "transactions"]
+							"path": ["api", "v1", "user", "accounts", "{{accountId}}", "transactions"]
 						},
-						"description": "[PHASE 2 - NOT YET IMPLEMENTED] Get all transactions for a specific account. Update {{accountId}} variable with actual account ID from Get All Accounts response."
+						"description": "[PHASE 2 - IMPLEMENTED IN PROJECT MOCK FLOW] Get all transactions for a specific account."
 					},
 					"response": []
 				},
 				{
-					"name": "❌ Get Single Transaction",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"value": "Bearer {{token}}"
-							}
-						],
-						"url": {
-							"raw": "{{baseUrl}}/api/v1/user/accounts/{{accountId}}/transactions/{{transactionId}}",
-							"host": ["{{baseUrl}}"],
-							"path": ["user", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
-						},
-						"description": "[PHASE 2 - NOT YET IMPLEMENTED] Get details of a specific transaction. Set {{accountId}} and {{transactionId}} variables with actual IDs."
-					},
-					"response": []
-				},
-				{
-					"name": "❌ Update Transaction - Category Only",
+					"name": "Update Transaction - Category Only",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -248,14 +210,14 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/accounts/{{accountId}}/transactions/{{transactionId}}",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
+							"path": ["api", "v1", "user", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
 						},
-						"description": "[PHASE 2 - NOT YET IMPLEMENTED] Update only the category field of a transaction. Categories: Food, Shopping, Transportation, Entertainment, Bills, etc."
+						"description": "[PHASE 2 - IMPLEMENTED IN PROJECT MOCK FLOW] Update only the category field of a transaction."
 					},
 					"response": []
 				},
 				{
-					"name": "❌ Update Transaction - Notes Only",
+					"name": "Update Transaction - Notes Only",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -275,14 +237,14 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/accounts/{{accountId}}/transactions/{{transactionId}}",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
+							"path": ["api", "v1", "user", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
 						},
-						"description": "[PHASE 2 - NOT YET IMPLEMENTED] Update only the notes field of a transaction."
+						"description": "[PHASE 2 - IMPLEMENTED IN PROJECT MOCK FLOW] Update only the notes field of a transaction."
 					},
 					"response": []
 				},
 				{
-					"name": "❌ Update Transaction - Both Fields",
+					"name": "Update Transaction - Both Fields",
 					"request": {
 						"method": "PATCH",
 						"header": [
@@ -302,14 +264,14 @@
 						"url": {
 							"raw": "{{baseUrl}}/api/v1/user/accounts/{{accountId}}/transactions/{{transactionId}}",
 							"host": ["{{baseUrl}}"],
-							"path": ["user", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
+							"path": ["api", "v1", "user", "accounts", "{{accountId}}", "transactions", "{{transactionId}}"]
 						},
-						"description": "[PHASE 2 - NOT YET IMPLEMENTED] Update both category and notes fields of a transaction in a single request."
+						"description": "[PHASE 2 - IMPLEMENTED IN PROJECT MOCK FLOW] Update category and notes fields in one request."
 					},
 					"response": []
 				}
 			],
-			"description": "Account and transaction management endpoints (Phase 2 - coming soon)"
+			"description": "Phase 2 transaction endpoints aligned with project mock implementation"
 		}
 	],
 	"variable": [

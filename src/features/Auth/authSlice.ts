@@ -44,9 +44,14 @@ const authSlice = createSlice({
       })
       .addCase(signInUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token;
-        state.isAuthenticated = true;
-        storage.setAuthToken(action.payload.token);
+        const { token } = action.payload;
+        if (token) {
+          state.token = token;
+          state.isAuthenticated = true;
+          storage.setAuthToken(token);
+        } else {
+          state.isAuthenticated = false;
+        }
       })
       .addCase(signInUser.rejected, (state, action) => {
         state.loading = false;
@@ -59,9 +64,14 @@ const authSlice = createSlice({
       })
       .addCase(signUpUser.fulfilled, (state, action) => {
         state.loading = false;
-        state.token = action.payload.token;
-        state.isAuthenticated = true;
-        storage.setAuthToken(action.payload.token);
+        const { token } = action.payload;
+        if (token) {
+          state.token = token;
+          state.isAuthenticated = true;
+          storage.setAuthToken(token);
+        } else {
+          state.isAuthenticated = false;
+        }
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.loading = false;

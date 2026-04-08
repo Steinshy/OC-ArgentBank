@@ -1,13 +1,12 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
-import { ToastContainer } from '@/components/Toast/Toast';
-import { useToast } from '@/components/Toast/useToast';
+import { useToast } from '@/components/Toast/ToastContext';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { signUpUser } from '@/features/Auth/authThunks';
 import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
-import { validateRegisterEmail, validateRegisterPassword, validateRegisterName } from '@/helpers/validator';
+import { validateEmail, validatePassword, validateName } from '@/helpers/validator';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { joinDescribedBy } from '@/utils/aria';
 import { FieldErrors } from '@/types';
@@ -45,10 +44,10 @@ export const Register = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const emailResult = validateRegisterEmail(email);
-    const passwordResult = validateRegisterPassword(password);
-    const firstNameResult = validateRegisterName(firstName, 'First name');
-    const lastNameResult = validateRegisterName(lastName, 'Last name');
+    const emailResult = validateEmail(email);
+    const passwordResult = validatePassword(password);
+    const firstNameResult = validateName(firstName, 'First name');
+    const lastNameResult = validateName(lastName, 'Last name');
 
     const newErrors: FieldErrors = {
       email: emailResult.isValid ? null : (emailResult.error ?? 'Invalid email'),
@@ -175,7 +174,7 @@ export const Register = () => {
             )}
 
             <button type="submit" className="sign-in-button" disabled={loading}>
-              {loading ? MESSAGES.REGISTERING : BUTTONS.REGISTER}
+              {loading ? MESSAGES.SIGNUP_PENDING : BUTTONS.REGISTER}
             </button>
 
             <p className="register-link">
@@ -184,8 +183,6 @@ export const Register = () => {
           </form>
         </section>
       </div>
-
-      <ToastContainer toasts={toast.toasts} onDismiss={toast.dismiss} onPause={toast.pause} onResume={toast.resume} />
     </div>
   );
 };
