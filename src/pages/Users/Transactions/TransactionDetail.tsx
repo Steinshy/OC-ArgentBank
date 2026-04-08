@@ -41,10 +41,10 @@ export const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, on
                     </option>
                   ))}
                 </select>
-                <button className="edit-save-btn" onClick={() => onSaveEdit(tx.id, 'category')}>
+                <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'category')}>
                   {BUTTONS.SAVE}
                 </button>
-                <button className="edit-cancel-btn" onClick={onCancelEdit}>
+                <button className="btn btn-secondary btn-sm" onClick={onCancelEdit}>
                   {BUTTONS.CANCEL}
                 </button>
               </div>
@@ -76,10 +76,10 @@ export const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, on
                   aria-labelledby={`notes-label-${tx.id}`}
                   placeholder={FORMS.ADD_NOTE_PLACEHOLDER}
                 />
-                <button className="edit-save-btn" onClick={() => onSaveEdit(tx.id, 'notes')}>
+                <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'notes')}>
                   {BUTTONS.SAVE}
                 </button>
-                <button className="edit-cancel-btn" onClick={onCancelEdit}>
+                <button className="btn btn-secondary btn-sm" onClick={onCancelEdit}>
                   {BUTTONS.CANCEL}
                 </button>
               </div>
