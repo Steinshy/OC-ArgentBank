@@ -42,7 +42,7 @@ export const Profile = () => {
           </div>
           <div className="account-content-wrapper cta">
             <button
-              className="transaction-button"
+              className="btn btn-primary"
               onClick={() => navigate(buildTransactionsRoute(account.id))}
               disabled={!USE_MOCK}
               title={!USE_MOCK ? 'Transactions API not yet implemented' : undefined}
