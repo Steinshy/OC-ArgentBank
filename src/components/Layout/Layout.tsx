@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import { CircleUser, LogOut, Settings } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router';
 
 import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText, getPublicAssetUrl } from '@/constants';
@@ -31,22 +32,22 @@ export const Layout = ({ children }: LayoutProps) => {
       </a>
       <nav className="main-nav" aria-label="Main navigation">
         <Link className="main-nav-logo" to={ROUTES.HOME}>
-          <img className="main-nav-logo-image" src={getPublicAssetUrl('assets/img/argentBankLogo.png')} alt={NAVIGATION.HOME_LOGO_ALT} />
+          <img className="main-nav-logo-image" src={getPublicAssetUrl('assets/img/argentBankLogo-60x40.png')} alt={NAVIGATION.HOME_LOGO_ALT} />
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
         <div className="main-nav-items">
           {isAuthenticated && user ? (
             <>
               <Link className="main-nav-user-cta" to={ROUTES.PROFILE}>
-                <i className="fa fa-user-circle" aria-hidden="true" />
+                <CircleUser className="main-nav-user-cta__icon" aria-hidden strokeWidth={2} />
                 {user.firstName}
               </Link>
               <Link className="main-nav-user-cta" to={ROUTES.SETTINGS}>
-                <i className="fa fa-gear" aria-hidden="true" />
+                <Settings className="main-nav-user-cta__icon" aria-hidden strokeWidth={2} />
                 Settings
               </Link>
               <button type="button" className="main-nav-user-cta main-nav-user-cta--logout" onClick={handleLogout}>
-                <i className="fa fa-sign-out main-nav-user-cta__icon--danger" aria-hidden="true" />
+                <LogOut className="main-nav-user-cta__icon main-nav-user-cta__icon--danger" aria-hidden strokeWidth={2} />
                 {BUTTONS.SIGN_OUT}
               </button>
             </>

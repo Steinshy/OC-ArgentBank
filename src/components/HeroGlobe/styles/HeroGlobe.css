@@ -1,0 +1,16 @@
+.hero-globe {
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  margin-left: auto;
+  max-height: 100%;
+  max-width: 100%;
+  overflow: visible;
+  position: relative;
+  width: min(360px, 100%);
+}
+
+.hero-globe__canvas {
+  display: block;
+  height: 100%;
+  width: 100%;
+}

@@ -20,6 +20,7 @@
   grid-template-columns: 1fr;
   margin: 0 auto;
   max-width: 1200px;
+  overflow: visible;
   position: relative;
   z-index: 1;
 }
@@ -75,20 +76,12 @@
 }
 
 .hero-visual {
+  align-items: center;
   display: none;
   height: 300px;
+  justify-content: flex-end;
+  overflow: visible;
   position: relative;
-}
-
-.gradient-orb {
-  animation: pulse 4s ease-in-out infinite;
-  background: radial-gradient(circle, rgb(0 188 119 / 40%), transparent);
-  border-radius: 50%;
-  height: 250px;
-  position: absolute;
-  right: 0;
-  top: 25px;
-  width: 250px;
 }
 
 /* ===== FEATURES SECTION ===== */
@@ -229,20 +222,6 @@
   font-size: 0.95rem;
 }
 
-/* ===== ANIMATIONS ===== */
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 0.4;
-    transform: scale(1);
-  }
-
-  50% {
-    opacity: 0.6;
-    transform: scale(1.05);
-  }
-}
-
 /* ===== RESPONSIVE ===== */
 @media (width >= 768px) {
   .hero-section {
@@ -276,13 +255,9 @@
   }
 
   .hero-visual {
-    display: block;
+    display: flex;
     height: 400px;
-  }
-
-  .gradient-orb {
-    height: 350px;
-    width: 350px;
+    padding-inline: 0.75rem;
   }
 
   .features-grid {
