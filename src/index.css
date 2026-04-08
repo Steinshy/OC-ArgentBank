@@ -84,6 +84,7 @@
   --z-skip-link: 9999;
 
   /* ===== RESPONSIVE BREAKPOINTS ===== */
+
   /* Mobile-first approach (base styles apply to all, breakpoints add/override)
      Standard breakpoints (matching Tailwind/Bootstrap conventions):
      sm: 640px   - small tablets/landscape phones
@@ -213,16 +214,16 @@ body {
 /* ===== BUTTON SIZE VARIANTS ===== */
 .btn-sm,
 .btn.btn-sm {
-  padding: 0.35rem 0.7rem;
   font-size: var(--font-size-sm);
   min-height: auto;
+  padding: 0.35rem 0.7rem;
 }
 
 .btn-lg,
 .btn.btn-lg {
-  padding: 1rem 2rem;
   font-size: var(--font-size-lg);
   min-height: 48px;
+  padding: 1rem 2rem;
 }
 
 /* ===== FULL WIDTH BUTTON ===== */
@@ -331,14 +332,14 @@ select[aria-invalid='true']:focus {
 /* ===== INPUT SIZING ===== */
 .input-sm {
   font-size: var(--font-size-sm);
-  padding: 0.35rem 0.5rem;
   min-height: 32px;
+  padding: 0.35rem 0.5rem;
 }
 
 .input-lg {
   font-size: var(--font-size-lg);
-  padding: 0.75rem 1rem;
   min-height: 48px;
+  padding: 0.75rem 1rem;
 }
 
 .input-full {
@@ -417,6 +418,7 @@ input[type='checkbox']:focus-visible {
 }
 
 /* ===== UTILITY-FIRST CSS CLASSES ===== */
+
 /* Tailwind-like utility classes but in plain CSS (no framework dependency)
    Use these classes to compose styling directly in markup */
 
@@ -426,12 +428,12 @@ input[type='checkbox']:focus-visible {
 .p-3   { padding: var(--spacing-lg); }
 .px-1  { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
 .px-2  { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
-.py-1  { padding-top: var(--spacing-sm); padding-bottom: var(--spacing-sm); }
-.py-2  { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+.py-1  { padding-bottom: var(--spacing-sm); padding-top: var(--spacing-sm); }
+.py-2  { padding-bottom: var(--spacing-md); padding-top: var(--spacing-md); }
 .m-1   { margin: var(--spacing-sm); }
 .m-2   { margin: var(--spacing-md); }
 .mx-1  { margin-left: var(--spacing-sm); margin-right: var(--spacing-sm); }
-.my-2  { margin-top: var(--spacing-md); margin-bottom: var(--spacing-md); }
+.my-2  { margin-bottom: var(--spacing-md); margin-top: var(--spacing-md); }
 .mt-1  { margin-top: var(--spacing-sm); }
 .mt-2  { margin-top: var(--spacing-md); }
 .mt-3  { margin-top: var(--spacing-lg); }
@@ -662,8 +664,8 @@ input[type='checkbox']:focus-visible {
 .spinner {
   animation: spin 0.8s linear infinite;
   border: 3px solid var(--color-border-light);
-  border-top-color: var(--color-primary);
   border-radius: 50%;
+  border-top-color: var(--color-primary);
 }
 
 .spinner-sm { height: 24px; width: 24px; }

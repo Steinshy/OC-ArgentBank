@@ -8,6 +8,7 @@ export default {
     'keyframes-name-pattern': null,
     'selector-id-pattern': null,
     'no-descending-specificity': null,
+    'declaration-block-single-line-max-declarations': null,
   },
   ignoreFiles: [
     '**/*.js',
