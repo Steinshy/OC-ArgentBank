@@ -97,7 +97,7 @@ export const SignIn = () => {
                 aria-describedby={emailDescribedBy}
               />
               {emailError && (
-                <p className="field-error" id="sign-in-email-error" role="alert">
+                <p className="form-error" id="sign-in-email-error" role="alert">
                   {emailError}
                 </p>
               )}
@@ -122,11 +122,11 @@ export const SignIn = () => {
               )}
             </div>
             {generalServerError && (
-              <p className="field-error field-error-server" id="sign-in-server-error" role="alert">
+              <p className="form-error form-error--server" id="sign-in-server-error" role="alert">
                 {generalServerError}
               </p>
             )}
-            <button type="submit" className="sign-in-button" disabled={loading}>
+            <button type="submit" className="btn btn-primary btn-full btn-elevated" disabled={loading}>
               {loading ? MESSAGES.SIGNIN_PENDING : BUTTONS.SIGN_IN}
             </button>
             <p className="register-link">
