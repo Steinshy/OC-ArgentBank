@@ -97,10 +97,10 @@ export const Settings = () => {
         </div>
 
         <div className="settings-actions">
-          <button type="button" className="settings-cancel-btn" onClick={handleCancel}>
+          <button type="button" className="btn btn-secondary" onClick={handleCancel}>
             {BUTTONS.CANCEL}
           </button>
-          <button type="submit" className="settings-save-btn">
+          <button type="submit" className="btn btn-primary">
             {BUTTONS.SAVE}
           </button>
         </div>
