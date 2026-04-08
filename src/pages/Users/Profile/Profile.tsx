@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
+import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { buildTransactionsRoute, ROUTES, MESSAGES, NAVIGATION, USE_MOCK } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
@@ -20,38 +21,46 @@ export const Profile = () => {
     return null;
   }
 
-  if (isLoading || !user) {
-    return <LoadingSpinner size="lg" label={MESSAGES.LOADING_PROFILE} />;
-  }
-
   return (
     <>
-      <div className="header">
-        <h1>
-          Welcome back {user.firstName} {user.lastName}!
-        </h1>
-      </div>
+      {isLoading && !user ? (
+        <>
+          <div className="header">
+            <div style={{ height: '3rem', width: '60%' }} className="skeleton" />
+          </div>
+          <h2 className="sr-only">Accounts</h2>
+          <SkeletonLoader variant="account" count={MOCK_ACCOUNTS.length} label="Loading accounts" />
+        </>
+      ) : (
+        <>
+          <div className="header">
+            <h1>
+              Welcome back {user?.firstName} {user?.lastName}!
+            </h1>
+          </div>
 
-      <h2 className="sr-only">Accounts</h2>
-      {MOCK_ACCOUNTS.map((account) => (
-        <section key={account.id} className="account">
-          <div className="account-content-wrapper">
-            <h3 className="account-title">{account.title}</h3>
-            <p className="account-amount">${account.amount.toFixed(2)}</p>
-            <p className="account-amount-description">{account.description}</p>
-          </div>
-          <div className="account-content-wrapper cta">
-            <button
-              className="btn btn-primary"
-              onClick={() => navigate(buildTransactionsRoute(account.id))}
-              disabled={!USE_MOCK}
-              title={!USE_MOCK ? 'Transactions API not yet implemented' : undefined}
-            >
-              {NAVIGATION.VIEW_TRANSACTIONS}
-            </button>
-          </div>
-        </section>
-      ))}
+          <h2 className="sr-only">Accounts</h2>
+          {MOCK_ACCOUNTS.map((account) => (
+            <section key={account.id} className="account">
+              <div className="account-content-wrapper">
+                <h3 className="account-title">{account.title}</h3>
+                <p className="account-amount">${account.amount.toFixed(2)}</p>
+                <p className="account-amount-description">{account.description}</p>
+              </div>
+              <div className="account-content-wrapper cta">
+                <button
+                  className="btn btn-primary"
+                  onClick={() => navigate(buildTransactionsRoute(account.id))}
+                  disabled={!USE_MOCK}
+                  title={!USE_MOCK ? 'Transactions API not yet implemented' : undefined}
+                >
+                  {NAVIGATION.VIEW_TRANSACTIONS}
+                </button>
+              </div>
+            </section>
+          ))}
+        </>
+      )}
     </>
   );
 };
