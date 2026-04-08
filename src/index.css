@@ -117,25 +117,123 @@ body {
   min-height: 100vh;
 }
 
-.btn-primary {
-  background-color: var(--color-primary);
-  border-radius: var(--radius-sm);
-  color: var(--color-surface);
+/* ===== BASE BUTTON STYLES ===== */
+.btn {
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
   display: inline-block;
-  font-weight: bold;
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
+  font-family: inherit;
+  font-weight: var(--font-weight-semibold);
+  min-height: 44px;
+  padding: 0.625rem 1.5rem;
   text-decoration: none;
-  transition: background-color 0.2s;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.btn-primary:hover {
-  background-color: var(--color-primary-hover);
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
 }
 
-.btn-primary:focus-visible {
+.btn:focus-visible {
   box-shadow: var(--focus-ring);
   outline: none;
+}
+
+/* ===== PRIMARY BUTTON ===== */
+.btn-primary,
+.btn.btn-primary {
+  background-color: var(--color-primary);
+  color: var(--color-surface);
+}
+
+.btn-primary:hover:not(:disabled),
+.btn.btn-primary:hover:not(:disabled) {
+  background-color: var(--color-primary-hover);
+  box-shadow: var(--shadow-button-hover);
+}
+
+.btn-primary:active:not(:disabled),
+.btn.btn-primary:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.btn-primary:focus-visible,
+.btn.btn-primary:focus-visible {
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
+/* ===== SECONDARY BUTTON ===== */
+.btn-secondary,
+.btn.btn-secondary {
+  background-color: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+}
+
+.btn-secondary:hover:not(:disabled),
+.btn.btn-secondary:hover:not(:disabled) {
+  background-color: var(--color-bg);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:focus-visible,
+.btn.btn-secondary:focus-visible {
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
+/* ===== TERTIARY BUTTON (Text-only) ===== */
+.btn-tertiary,
+.btn.btn-tertiary {
+  background: none;
+  color: var(--color-info);
+  font-size: var(--font-size-sm);
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.btn-tertiary:hover:not(:disabled),
+.btn.btn-tertiary:hover:not(:disabled) {
+  opacity: 0.8;
+}
+
+/* ===== BUTTON SIZE VARIANTS ===== */
+.btn-sm,
+.btn.btn-sm {
+  padding: 0.35rem 0.7rem;
+  font-size: var(--font-size-sm);
+  min-height: auto;
+}
+
+.btn-lg,
+.btn.btn-lg {
+  padding: 1rem 2rem;
+  font-size: var(--font-size-lg);
+  min-height: 48px;
+}
+
+/* ===== FULL WIDTH BUTTON ===== */
+.btn-full,
+.btn.btn-full {
+  width: 100%;
+}
+
+/* ===== BUTTON WITH ICON ===== */
+.btn-with-icon,
+.btn.btn-with-icon {
+  align-items: center;
+  display: inline-flex;
+  gap: 0.5rem;
+}
+
+/* ===== BACKWARD COMPATIBILITY: Keep old margin-top ===== */
+.btn-primary {
+  margin-top: 1rem;
 }
 
 .sr-only {
