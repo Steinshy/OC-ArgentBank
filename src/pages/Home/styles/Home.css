@@ -45,34 +45,15 @@
   text-align: center;
 }
 
+/* Button styling moved to global system: .btn, .btn-primary, .btn-elevated */
 .cta-button {
-  align-items: center;
-  background: var(--color-primary);
-  border-radius: var(--radius-md);
-  color: var(--color-surface);
   display: inline-flex;
-  font-size: 1.1rem;
-  font-weight: 700;
   gap: 0.5rem;
-  padding: 1rem 2rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
   width: fit-content;
 }
 
 .hero-text .cta-button {
   margin-inline: auto;
-}
-
-.cta-button:hover {
-  background: #00d686;
-  box-shadow: 0 10px 25px rgb(0 188 119 / 30%);
-  transform: translateX(4px);
-}
-
-.cta-button:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
 }
 
 .hero-visual {
@@ -280,11 +261,6 @@
 
   .hero-text .hero-subtitle {
     font-size: 1rem;
-  }
-
-  .cta-button {
-    font-size: 1rem;
-    padding: 0.875rem 1.5rem;
   }
 
   .hero-visual {
