@@ -50,7 +50,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
           <div className="error-boundary-content">
             <h1 className="error-boundary-title">Oops! Something went wrong</h1>
             <p className="error-boundary-message">{this.state.error.message}</p>
-            <button onClick={this.handleReset} className="error-boundary-button">
+            <button onClick={this.handleReset} className="btn btn-primary">
               Try again
             </button>
           </div>
