@@ -1,256 +1,265 @@
-# Argent Bank - Financial Dashboard
+<h1 align="center">Argent Bank — Financial Dashboard</h1>
 
-A modern financial dashboard application built with React, Redux, and Express.js.
+<p align="center"><strong>Languages:</strong> <a href="README.md">English</a> | <a href="README.fr.md">Français</a></p>
 
-![React](https://img.shields.io/badge/React-19.2-blue)
-![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)
-![Redux](https://img.shields.io/badge/Redux-Toolkit-purple)
-![Vite](https://img.shields.io/badge/Vite-7.3-green)
-![License](https://img.shields.io/badge/License-MIT-green)
+<p align="center">
+  <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19+-61DAFB?style=flat-square&logo=react" alt="React" /></a>
+  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-6.0+-3178C6?style=flat-square&logo=typescript" alt="TypeScript" /></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js" alt="Node.js" /></a>
+  <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/Vite-8+-646CFF?style=flat-square&logo=vite" alt="Vite" /></a>
+  <a href="https://redux-toolkit.js.org"><img src="https://img.shields.io/badge/Redux_Toolkit-2+-764ABC?style=flat-square&logo=redux" alt="Redux Toolkit" /></a>
+  <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Express-5-000000?style=flat-square&logo=express&logoColor=white" alt="Express" /></a>
+  <a href="https://www.mongodb.com"><img src="https://img.shields.io/badge/MongoDB-6+-47A248?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB" /></a>
+  <a href="https://github.com/steinshy/ArgentBank"><img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status" /></a>
+</p>
 
-## 📋 Table of Contents
+## 📋 Overview
 
-- [Overview](#overview)
-- [Features](#features)
-- [Tech Stack](#tech-stack)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [API Documentation](#api-documentation)
-- [Development](#development)
-- [Testing](#testing)
-- [Contributing](#contributing)
-- [License](#license)
+Argent Bank is a full-stack banking dashboard SPA: users sign in, manage their profile, and browse account transactions. The frontend is **React 19 + TypeScript + Vite** with **Redux Toolkit** (auth slice + RTK Query-style API layer). The backend is **Express** + **MongoDB** with JWT auth and Swagger docs.
 
-## 🎯 Overview
+### Current Scope
 
-Argent Bank is a full-stack financial dashboard providing users with secure access to their bank accounts, transactions, and profile management. Built with cutting-edge technologies, it emphasizes security, performance, and user experience.
+- ✅ JWT authentication (login, register) with protected routes
+- ✅ User profile read/update
+- ✅ Transaction list and detail UI with category/notes editing
+- ✅ Mock mode for static hosting without a live API (`VITE_USE_MOCK=true`)
+- ⏳ Account/transaction REST routes: frontend targets paths under `/api/v1/user/...`; ensure `Backend/routes` matches your deployment (see `Backend/swagger.yaml`)
 
-## ✨ Features
+## 🚀 Getting Started
 
-- 🔐 **Secure Authentication** - JWT-based login with token persistence
-- 👤 **User Profiles** - View and manage user information
-- 💳 **Account Management** - Monitor multiple accounts
-- 📊 **Transaction History** - View detailed transaction records
-- 🎨 **Responsive Design** - Works seamlessly on desktop and mobile
-- ⚡ **High Performance** - Built with Vite for instant dev updates
-- 📱 **Progressive Web App** - Installable and works offline
-- 🔒 **Protected Routes** - Authentication-required pages
+### Prerequisites
 
-## 🛠️ Tech Stack
+- Node.js 18+ and npm
+- MongoDB (local or remote) when running the backend
+- Backend running on port **3001** (or set `VITE_API_BASE_URL` accordingly)
 
-### Frontend
-
-- **Framework:** React 19 with TypeScript
-- **Build Tool:** Vite 7.3
-- **State Management:** Redux Toolkit
-- **Routing:** React Router v7
-- **HTTP Client:** Fetch API
-- **UI Icons:** Lucide React
-- **Code Quality:** ESLint, Prettier, StyleLint
-
-### Backend
-
-- **Runtime:** Node.js
-- **Framework:** Express.js
-- **Database:** MongoDB
-- **Authentication:** JWT (JSON Web Tokens)
-- **Password Hashing:** bcrypt
-- **Documentation:** Swagger/OpenAPI
-
-## 📦 Prerequisites
-
-- **Node.js:** v16.0.0 or higher
-- **npm:** v8.0.0 or higher
-- **MongoDB:** v5.0 or higher (for backend)
-
-## 🚀 Installation
-
-### Frontend Setup
+### Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/steinshy/ArgentBank.git
 cd ArgentBank
-
-# Install dependencies
-npm install
-```
-
-### Backend Setup
-
-```bash
-# Navigate to backend directory
-cd Backend
-
-# Install dependencies
 npm install
 
-# Start the server
-npm run dev:server
-```
+cp .env.example .env.local
+# VITE_API_BASE_URL=http://localhost:3001
+# VITE_USE_MOCK=false
 
-## 🎮 Usage
-
-### Start Development Server
-
-```bash
-# Frontend (from project root)
-npm run dev
-# Opens at http://localhost:5173
-
-# Backend (from Backend directory)
-npm run dev:server
-# Runs at http://localhost:3001
-```
-
-### Build for Production
-
-```bash
-# Frontend
-npm run build
-
-# Preview production build locally
-npm run preview
-```
-
-### Linting and Formatting
-
-```bash
-npm run lint          # Check code quality
-npm run lint:fix      # Auto-fix lint errors
-npm run format        # Format code with Prettier
-npm run format:check  # Check formatting
-```
-
-## 📚 API Documentation
-
-The backend API documentation is available via Swagger at:
-
-```
-http://localhost:3001/api-docs
-```
-
-### Testing with HTTPie
-
-For command-line API testing, see [Backend/API_TESTING.md](./Backend/API_TESTING.md) for complete HTTPie examples.
-
-Quick test:
-
-```bash
-# Source helper functions
-source Backend/httpie-examples.sh
-
-# Login and save token
-TOKEN=$(ab_login "tony@stark.com" "password123" | jq -r '.body.token')
-
-# Get profile
-ab_profile "$TOKEN"
-```
-
-### Main Endpoints
-
-- `POST /api/v1/user/login` - User login
-- `GET /api/v1/user/profile` - Get user profile
-- `PUT /api/v1/user/profile` - Update user profile
-- `GET /api/v1/user/accounts` - List user accounts
-- `GET /api/v1/user/accounts/:id/transactions` - Get account transactions
-
-## 💻 Development
-
-### Code Style
-
-This project follows strict code quality standards:
-
-- **ESLint:** Enforces consistent code patterns
-- **Prettier:** Auto-formats code on save
-- **TypeScript:** Strict type checking enabled
-- **StyleLint:** CSS/SCSS validation
-
-### Adding Features
-
-1. Create a new page component in `src/pages/`
-2. Add route configuration in `src/AppRoutes.tsx`
-3. Create Redux slice if state management needed in `src/features/`
-4. Add API calls to `src/services/`
-5. Define types in `src/types/index.ts`
-
-````
-
-## 🧪 Testing
-
-### HTTPie Desktop - API Testing
-
-You can test the API using HTTPie Desktop:
-
-1. **Import Collection**: Open HTTPie Desktop → **+** → **Import** → Select `Backend/argent-bank-postman-collection.json`
-2. **Start Backend**: `cd Backend && npm run dev:server`
-3. **Login**: Expand "Authentication" folder → Run "Login - Tony Stark" (token auto-saves)
-4. **Test**: Try other requests like "Get User Profile", "Get All Accounts"
-
-See [Backend/HTTPIE_DESKTOP.md](./Backend/HTTPIE_DESKTOP.md) for complete guide.
-
-### Test Credentials
-
-To test the application, use these test user accounts:
-
-| Email              | Password      | Name         |
-| ------------------ | ------------- | ------------ |
-| `tony@stark.com`   | `password123` | Tony Stark   |
-| `steve@rogers.com` | `password456` | Steve Rogers |
-
-To populate the database with test users:
-
-```bash
-# Navigate to backend directory
 cd Backend
+npm install
+cp .env.example .env
+# DATABASE_URL, JWT_SECRET / SECRET_KEY, PORT=3001
 
-# Run the populate script
 npm run populate-db
-````
+cd ..
+```
 
-### Manual Testing
+### Run
 
 ```bash
-# Start backend server
-cd Backend
-npm run dev:server
-
-# In another terminal, start frontend dev server
+# Frontend only (http://localhost:5173)
 npm run dev
 
-# Open browser and test:
-# 1. Home page navigation
-# 2. Login with test credentials above
-# 3. Profile access (protected route)
-# 4. Navigation between pages
-# 5. Transaction history
+# Backend only (from Backend/)
+npm run dev:server
+
+# Frontend + backend (stops other Vite/nodemon processes first)
+npm run dev:all
 ```
 
-### Linting Tests
+### Build & quality
 
 ```bash
-npm run lint        # Check for issues
-npm run format:check # Verify formatting
+npm run build
+npm run preview
+npm run type-check
+npm run lint
+npm run lint:fix
+npm run lint:styles
+npm run format:check
 ```
 
-## 🤝 Contributing
+## 📁 Project Structure
 
-Contributions are welcome! Please follow these steps:
+```
+src/
+├── api/                 # fetch client + RTK Query API slice (argentBankApi)
+├── components/          # Layout, ProtectedRoute, Toast, Loader, ErrorBoundary, …
+├── constants/           # Routes, API endpoints, UI constants
+├── features/            # Redux slices & thunks (e.g. Auth)
+├── helpers/             # Validators
+├── hooks/               # useAuth, …
+├── mocks/               # Mock auth, accounts, users (in-memory dev data)
+├── pages/               # Home, SignIn, Register, Profile, Settings, Transactions, …
+├── store/               # Redux store configuration
+├── types/               # Shared TypeScript contracts (API + UI)
+└── utils/               # Storage, errors, a11y helpers
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+Backend/
+├── server.js            # Express entry
+├── routes/              # HTTP routes (e.g. /api/v1/user)
+├── controllers/         # Request handlers
+├── services/            # Auth & user logic
+├── middleware/          # JWT validation
+├── database/            # Connection + Mongoose models
+├── swagger.yaml         # OpenAPI spec (Swagger UI in dev)
+└── scripts/             # populateDatabase, …
+```
 
-## 🔗 Links
+## 🎯 Key Features
 
-- [Repository](https://github.com/steinshy/ArgentBank)
-- [Issues](https://github.com/steinshy/ArgentBank/issues)
-- [French Documentation](./README.fr.md)
+### Authentication & routing
+
+- Sign in and register with JWT persistence (local storage)
+- Protected routes for profile, settings, and transactions
+- Central layout and navigation
+
+### User area
+
+- Profile: load and update first/last name
+- Settings placeholder page
+- Transactions: list by account, detail view, edit category/notes (mock or API per env)
+
+### Data modes
+
+- **API mode** (`VITE_USE_MOCK=false`): HTTP calls to `VITE_API_BASE_URL`
+- **Mock mode** (`VITE_USE_MOCK=true`): in-memory users/accounts for demos and GitHub Pages–style deploys
+
+## 📚 Documentation
+
+- **[Architecture notes →](./docs/ARCHITECTURE.md)** — ADRs and structural decisions
+- **Swagger UI** (non-production): `http://localhost:3001/api-docs`
+- **Backend deep dive** → [Backend/README.md](./Backend/README.md)
+- **API examples** → [Backend/API_TESTING.md](./Backend/API_TESTING.md), [Backend/HTTPIE_DESKTOP.md](./Backend/HTTPIE_DESKTOP.md)
+
+## 🔌 API Integration
+
+### Auth & profile (implemented in `Backend/routes/userRoutes.js`)
+
+```typescript
+POST /api/v1/user/signup
+→ Body: email, password, firstName, lastName
+
+POST /api/v1/user/login
+→ Body: email, password → JWT in response body
+
+POST /api/v1/user/profile   (Authorization: Bearer <token>)
+→ Returns user profile in response body
+
+PUT /api/v1/user/profile
+→ Body: firstName, lastName
+```
+
+### Accounts & transactions (frontend contract)
+
+The SPA calls paths such as `GET /api/v1/user/accounts/:accountId/transactions` and `PATCH` on a transaction resource when mock mode is off. These are documented in `Backend/swagger.yaml`; wire or extend `Backend/routes` to match your backend implementation.
+
+### Mock vs live API
+
+**Mock**
+
+```bash
+# .env.local
+VITE_USE_MOCK=true
+```
+
+**Live API**
+
+```bash
+VITE_USE_MOCK=false
+VITE_API_BASE_URL=http://localhost:3001
+```
+
+## 🛠️ Development Guidelines
+
+### Data flow
+
+1. Auth thunks update the Redux auth slice (token, user id).
+2. `argentBankApi` endpoints use `apiCall` (fetch wrapper) or mocks based on `USE_MOCK`.
+3. Pages consume hooks from RTK Query and/or `useAuth`.
+
+### Adding features
+
+- Pages under `src/pages/`, routes in `src/App.tsx` via `ROUTES` in `src/constants/`.
+- New async flows: prefer `createAsyncThunk` for auth-style flows; extend `src/api/argentBankApi.ts` for cached server state.
+- Types per endpoint in `src/types/index.ts`.
+
+### Code standards
+
+- TypeScript strict, no `any`
+- Functional components; shared UI under `src/components/`
+- Styles: `Component/styles/Component.css` next to the component
+
+## 🔄 Data Models
+
+```typescript
+// Profile (API body)
+UserProfile {
+  id: string
+  email: string
+  firstName: string
+  lastName: string
+}
+
+// Transactions (list items)
+Transaction {
+  id: string
+  date: string
+  description: string
+  amount: number
+  balance: number
+  type: TransactionType
+  category: string
+  notes?: string
+}
+```
+
+## 🌍 Browser Support
+
+- Modern evergreen browsers (ES modules)
+- Desktop-first dashboard; responsive layout where implemented
+
+## 📝 Dependencies (high level)
+
+| Area    | Packages                                        |
+| ------- | ----------------------------------------------- |
+| UI      | React 19, React Router 7, Lucide React          |
+| State   | Redux Toolkit, React Redux                      |
+| HTTP    | Fetch via `src/api/client.ts`                   |
+| Build   | Vite 8, TypeScript, ESLint, Prettier, Stylelint |
+| Backend | Express 5, Mongoose, JWT, bcrypt, Swagger UI    |
+
+## 📚 Available Scripts
+
+| Command                | Purpose                                             |
+| ---------------------- | --------------------------------------------------- |
+| `npm run dev`          | Vite dev server                                     |
+| `npm run dev:all`      | Frontend + backend (stops other Vite/nodemon first) |
+| `npm run build`        | Production build to `dist/`                         |
+| `npm run preview`      | Preview production build                            |
+| `npm run type-check`   | `tsc --noEmit`                                      |
+| `npm run lint`         | ESLint on `src/`                                    |
+| `npm run lint:fix`     | ESLint with fix                                     |
+| `npm run lint:styles`  | Stylelint on CSS/SCSS                               |
+| `npm run format`       | Prettier write                                      |
+| `npm run format:check` | Prettier check                                      |
+
+## 🚀 Deployment
+
+```bash
+npm run build
+```
+
+Serve the `dist/` folder behind any static host; set `VITE_API_BASE_URL` and `VITE_BASE_PATH` at build time for your environment.
+
+## 🧪 Manual testing
+
+| Email              | Password      |
+| ------------------ | ------------- |
+| `tony@stark.com`   | `password123` |
+| `steve@rogers.com` | `password456` |
+
+Create users with `npm run populate-db` in `Backend/`.
 
 ---
 
-https://redux-toolkit.js.org/rtk-query/usage/automated-refetching
+**Built with React, TypeScript, Redux Toolkit, and Express**

@@ -4,8 +4,11 @@ import checker from 'vite-plugin-checker';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { resolve } from 'path';
 
+/** Same value as Vite `base` — injected for static asset URLs (see `getPublicAssetUrl`) */
+export const appPublicBasePath = process.env.VITE_BASE_PATH || '/';
+
 export default defineConfig(({ mode }) => {
-  const basePath = process.env.VITE_BASE_PATH || '/';
+  const basePath = appPublicBasePath;
 
   const buildOptions = {
     target: 'esnext',
@@ -52,6 +55,9 @@ export default defineConfig(({ mode }) => {
   }
 
   return {
+    define: {
+      __APP_PUBLIC_BASE_PATH__: JSON.stringify(appPublicBasePath),
+    },
     oxc: {
       jsx: { runtime: 'automatic' },
     },
