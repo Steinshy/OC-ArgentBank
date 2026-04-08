@@ -1,361 +1,409 @@
-# Architecture Decision Records
+# Architecture
 
-This document records key architectural decisions made in the Argent Bank project.
+<p align="center"><strong>Languages:</strong> <a href="ARCHITECTURE.md">English</a> | <a href="ARCHITECTURE-FR.md">Français</a></p>
 
----
+This document describes how the Argent Bank project is structured and records the main architectural decisions (ADRs).
 
-## ADR-001: Redux Toolkit for State Management
+## System overview
 
-**Status:** Accepted  
-**Date:** March 2026
+The product is a **single-page application** (Vite + React 19 + TypeScript) talking to a **REST API** (Express + MongoDB + Mongoose). The browser stores a **JWT** after login; protected screens require a valid token and a loadable user profile.
 
-### Context
-
-The application requires global state management for authentication, user profile, and transaction data that needs to be shared across multiple components.
-
-### Decision
-
-Use Redux Toolkit (RTK) with the following patterns:
-- Feature-based slices in `src/features/`
-- Async operations via `createAsyncThunk`
-- Typed hooks via `AppDispatch` and `RootState`
-
-### Rationale
-
-- RTK reduces Redux boilerplate significantly
-- Built-in Immer for immutable updates
-- DevTools integration out of the box
-- TypeScript support is excellent
-- Industry standard for complex React apps
-
-### Consequences
-
-- Learning curve for developers unfamiliar with Redux
-- Slightly more code than lightweight alternatives (Zustand, Jotai)
-- Excellent debugging capabilities via Redux DevTools
-
----
-
-## ADR-002: Feature-Based Folder Structure
-
-**Status:** Accepted  
-**Date:** March 2026
-
-### Context
-
-Need a scalable folder structure that supports team collaboration and feature isolation.
-
-### Decision
-
-Organize code by feature/domain rather than by type:
-
+```text
+Browser (React)
+  ├─ Redux store: auth slice (token, session flags)
+  ├─ RTK Query API slice: profile + transactions (cached server state)
+  └─ fetch via api/client.ts ──► Express /api/v1/user/* ──► MongoDB
 ```
+
+**Auth vs server state**
+
+- **Login / register / logout** use `createAsyncThunk` in `authThunks.ts` and update `authSlice`. Tokens are persisted with `utils/storage.ts` (localStorage).
+- **Profile and transactions** use an RTK Query `createApi` instance (`argentBankApi.ts`) with `fakeBaseQuery`: each endpoint runs `queryFn` that either calls `apiCall` or in-memory mocks when `VITE_USE_MOCK=true`.
+- **`setupListeners(store.dispatch)`** in `main.tsx` enables refetch-on-focus/reconnect behavior for RTK Query.
+
+**Protected routes**
+
+`ProtectedRoute` requires `isAuthenticated`, waits for `useGetProfileQuery`, shows a spinner while loading, and dispatches `logoutUser` if the profile request fails (invalid/expired token).
+
+---
+
+## Repository layout (current)
+
+```text
 src/
-├── features/           # Redux slices by domain
-│   ├── Auth/
-│   └── Transactions/
-├── pages/              # Route-level components
-├── components/         # Shared UI components
-├── api/                # API client layer
-├── constants/          # Application constants
-├── hooks/              # Custom React hooks
-├── utils/              # Utility functions
-└── types/              # TypeScript definitions
+├── api/              # apiCall (fetch) + argentBankApi (RTK Query)
+├── components/       # Layout, ProtectedRoute, Toast, Loader, ErrorBoundary, …
+├── constants/        # api.ts, routes.ts, ui.ts (+ re-export index.ts)
+├── features/Auth/    # authSlice.ts, authThunks.ts (only feature slice today)
+├── helpers/          # e.g. validator
+├── hooks/            # useAuth (composes slice + profile hooks)
+├── mocks/            # mockAuthApi, mock accounts/users for USE_MOCK
+├── pages/            # Route-level screens (Home, SignIn, Register, Profile, …)
+├── store/            # configureStore, typed hooks
+├── types/            # Shared TS types + env.d.ts
+└── utils/            # storage, errorHandler, aria, …
+
+Backend/
+├── server.js         # Express app, CORS, JSON, /api/v1/user routes, Swagger (non-prod)
+├── routes/           # userRoutes → signup, login, profile (POST get, PUT update)
+├── controllers/      # HTTP adapters
+├── services/         # Auth, JWT, user persistence
+├── middleware/       # JWT validation
+├── database/         # connection + Mongoose models
+└── swagger.yaml      # OpenAPI (may describe endpoints beyond current routes)
 ```
-
-### Rationale
-
-- Features are self-contained and easier to understand
-- Reduces cross-feature dependencies
-- Easier to delete/refactor features
-- Clear ownership boundaries for teams
-
-### Consequences
-
-- May have some code duplication across features
-- Shared utilities need clear home (`utils/`, `components/`)
 
 ---
 
-## ADR-003: Centralized Constants
+## ADR-001: Redux Toolkit for authentication state
 
 **Status:** Accepted  
 **Date:** March 2026
 
 ### Context
 
-Magic strings and numbers were scattered across the codebase, leading to inconsistency and maintenance burden.
+The app needs global, synchronous access to session state (token, loading, errors) across the layout and auth forms.
 
 ### Decision
 
-Extract all constants to `src/constants/` with domain-specific files:
-- `api.ts` - API endpoints and configuration
-- `routes.ts` - Route paths
-- `storage.ts` - localStorage keys
-- `ui.ts` - UI text, labels, messages
-- `transactions.ts` - Transaction-specific constants
-
-Export everything through `index.ts` for clean imports:
-
-```typescript
-import { ROUTES, API_ENDPOINTS, STORAGE_KEYS } from '@/constants';
-```
+Use **Redux Toolkit** for the **auth** domain only (`authSlice` + `authThunks`). Use typed `useAppDispatch` / `useAppSelector` from `store/store.ts`.
 
 ### Rationale
 
-- Single source of truth for all constants
-- Easy to find and update values
-- Prevents typos in string literals
-- Enables IDE autocomplete
+- Predictable updates for sign-in, sign-up, and logout
+- `createAsyncThunk` fits request/response flows with pending/fulfilled/rejected
+- DevTools and TypeScript integrate cleanly
 
 ### Consequences
 
-- Additional indirection layer
-- Must remember to add new constants to index exports
+- Not all server state lives in plain slices: profile and transactions use RTK Query (see ADR-011).
+- Developers must know both thunk-based auth and query-based resources.
 
 ---
 
-## ADR-004: Typed localStorage Wrapper
+## ADR-002: Feature-based folders (incremental)
+
+**Status:** Accepted  
+**Date:** March 2026 (updated April 2026)
+
+### Context
+
+The codebase should stay navigable as features grow.
+
+### Decision
+
+Use **feature folders under `src/features/`** for Redux slices tied to a domain. Shared UI stays in `components/`, routes in `pages/`, HTTP primitives in `api/`.
+
+**Current state:** only `features/Auth/` exists. Transaction UI lives under `pages/Users/Transactions/` without a dedicated `features/Transactions` slice.
+
+### Rationale
+
+- Clear place for `authSlice` / `authThunks`
+- Avoids premature abstraction when a feature is mostly UI + RTK Query endpoints
+
+### Consequences
+
+- If transaction rules become complex, a `features/Transactions` slice or hooks module may be added later.
+
+---
+
+## ADR-003: Centralized constants
+
+**Status:** Accepted  
+**Date:** March 2026 (updated April 2026)
+
+### Context
+
+Route paths, API paths, and user-visible copy should not be duplicated as raw strings.
+
+### Decision
+
+Centralize configuration in `src/constants/`:
+
+| File        | Role |
+| ----------- | ---- |
+| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `USE_MOCK`, `API_CONFIG` |
+| `routes.ts` | `ROUTES`, `buildTransactionsRoute` |
+| `ui.ts`     | Labels, messages, nav copy, transaction categories/types, home feature cards |
+
+Re-export from `constants/index.ts` for `import { … } from '@/constants'`.
+
+### Rationale
+
+- Single source of truth; safer refactors
+- `VITE_*` env usage is concentrated next to API concerns
+
+### Consequences
+
+- New domains may justify new files (e.g. `validation.ts`) rather than growing `ui.ts` indefinitely.
+
+---
+
+## ADR-004: Thin storage helper
 
 **Status:** Accepted  
 **Date:** April 2026
 
 ### Context
 
-Direct `localStorage` calls were scattered across components with inconsistent key names.
+The JWT must persist across reloads without scattering `localStorage` access.
 
 ### Decision
 
-Create `src/utils/storage.ts` with typed methods:
-
-```typescript
-export const storage = {
-  getAuthToken: () => localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN),
-  setAuthToken: (token: string) => localStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token),
-  removeAuthToken: () => localStorage.removeItem(STORAGE_KEYS.AUTH_TOKEN),
-  // ...
-};
-```
+Use `src/utils/storage.ts` with `getAuthToken`, `setAuthToken`, `removeAuthToken`. The key is currently the literal `'authToken'`.
 
 ### Rationale
 
-- Type safety for storage operations
-- Centralized key management via constants
-- Easier to mock in tests
-- Single place to add validation/encryption if needed
+- One place to change persistence or add guards later
+- Thunks and slice reducers can stay focused on state transitions
 
 ### Consequences
 
-- All storage access must go through wrapper
-- Minor overhead vs direct localStorage
+- The storage key is **not** yet re-exported from `constants/`; consider aligning with ADR-003 if multiple modules need the key string.
 
 ---
 
-## ADR-005: Fetch-based API Client (No Axios)
+## ADR-005: Fetch-based API client (no Axios)
 
 **Status:** Accepted  
 **Date:** March 2026
 
 ### Context
 
-Need an HTTP client for API communication.
+The SPA must call JSON REST endpoints with optional `Authorization` and timeouts.
 
 ### Decision
 
-Use native `fetch` API with a custom wrapper in `src/api/client.ts`:
-
-```typescript
-export async function apiCall<T>(endpoint: string, options?: RequestInit & { token?: string }): Promise<T>
-```
+Implement `apiCall` in `src/api/client.ts` using **native `fetch`**: default JSON headers, bearer token injection, `AbortController` + `API_CONFIG.TIMEOUT`, non-OK responses handled via `handleHttpError`.
 
 ### Rationale
 
-- No additional dependencies
-- Fetch is native and well-supported
-- Smaller bundle size
-- Sufficient for our API needs
-- TypeScript generics provide type safety
+- No extra HTTP dependency; small bundle
+- Generics on `apiCall<T>` document expected response shapes at call sites
 
 ### Consequences
 
-- Manual error handling (no interceptors like Axios)
-- Must handle JSON parsing explicitly
-- No automatic request/response transformation
+- No Axios-style interceptors; each caller handles domain errors (thunks / `queryFn` use `extractErrorMessage`).
 
 ---
 
-## ADR-006: Error Boundary Pattern
+## ADR-006: Error boundary at the root
 
 **Status:** Accepted  
 **Date:** April 2026
 
 ### Context
 
-Runtime errors in React components would crash the entire application.
+Uncaught render errors should not blank the entire app without feedback.
 
 ### Decision
 
-Implement `ErrorBoundary` class component wrapping the app root:
-
-```tsx
-<ErrorBoundary>
-  <Provider store={store}>
-    <BrowserRouter>
-      <Layout>...</Layout>
-    </BrowserRouter>
-  </Provider>
-</ErrorBoundary>
-```
+Wrap the tree in `components/ErrorBoundary/ErrorBoundary.tsx` **outside** `Provider` and `BrowserRouter` in `App.tsx` so the boundary can still render a fallback if inner providers fail.
 
 ### Rationale
 
-- Prevents full app crashes from component errors
-- Provides user-friendly fallback UI
-- Logs errors for debugging
-- Reset mechanism allows recovery
+- Class-based boundary API is still required for this concern in React
+- Optional custom `fallback` render prop for flexibility
 
 ### Consequences
 
-- Only catches render errors (not event handlers, async)
-- Class component required (hooks don't support error boundaries yet)
+- Does not catch errors inside event handlers or async code unless they propagate to render.
 
 ---
 
-## ADR-007: CSS Organization
+## ADR-007: Global and co-located CSS
+
+**Status:** Accepted  
+**Date:** March 2026 (updated April 2026)
+
+### Context
+
+Styling should stay maintainable without adopting a CSS-in-JS stack.
+
+### Decision
+
+- **Global** tokens and base rules live in `src/index.css` under `:root` (colors, radii, focus ring, breakpoints documented in comments).
+- **Component** styles live beside components: `ComponentName/styles/ComponentName.css`.
+- **Stylelint** enforces consistency (`npm run lint:styles`).
+
+### Rationale
+
+- Matches OpenClassrooms-style deliverables and simple deployment
+- Design tokens via CSS variables are easy to theme
+
+### Consequences
+
+- Class names are global; rely on BEM-style or prefixed naming per component where needed.
+
+---
+
+## ADR-008: Path alias `@/`
 
 **Status:** Accepted  
 **Date:** March 2026
 
 ### Context
 
-Need a maintainable CSS architecture that scales with the application.
+Deep relative imports are brittle when files move.
 
 ### Decision
 
-Use vanilla CSS with the following structure:
-- Global styles in `src/index.css`
-- Component styles in `ComponentName/styles/ComponentName.css`
-- CSS variables in `variables.css` for theming
+Map `@/*` → `src/*` in **both** `tsconfig` and `vite.config.ts` (`resolve.alias`).
 
 ### Rationale
 
-- No build-time CSS processing complexity
-- Easy to understand and debug
-- CSS variables provide theming capability
-- Co-located styles are easy to find
-
-### Alternatives Considered
-
-- CSS Modules: Added complexity not needed for this project size
-- Tailwind: Team preference for traditional CSS
-- Styled-components: Runtime overhead, different paradigm
+- Consistent imports across pages, api, and tests
 
 ### Consequences
 
-- No automatic scoping (must be careful with class names)
-- Manual handling of vendor prefixes if needed
+- Tooling outside Vite (e.g. some test runners) must resolve the same alias.
 
 ---
 
-## ADR-008: Path Aliases (@/)
+## ADR-009: `useAuth` as the primary auth hook
+
+**Status:** Accepted  
+**Date:** April 2026 (updated April 2026)
+
+### Context
+
+Screens need token state, user display name, sign-in, logout, and profile updates without repeating selectors.
+
+### Decision
+
+Implement **`useAuth`** in `hooks/useAuth.ts`: reads `auth` slice, subscribes to `useGetProfileQuery` (skipped when logged out), exposes `updateProfile` from `useUpdateProfileMutation`, and wraps `signInUser` / `logoutUser` dispatch.
+
+### Rationale
+
+- Single entry point for “who is logged in” + profile data
+- Encapsulates RTK Query + slice composition
+
+### Consequences
+
+- There is **no** separate `useTransactions` hook; transaction pages use RTK Query hooks (`useGetTransactionsQuery`, etc.) directly.
+
+---
+
+## ADR-010: Vite environment variables
 
 **Status:** Accepted  
 **Date:** March 2026
 
 ### Context
 
-Deep relative imports (`../../../components/`) are hard to read and refactor.
+API base URL, optional GitHub Pages base path, and mock mode must vary by environment.
 
 ### Decision
 
-Configure `@/` alias to map to `src/` in both TypeScript and Vite:
-
-```typescript
-// tsconfig.json
-"paths": { "@/*": ["./src/*"] }
-
-// vite.config.ts
-resolve: { alias: { '@': '/src' } }
-```
+Use Vite env with **`VITE_` prefix** for client code. Document expected keys in `.env.example`. Declare typings in `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_BASE_PATH`, `VITE_USE_MOCK`).
 
 ### Rationale
 
-- Clean, consistent imports
-- Easy to move files without updating imports
-- Clear distinction between project code and node_modules
+- Standard Vite workflow; values are inlined at build time
 
 ### Consequences
 
-- IDE must be configured to understand alias
-- Must keep tsconfig and vite.config in sync
+- Changing env requires a rebuild for production bundles.
 
 ---
 
-## ADR-009: Custom Hooks for State Access
+## ADR-011: RTK Query API slice for profile and transactions
 
 **Status:** Accepted  
 **Date:** April 2026
 
 ### Context
 
-Components repeatedly write the same useSelector/useDispatch patterns for auth and transactions.
+Profile and transaction data benefit from caching, tag invalidation, and shared loading/error semantics. Auth thunks alone would duplicate that logic.
 
 ### Decision
 
-Create custom hooks in `src/hooks/`:
-- `useAuth()` - Auth state + login/logout/profile actions
-- `useTransactions()` - Transaction state + fetch/update actions
+Define **`argentBankApi`** with `createApi`, `reducerPath: 'argentBankApi'`, `fakeBaseQuery`, and endpoints implemented via **`queryFn`**:
+
+- `getProfile` / `updateProfile` — POST/PUT profile; mock branch uses `mockAuthApi`
+- `getTransactions` / `patchTransaction` — GET/PATCH transaction resources; mock branch mutates `MOCK_ACCOUNTS`
+
+Register `argentBankApi.reducer` and `argentBankApi.middleware` in `store.ts`. Call **`argentBankApi.util.resetApiState()`** on logout to clear cached user data.
 
 ### Rationale
 
-- Reduces boilerplate in components
-- Encapsulates Redux implementation details
-- Easier to test components
-- Single place to modify state access patterns
+- Aligns with Redux Toolkit ecosystem patterns
+- Keeps auth token in the slice while server entities stay cacheable
 
 ### Consequences
 
-- Additional abstraction layer
-- Hooks must be kept in sync with slice changes
+- Developers must understand `skip` options (e.g. profile fetch only when authenticated).
+- `App.tsx` prefetches profile when authenticated to hydrate layout/nav.
 
 ---
 
-## ADR-010: Environment Configuration
+## ADR-012: Optional mock backend (`VITE_USE_MOCK`)
 
 **Status:** Accepted  
-**Date:** March 2026
+**Date:** April 2026
 
 ### Context
 
-Need to configure API URLs and other settings per environment.
+Demos and static hosting should work without MongoDB or Express.
 
 ### Decision
 
-Use Vite's built-in environment variable system:
-- `.env.example` as template (committed)
-- `.env.local` for local overrides (gitignored)
-- `VITE_` prefix for client-exposed variables
-- Type definitions in `src/types/env.d.ts`
+When `import.meta.env.VITE_USE_MOCK === 'true'`, **auth thunks** and **`argentBankApi` queryFns** read/write **`src/mocks`** instead of calling `apiCall`.
 
 ### Rationale
 
-- Vite handles env injection automatically
-- Type safety for environment variables
-- Standard pattern for Vite projects
+- Same UI and Redux paths in dev and demo builds
+- Clear switch at the API boundary
 
 ### Consequences
 
-- Variables must have `VITE_` prefix to be exposed
-- Rebuild required for env changes in production
+- Mock data can drift from `swagger.yaml`; treat mocks as a **contract test** for the UI, not the source of truth for production API behavior.
 
 ---
 
-## Future Considerations
+## ADR-013: Backend layering (Express)
 
-### Potential ADRs to Add
+**Status:** Accepted  
+**Date:** April 2026
 
-1. **Testing Strategy** - Unit vs integration vs E2E balance
-2. **Internationalization** - i18n library choice if needed
-3. **Performance Monitoring** - Error tracking and analytics
-4. **API Versioning** - How to handle API version changes
-5. **Code Splitting** - Route-based lazy loading strategy
+### Context
+
+The API must stay testable and easy to extend for coursework and maintenance.
+
+### Decision
+
+Follow **route → controller → service → model** in `Backend/`:
+
+- **Routes** declare paths and attach middleware (e.g. JWT validation).
+- **Controllers** parse requests and return HTTP responses.
+- **Services** hold bcrypt/JWT and business rules.
+- **Mongoose models** define persistence.
+
+Expose **Swagger UI** at `/api-docs` when `NODE_ENV !== 'production'`, driven by `swagger.yaml`.
+
+### Rationale
+
+- Matches common Express practice and OpenClassrooms project expectations
+- Clear place to add future account/transaction routes if the spec grows beyond current `userRoutes.js`
+
+### Consequences
+
+- `swagger.yaml` may describe endpoints that are not all wired in `routes/` yet; keep docs and code in sync when shipping features.
+
+---
+
+## Build tooling notes
+
+- **Vite 8** with `@vitejs/plugin-react`, **oxc** minify, optional **rollup-plugin-visualizer** in production builds (`dist/stats.html`).
+- **vite-plugin-checker** runs TypeScript checking in dev.
+- **ESLint** + **Prettier** + **Stylelint** — see root `package.json` scripts.
+
+---
+
+## Future considerations
+
+1. **Testing** — Unit tests for thunks/reducers and integration tests for `ProtectedRoute` + API slice; optional Playwright for critical paths.
+2. **API parity** — Implement or trim `swagger.yaml` entries so accounts/transactions match production routes.
+3. **i18n** — If required, extract `constants/ui.ts` strings behind a library (e.g. react-i18next).
+4. **Route-level code splitting** — `React.lazy` for heavy pages if bundle size grows.
+5. **Centralize `authToken` key** — Move literal to `constants/` if more modules need it.

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
 
-import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText } from '@/constants';
+import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText, getPublicAssetUrl } from '@/constants';
 import { logoutUser } from '@/features/Auth/authThunks';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -31,7 +31,7 @@ export const Layout = ({ children }: LayoutProps) => {
       </a>
       <nav className="main-nav" aria-label="Main navigation">
         <Link className="main-nav-logo" to={ROUTES.HOME}>
-          <img className="main-nav-logo-image" src="/assets/img/argentBankLogo.png" alt={NAVIGATION.HOME_LOGO_ALT} />
+          <img className="main-nav-logo-image" src={getPublicAssetUrl('assets/img/argentBankLogo.png')} alt={NAVIGATION.HOME_LOGO_ALT} />
           <h1 className="sr-only">Argent Bank</h1>
         </Link>
         <div className="main-nav-items">
