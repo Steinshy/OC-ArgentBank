@@ -123,48 +123,7 @@
   padding-top: 1.5rem;
 }
 
-.settings-save-btn,
-.settings-cancel-btn {
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 0.95rem;
-  font-weight: 600;
-  min-height: 44px;
-  padding: 0.625rem 2rem;
-  transition: background-color 0.2s;
-}
-
-.settings-save-btn {
-  background-color: var(--color-primary);
-  color: var(--color-surface);
-}
-
-.settings-save-btn:hover:not(:disabled) {
-  background-color: var(--color-primary-hover);
-}
-
-.settings-save-btn:focus-visible,
-.settings-cancel-btn:focus-visible {
-  box-shadow: var(--focus-ring);
-  outline: none;
-}
-
-.settings-save-btn:disabled,
-.settings-cancel-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.settings-cancel-btn {
-  background-color: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-}
-
-.settings-cancel-btn:hover:not(:disabled) {
-  background-color: var(--color-bg);
-}
+/* Button styling moved to global system: .btn, .btn-primary, .btn-secondary */
 
 /* Mobile */
 @media (width <= 600px) {
@@ -213,13 +172,6 @@
 
   .settings-page {
     padding: 1rem 0.75rem;
-  }
-
-  .settings-save-btn,
-  .settings-cancel-btn {
-    font-size: 0.875rem;
-    min-height: 40px;
-    padding: 0.5rem 1.5rem;
   }
 
   .settings-section-title {
