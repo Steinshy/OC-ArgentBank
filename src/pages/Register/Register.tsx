@@ -173,7 +173,7 @@ export const Register = () => {
               </p>
             )}
 
-            <button type="submit" className="sign-in-button" disabled={loading}>
+            <button type="submit" className="btn btn-primary btn-full btn-elevated" disabled={loading}>
               {loading ? MESSAGES.SIGNUP_PENDING : BUTTONS.REGISTER}
             </button>
 
