@@ -32,26 +32,9 @@
   text-align: left;
 }
 
+/* Button styling moved to global system: .btn, .btn-primary */
 .back-button {
-  background-color: var(--color-primary);
-  border: none;
-  border-radius: var(--radius-sm);
-  color: var(--color-surface);
-  cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 600;
   margin-bottom: 1.5rem;
-  padding: 0.5rem 1rem;
-  transition: background-color 0.2s;
-}
-
-.back-button:hover {
-  background-color: var(--color-primary-hover);
-}
-
-.back-button:focus-visible {
-  box-shadow: var(--focus-ring);
-  outline: none;
 }
 
 .transaction-error {
@@ -256,40 +239,7 @@
   outline: none;
 }
 
-.edit-save-btn,
-.edit-cancel-btn {
-  border: none;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 0.8rem;
-  font-weight: 600;
-  padding: 0.35rem 0.7rem;
-  transition: background-color 0.2s;
-}
-
-.edit-save-btn {
-  background-color: var(--color-primary);
-  color: var(--color-surface);
-}
-
-.edit-save-btn:hover {
-  background-color: var(--color-primary-hover);
-}
-
-.edit-cancel-btn {
-  background-color: var(--color-border);
-  color: var(--color-text);
-}
-
-.edit-cancel-btn:hover {
-  opacity: 0.8;
-}
-
-.edit-save-btn:focus-visible,
-.edit-cancel-btn:focus-visible {
-  box-shadow: var(--focus-ring);
-  outline: none;
-}
+/* Button styling moved to global system: .btn, .btn-primary, .btn-secondary, .btn-sm */
 
 /* Responsive */
 @media (width <= 768px) {
@@ -326,11 +276,6 @@
 }
 
 @media (width <= 600px) {
-  .back-button {
-    font-size: 0.8rem;
-    padding: 0.4rem 0.75rem;
-  }
-
   .transaction-content {
     -webkit-overflow-scrolling: touch;
     overflow-x: auto;
