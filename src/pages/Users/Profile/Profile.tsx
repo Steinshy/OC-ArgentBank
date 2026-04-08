@@ -1,10 +1,9 @@
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
-import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { useGetProfileQuery } from '@/api/argentBankApi';
-import { buildTransactionsRoute, ROUTES, MESSAGES, NAVIGATION, USE_MOCK } from '@/constants';
+import { buildTransactionsRoute, ROUTES, NAVIGATION, USE_MOCK } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
 import { logoutUser } from '@/features/Auth/authThunks';
 import type { AppDispatch } from '@/store/store';

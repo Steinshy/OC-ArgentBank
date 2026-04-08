@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
-import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS } from '@/constants';
 import { useGetTransactionsQuery } from '@/api/argentBankApi';
