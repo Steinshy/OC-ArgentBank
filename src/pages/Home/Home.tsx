@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 
+import { HeroGlobe } from '@/components/HeroGlobe/HeroGlobe';
 import { ROUTES, BUTTONS, FEATURES } from '@/constants';
 import { useAppSelector } from '@/store/store';
 import './styles/Home.css';
@@ -19,7 +20,7 @@ export const Home = () => {
             </Link>
           </div>
           <div className="hero-visual">
-            <div className="gradient-orb"></div>
+            <HeroGlobe />
           </div>
         </div>
       </section>
