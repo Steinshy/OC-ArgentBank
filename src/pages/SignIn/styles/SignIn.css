@@ -189,12 +189,14 @@
 }
 
 /* ===== SUBMIT BUTTON ===== */
+
 /* Button styling moved to global system: .btn, .btn-primary, .btn-full, .btn-elevated */
 .sign-in-content button {
   margin-top: 2rem;
 }
 
 /* ===== ERRORS ===== */
+
 /* Error styling moved to global system: .form-error, .form-error--server */
 
 /* ===== REGISTER LINK ===== */
