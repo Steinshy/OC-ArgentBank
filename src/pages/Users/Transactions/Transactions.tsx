@@ -42,7 +42,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
 
   return (
     <div className="transaction-content">
-      <button className="btn btn-primary" onClick={() => navigate(ROUTES.PROFILE)}>
+      <button className="btn btn-primary back-button" onClick={() => navigate(ROUTES.PROFILE)}>
         <ArrowLeft className="transaction-icon" aria-hidden strokeWidth={2} />
         {BUTTONS.BACK_TO_ACCOUNTS}
       </button>
