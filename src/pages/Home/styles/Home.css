@@ -45,15 +45,11 @@
   text-align: center;
 }
 
-/* Button styling moved to global system: .btn, .btn-primary, .btn-elevated */
+/* Button wrapper for CTA - allows full-width button in hero */
 .cta-button {
-  display: inline-flex;
+  display: flex;
   gap: 0.5rem;
-  width: fit-content;
-}
-
-.hero-text .cta-button {
-  margin-inline: auto;
+  width: 100%;
 }
 
 .hero-visual {
