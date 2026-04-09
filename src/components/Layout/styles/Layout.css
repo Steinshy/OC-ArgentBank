@@ -122,8 +122,8 @@
 }
 
 .layout .main-nav-user-cta:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
+  box-shadow: var(--focus-ring);
+  outline: none;
 }
 
 .layout .main-nav-user-cta__icon {
