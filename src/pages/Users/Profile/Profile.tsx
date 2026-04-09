@@ -2,6 +2,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { buildTransactionsRoute, ROUTES, NAVIGATION, USE_MOCK } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
@@ -10,6 +11,7 @@ import type { AppDispatch } from '@/store/store';
 import './styles/Profile.css';
 
 export const Profile = () => {
+  useDocumentTitle('Profile');
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { data: user, isLoading, isError } = useGetProfileQuery();

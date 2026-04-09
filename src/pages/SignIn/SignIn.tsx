@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { clearError } from '@/features/Auth/authSlice';
 import { signInUser } from '@/features/Auth/authThunks';
 import { classifySignInError } from '@/utils/errorHandler';
@@ -10,6 +11,7 @@ import { joinDescribedBy } from '@/utils/aria';
 import './styles/SignIn.css';
 
 export const SignIn = () => {
+  useDocumentTitle('Sign In');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailValidationError, setEmailValidationError] = useState('');
@@ -79,7 +81,7 @@ export const SignIn = () => {
     <div className="sign-in-page">
       <div className="sign-in-panel">
         <section className="sign-in-content">
-          <h2>Welcome back</h2>
+          <h1>Welcome back</h1>
           <p className="sign-in-sub">Sign in to your account</p>
 
           <form noValidate onSubmit={handleSubmit}>

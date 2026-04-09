@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router';
 import { useToast } from '@/components/Toast/ToastContext';
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { validateName } from '@/helpers/validator';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -12,12 +13,15 @@ import { logoutUser } from '@/features/Auth/authThunks';
 import './styles/Settings.css';
 
 export const Settings = () => {
+  useDocumentTitle('Settings');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isAuthenticated } = useAppSelector((state) => state.auth);
   const { data: user, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
   const [firstName, setFirstName] = useState(user?.firstName ?? '');
   const [lastName, setLastName] = useState(user?.lastName ?? '');
+  const [firstNameError, setFirstNameError] = useState<string | null>(null);
+  const [lastNameError, setLastNameError] = useState<string | null>(null);
   const [updateProfile] = useUpdateProfileMutation();
   const toast = useToast();
 
@@ -32,14 +36,13 @@ export const Settings = () => {
     e.preventDefault();
 
     const firstNameValidation = validateName(firstName, 'First name');
-    if (!firstNameValidation.isValid) {
-      toast.show('Validation error', firstNameValidation.error!, 'error');
-      return;
-    }
-
     const lastNameValidation = validateName(lastName, 'Last name');
-    if (!lastNameValidation.isValid) {
-      toast.show('Validation error', lastNameValidation.error!, 'error');
+    const fnError = firstNameValidation.isValid ? null : (firstNameValidation.error ?? 'Invalid first name');
+    const lnError = lastNameValidation.isValid ? null : (lastNameValidation.error ?? 'Invalid last name');
+    setFirstNameError(fnError);
+    setLastNameError(lnError);
+
+    if (fnError || lnError) {
       return;
     }
 
@@ -102,11 +105,47 @@ export const Settings = () => {
         <div className="settings-name-row">
           <div className="settings-field">
             <label htmlFor="settings-firstName">First Name</label>
-            <input type="text" id="settings-firstName" name="firstName" autoComplete="given-name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
+            <input
+              type="text"
+              id="settings-firstName"
+              name="firstName"
+              autoComplete="given-name"
+              value={firstName}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+                if (firstNameError) setFirstNameError(null);
+              }}
+              aria-invalid={firstNameError ? true : undefined}
+              aria-describedby={firstNameError ? 'settings-firstName-error' : undefined}
+              required
+            />
+            {firstNameError && (
+              <p className="field-error" id="settings-firstName-error" role="alert">
+                {firstNameError}
+              </p>
+            )}
           </div>
           <div className="settings-field">
             <label htmlFor="settings-lastName">Last Name</label>
-            <input type="text" id="settings-lastName" name="lastName" autoComplete="family-name" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
+            <input
+              type="text"
+              id="settings-lastName"
+              name="lastName"
+              autoComplete="family-name"
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value);
+                if (lastNameError) setLastNameError(null);
+              }}
+              aria-invalid={lastNameError ? true : undefined}
+              aria-describedby={lastNameError ? 'settings-lastName-error' : undefined}
+              required
+            />
+            {lastNameError && (
+              <p className="field-error" id="settings-lastName-error" role="alert">
+                {lastNameError}
+              </p>
+            )}
           </div>
         </div>
 

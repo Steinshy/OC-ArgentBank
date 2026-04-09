@@ -13,7 +13,9 @@ interface Point3D {
 }
 
 const DEG_TO_RAD = Math.PI / 180;
+const TWO_PI = Math.PI * 2;
 const ROTATION_SPEED = 0.3 * DEG_TO_RAD;
+const AXIS_TILT = 15 * DEG_TO_RAD;
 const MERIDIAN_COUNT = 8;
 const PARALLEL_COUNT = 6;
 const ARC_RESOLUTION = 40;
@@ -21,19 +23,13 @@ const NODE_BASE_RADIUS = 4;
 const NODE_PULSE_AMP = 1.5;
 const NODE_PULSE_SPEED = 0.002;
 
-// Fibonacci sphere: evenly distributed points across the surface
 const NODE_COUNT = 120;
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
-const CONNECTION_THRESHOLD = 0.38; // connect nodes within this distance (normalized to diameter)
+const CONNECTION_THRESHOLD = 0.38;
+const CONNECTION_THRESHOLD_SQ = CONNECTION_THRESHOLD * CONNECTION_THRESHOLD;
 
-interface NodePoint {
-  x: number;
-  y: number;
-  z: number;
-}
-
-function generateNodes(): NodePoint[] {
-  const nodes: NodePoint[] = [];
+function generateNodes(): Point3D[] {
+  const nodes: Point3D[] = [];
   for (let i = 0; i < NODE_COUNT; i++) {
     const y = 1 - (2 * i) / (NODE_COUNT - 1);
     const r = Math.sqrt(1 - y * y);
@@ -43,14 +39,14 @@ function generateNodes(): NodePoint[] {
   return nodes;
 }
 
-function generateEdges(nodes: NodePoint[]): [number, number][] {
+function generateEdges(nodes: Point3D[]): [number, number][] {
   const edges: [number, number][] = [];
   for (let i = 0; i < nodes.length; i++) {
     for (let j = i + 1; j < nodes.length; j++) {
       const dx = nodes[i]!.x - nodes[j]!.x;
       const dy = nodes[i]!.y - nodes[j]!.y;
       const dz = nodes[i]!.z - nodes[j]!.z;
-      if (Math.sqrt(dx * dx + dy * dy + dz * dz) < CONNECTION_THRESHOLD) {
+      if (dx * dx + dy * dy + dz * dz < CONNECTION_THRESHOLD_SQ) {
         edges.push([i, j]);
       }
     }
@@ -79,6 +75,24 @@ function tiltX(p: Point3D, a: number): Point3D {
   return { x: p.x, y: p.y * c - p.z * s, z: p.y * s + p.z * c };
 }
 
+function generateArc(lat: number, lonStart: number, lonEnd: number, r: number, steps: number): Point3D[] {
+  const pts: Point3D[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const lon = lonStart + ((lonEnd - lonStart) * i) / steps;
+    pts.push(latLonToXYZ(lat, lon, r));
+  }
+  return pts;
+}
+
+function generateMeridian(lon: number, r: number, steps: number): Point3D[] {
+  const pts: Point3D[] = [];
+  for (let i = 0; i <= steps; i++) {
+    const lat = 90 - (180 * i) / steps;
+    pts.push(latLonToXYZ(lat, lon, r));
+  }
+  return pts;
+}
+
 export const HeroGlobe = ({ className }: Props) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -94,7 +108,6 @@ export const HeroGlobe = ({ className }: Props) => {
 
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
     let angle = 0;
-    const axisTilt = 15 * DEG_TO_RAD;
 
     function resize() {
       const rect = container!.getBoundingClientRect();
@@ -110,24 +123,6 @@ export const HeroGlobe = ({ className }: Props) => {
     const observer = new ResizeObserver(resize);
     observer.observe(container);
     resize();
-
-    function generateArc(lat: number, lonStart: number, lonEnd: number, r: number, steps: number): Point3D[] {
-      const pts: Point3D[] = [];
-      for (let i = 0; i <= steps; i++) {
-        const lon = lonStart + ((lonEnd - lonStart) * i) / steps;
-        pts.push(latLonToXYZ(lat, lon, r));
-      }
-      return pts;
-    }
-
-    function generateMeridian(lon: number, r: number, steps: number): Point3D[] {
-      const pts: Point3D[] = [];
-      for (let i = 0; i <= steps; i++) {
-        const lat = 90 - (180 * i) / steps;
-        pts.push(latLonToXYZ(lat, lon, r));
-      }
-      return pts;
-    }
 
     function drawLine(points: Point3D[], a: number, t: number, cx: number, cy: number, r: number) {
       ctx!.beginPath();
@@ -154,8 +149,7 @@ export const HeroGlobe = ({ className }: Props) => {
         }
       }
 
-      const alpha = 0.18;
-      ctx!.strokeStyle = `rgba(0, 188, 119, ${alpha})`;
+      ctx!.strokeStyle = 'rgba(0, 188, 119, 0.18)';
       ctx!.lineWidth = 0.7;
       ctx!.stroke();
     }
@@ -169,19 +163,15 @@ export const HeroGlobe = ({ className }: Props) => {
 
       ctx!.clearRect(0, 0, w, h);
 
-      // Sphere background shading
+      // Sphere background + rim
       const grad = ctx!.createRadialGradient(cx - radius * 0.25, cy - radius * 0.2, radius * 0.1, cx, cy, radius);
       grad.addColorStop(0, 'rgba(0, 188, 119, 0.08)');
       grad.addColorStop(0.5, 'rgba(0, 188, 119, 0.03)');
       grad.addColorStop(1, 'rgba(0, 0, 0, 0.15)');
       ctx!.beginPath();
-      ctx!.arc(cx, cy, radius, 0, Math.PI * 2);
+      ctx!.arc(cx, cy, radius, 0, TWO_PI);
       ctx!.fillStyle = grad;
       ctx!.fill();
-
-      // Rim
-      ctx!.beginPath();
-      ctx!.arc(cx, cy, radius, 0, Math.PI * 2);
       ctx!.strokeStyle = 'rgba(0, 188, 119, 0.25)';
       ctx!.lineWidth = 1;
       ctx!.stroke();
@@ -190,21 +180,21 @@ export const HeroGlobe = ({ className }: Props) => {
       for (let i = 0; i < MERIDIAN_COUNT; i++) {
         const lon = (360 / MERIDIAN_COUNT) * i;
         const pts = generateMeridian(lon, radius, ARC_RESOLUTION);
-        drawLine(pts, angle, axisTilt, cx, cy, radius);
+        drawLine(pts, angle, AXIS_TILT, cx, cy, radius);
       }
 
       // Parallels
       for (let i = 1; i < PARALLEL_COUNT; i++) {
         const lat = -60 + (120 / PARALLEL_COUNT) * i;
         const pts = generateArc(lat, -180, 180, radius, ARC_RESOLUTION);
-        drawLine(pts, angle, axisTilt, cx, cy, radius);
+        drawLine(pts, angle, AXIS_TILT, cx, cy, radius);
       }
 
       // Project all nodes once
       const projected = NODES.map((n) => {
         const scaled = { x: n.x * radius, y: n.y * radius, z: n.z * radius };
         const r1 = rotateY(scaled, angle);
-        const r2 = tiltX(r1, axisTilt);
+        const r2 = tiltX(r1, AXIS_TILT);
         const depth = (r2.z + radius) / (2 * radius);
         return { sx: cx + r2.x, sy: cy - r2.y, depth };
       });
@@ -232,22 +222,22 @@ export const HeroGlobe = ({ className }: Props) => {
         const r = pulse * p.depth;
 
         ctx!.beginPath();
-        ctx!.arc(p.sx, p.sy, r * 2, 0, Math.PI * 2);
+        ctx!.arc(p.sx, p.sy, r * 2, 0, TWO_PI);
         ctx!.fillStyle = `rgba(0, 188, 119, ${nodeAlpha * 0.1})`;
         ctx!.fill();
 
         ctx!.beginPath();
-        ctx!.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+        ctx!.arc(p.sx, p.sy, r, 0, TWO_PI);
         ctx!.fillStyle = `rgba(0, 188, 119, ${nodeAlpha})`;
         ctx!.fill();
       }
 
-      // Atmosphere glow (outer ring)
+      // Atmosphere glow
       const atmosGrad = ctx!.createRadialGradient(cx, cy, radius * 0.95, cx, cy, radius * 1.15);
       atmosGrad.addColorStop(0, 'rgba(0, 188, 119, 0.06)');
       atmosGrad.addColorStop(1, 'rgba(0, 188, 119, 0)');
       ctx!.beginPath();
-      ctx!.arc(cx, cy, radius * 1.15, 0, Math.PI * 2);
+      ctx!.arc(cx, cy, radius * 1.15, 0, TWO_PI);
       ctx!.fillStyle = atmosGrad;
       ctx!.fill();
 

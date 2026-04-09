@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS } from '@/constants';
 import { useGetTransactionsQuery } from '@/api/argentBankApi';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
@@ -32,13 +33,6 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
       navigate(ROUTES.LOGIN);
     }
   }, [isError, dispatch, navigate]);
-
-  const handleRowKeyDown = (e: React.KeyboardEvent, id: string) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      toggleRow(id);
-    }
-  };
 
   return (
     <div className="transaction-content">
@@ -73,8 +67,21 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
           <tbody>
             {transactions.map((tx: Transaction) => (
               <React.Fragment key={tx.id}>
-                <tr className="transaction-row" onClick={() => toggleRow(tx.id)} onKeyDown={(e) => handleRowKeyDown(e, tx.id)} tabIndex={0} role="button" aria-expanded={expandedRowId === tx.id}>
-                  <td>{expandedRowId === tx.id ? <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} /> : <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />}</td>
+                <tr className="transaction-row" onClick={() => toggleRow(tx.id)}>
+                  <td>
+                    <button
+                      type="button"
+                      className="row-toggle-btn"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        toggleRow(tx.id);
+                      }}
+                      aria-expanded={expandedRowId === tx.id}
+                      aria-label={`${expandedRowId === tx.id ? 'Collapse' : 'Expand'} transaction ${tx.description}`}
+                    >
+                      {expandedRowId === tx.id ? <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} /> : <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />}
+                    </button>
+                  </td>
                   <td>{tx.date}</td>
                   <td>{tx.description}</td>
                   <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
@@ -106,6 +113,8 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
 export const Transactions = () => {
   const { accountId } = useParams<{ accountId: string }>();
   const account = accountId ? MOCK_ACCOUNTS.find((a) => a.id === accountId) : undefined;
+
+  useDocumentTitle(account ? `Transactions — ${account.title}` : 'Transactions');
 
   if (!account || !accountId) {
     return <p>{MESSAGES.ACCOUNT_NOT_FOUND}</p>;

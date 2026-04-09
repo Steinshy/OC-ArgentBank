@@ -32,7 +32,6 @@ export const ToastContainer = ({ toasts, onDismiss, onPause, onResume }: ToastCo
             key={toast.id}
             className={`toast toast-${toast.type}${toast.dismissing ? ' toast-dismissing' : ''}${toast.paused ? ' toast-paused' : ''}`}
             role={isUrgent ? 'alert' : undefined}
-            aria-live={isUrgent ? 'assertive' : undefined}
             onMouseEnter={() => onPause(toast.id)}
             onMouseLeave={() => onResume(toast.id)}
           >

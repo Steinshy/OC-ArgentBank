@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router';
 
 import { useToast } from '@/components/Toast/ToastContext';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { clearError } from '@/features/Auth/authSlice';
 import { signUpUser } from '@/features/Auth/authThunks';
 import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
@@ -15,6 +16,7 @@ import './styles/Register.css';
 const initialFieldErrors: FieldErrors = { email: null, password: null, firstName: null, lastName: null };
 
 export const Register = () => {
+  useDocumentTitle('Register');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -75,7 +77,7 @@ export const Register = () => {
   const { generalError: generalServerError } = classifySignUpError(error);
 
   const emailDescribedBy = joinDescribedBy(fieldErrors.email && 'register-email-error', generalServerError && 'register-server-error');
-  const passwordDescribedBy = joinDescribedBy(fieldErrors.password && 'register-password-error', generalServerError && 'register-server-error');
+  const passwordDescribedBy = joinDescribedBy('register-password-hint', fieldErrors.password && 'register-password-error', generalServerError && 'register-server-error');
   const firstNameDescribedBy = joinDescribedBy(fieldErrors.firstName && 'register-first-name-error');
   const lastNameDescribedBy = joinDescribedBy(fieldErrors.lastName && 'register-last-name-error');
 
@@ -83,7 +85,7 @@ export const Register = () => {
     <div className="sign-in-page">
       <div className="sign-in-panel">
         <section className="sign-in-content">
-          <h2>Create an account</h2>
+          <h1>Create an account</h1>
           <p className="sign-in-sub">Join Argent Bank today</p>
 
           <form noValidate onSubmit={handleSubmit}>
@@ -160,6 +162,9 @@ export const Register = () => {
                 aria-invalid={fieldErrors.password || generalServerError ? true : undefined}
                 aria-describedby={passwordDescribedBy}
               />
+              <p className="form-help" id="register-password-hint">
+                At least 8 characters, one uppercase letter, and one number.
+              </p>
               {fieldErrors.password && (
                 <p className="field-error" id="register-password-error" role="alert">
                   {fieldErrors.password}
