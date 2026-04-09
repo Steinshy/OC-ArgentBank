@@ -233,6 +233,7 @@
   height: 32px !important;
   justify-content: center;
   line-height: 1 !important;
+  margin-top: 0 !important;
   min-height: unset !important;
   padding: 0 0.7rem !important;
   white-space: nowrap;
