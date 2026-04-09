@@ -225,12 +225,17 @@
   gap: 0.5rem;
 }
 
+.edit-controls .btn {
+  min-height: 32px;
+}
+
 .edit-inline-input,
 .edit-inline-select {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   font-family: inherit;
   font-size: 0.85rem;
+  min-height: 32px;
   padding: 0.35rem 0.5rem;
 }
 
