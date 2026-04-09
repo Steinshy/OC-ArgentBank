@@ -35,9 +35,14 @@
 /* Button styling moved to global system: .btn, .btn-primary */
 .back-button {
   align-items: center;
-  display: flex;
+  display: flex !important;
+  flex-wrap: nowrap;
+  gap: 0.5rem;
   justify-content: flex-start;
   margin-bottom: 1.5rem;
+  min-width: fit-content;
+  padding: 0.625rem 1.5rem !important;
+  white-space: nowrap;
 }
 
 .transaction-error {
