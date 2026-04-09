@@ -124,6 +124,7 @@
 }
 
 .settings-actions button {
+  margin-top: 0;
   min-width: 120px;
 }
 

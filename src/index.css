@@ -119,6 +119,7 @@ body {
   align-items: center;
   border: none;
   border-radius: var(--radius-md);
+  box-sizing: border-box;
   cursor: pointer;
   display: inline-flex;
   font-family: inherit;
