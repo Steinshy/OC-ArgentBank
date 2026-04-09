@@ -1,3 +1,5 @@
+import { Edit } from 'lucide-react';
+
 import { TRANSACTION_CATEGORIES, BUTTONS, FORMS } from '@/constants';
 import { Transaction } from '@/types';
 
@@ -52,7 +54,7 @@ export const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, on
               <>
                 {tx.category}
                 <button className="edit-pencil" onClick={() => onStartEdit(tx.id, 'category', tx.category)} aria-label={FORMS.EDIT_CATEGORY_TITLE}>
-                  ✎
+                  <Edit className="edit-pencil-icon" aria-hidden strokeWidth={2} />
                 </button>
               </>
             )}
@@ -87,7 +89,7 @@ export const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, on
               <>
                 {tx.notes || '-'}
                 <button className="edit-pencil" onClick={() => onStartEdit(tx.id, 'notes', tx.notes || '')} aria-label={FORMS.EDIT_NOTES_TITLE}>
-                  ✎
+                  <Edit className="edit-pencil-icon" aria-hidden strokeWidth={2} />
                 </button>
               </>
             )}

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
@@ -42,6 +43,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
   return (
     <div className="transaction-content">
       <button className="btn btn-primary" onClick={() => navigate(ROUTES.PROFILE)}>
+        <ArrowLeft className="transaction-icon" aria-hidden strokeWidth={2} />
         {BUTTONS.BACK_TO_ACCOUNTS}
       </button>
 
@@ -73,7 +75,11 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
               <React.Fragment key={tx.id}>
                 <tr className="transaction-row" onClick={() => toggleRow(tx.id)} onKeyDown={(e) => handleRowKeyDown(e, tx.id)} tabIndex={0} role="button" aria-expanded={expandedRowId === tx.id}>
                   <td>
-                    <span className={`arrow ${expandedRowId === tx.id ? 'arrow-up' : 'arrow-down'}`} aria-hidden="true" />
+                    {expandedRowId === tx.id ? (
+                      <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} />
+                    ) : (
+                      <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />
+                    )}
                   </td>
                   <td>{tx.date}</td>
                   <td>{tx.description}</td>
