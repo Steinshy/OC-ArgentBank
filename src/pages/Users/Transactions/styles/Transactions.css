@@ -54,6 +54,7 @@
 }
 
 /* ===== ICONS ===== */
+
 /* Base icon styling - flex sizing and alignment */
 .transaction-icon,
 .edit-pencil-icon {
@@ -170,7 +171,6 @@
   box-shadow: var(--focus-ring);
   outline: none;
 }
-
 
 /* Amount styling */
 .amount-debit {
