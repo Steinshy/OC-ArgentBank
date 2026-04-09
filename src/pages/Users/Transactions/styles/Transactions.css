@@ -242,10 +242,11 @@
 .edit-inline-input,
 .edit-inline-select {
   appearance: none;
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: var(--radius-sm) !important;
   box-sizing: border-box;
+  color: var(--color-text);
   font-family: inherit;
   font-size: 0.85rem;
   height: 32px;
@@ -253,10 +254,16 @@
   padding: 0 0.5rem;
 }
 
+.edit-inline-input::placeholder,
+.edit-inline-select::placeholder {
+  color: var(--color-text-disabled);
+}
+
 .edit-inline-input:focus,
 .edit-inline-select:focus {
-  border-color: var(--color-primary);
-  box-shadow: var(--focus-ring);
+  background-color: var(--color-surface) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: var(--focus-ring) !important;
   outline: none;
 }
 
