@@ -226,9 +226,11 @@
 }
 
 .edit-controls .btn {
+  display: flex;
   height: 32px;
+  line-height: 1;
   min-height: unset;
-  padding: 0.35rem 0.7rem;
+  padding: 0 0.7rem;
 }
 
 .edit-inline-input,
@@ -239,7 +241,9 @@
   font-family: inherit;
   font-size: 0.85rem;
   height: 32px;
-  padding: 0.35rem 0.5rem;
+  line-height: 1;
+  padding: 0 0.5rem;
+  vertical-align: middle;
 }
 
 .edit-inline-input:focus,
