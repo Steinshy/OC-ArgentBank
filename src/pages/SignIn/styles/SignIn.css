@@ -111,7 +111,7 @@
 
 /* ===== SUBMIT BUTTON ===== */
 
-/* Button styling moved to global system: .btn, .btn-primary, .btn-full, .btn-elevated */
+/* Button styling from global system with page-specific margin */
 .sign-in-content button {
   margin-top: 2rem;
 }

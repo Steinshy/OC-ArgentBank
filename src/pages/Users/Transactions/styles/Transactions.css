@@ -53,24 +53,31 @@
   padding: 1rem;
 }
 
-/* Icons */
-.transaction-icon {
-  color: var(--color-primary);
+/* ===== ICONS ===== */
+/* Base icon styling - flex sizing and alignment */
+.transaction-icon,
+.edit-pencil-icon {
   display: flex;
   flex-shrink: 0;
-  height: 1.05rem;
   line-height: 1;
   vertical-align: middle;
+}
+
+/* Primary icon size (table expand/collapse arrows) */
+.transaction-icon {
+  color: var(--color-primary);
+  height: 1.05rem;
   width: 1.05rem;
 }
 
+/* Primary icon variant (white on green button) */
 .back-button .transaction-icon {
   color: var(--color-surface);
 }
 
+/* Edit icon size (pencil icon) */
 .edit-pencil-icon {
   color: var(--color-primary);
-  flex-shrink: 0;
   height: 0.8rem;
   width: 0.8rem;
 }
@@ -231,7 +238,7 @@
   outline: none;
 }
 
-/* Edit controls */
+/* Edit controls - custom button sizing for inline edit context */
 .edit-controls {
   align-items: stretch;
   display: flex;
@@ -239,6 +246,7 @@
 }
 
 .edit-controls .btn {
+  /* Custom button sizing for compact inline edit buttons */
   align-items: center;
   box-sizing: border-box;
   display: flex;
@@ -279,8 +287,6 @@
   box-shadow: var(--focus-ring);
   outline: none;
 }
-
-/* Button styling moved to global system: .btn, .btn-primary, .btn-secondary, .btn-sm */
 
 /* Responsive */
 @media (width <= 768px) {
