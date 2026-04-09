@@ -34,10 +34,9 @@
 
 /* Button styling moved to global system: .btn, .btn-primary */
 .back-button {
-  align-items: center !important;
-  display: flex !important;
-  gap: 0.5rem;
-  justify-content: flex-start !important;
+  align-items: center;
+  display: flex;
+  justify-content: flex-start;
   margin-bottom: 1.5rem;
 }
 
