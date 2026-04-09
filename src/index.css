@@ -169,14 +169,15 @@ body {
 .btn-secondary,
 .btn.btn-secondary {
   background-color: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
 }
 
 .btn-secondary:hover:not(:disabled),
 .btn.btn-secondary:hover:not(:disabled) {
-  background-color: var(--color-bg);
-  border-color: var(--color-border);
+  background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
+  border-color: var(--color-primary-hover);
+  color: var(--color-primary-hover);
 }
 
 .btn-secondary:focus-visible,
