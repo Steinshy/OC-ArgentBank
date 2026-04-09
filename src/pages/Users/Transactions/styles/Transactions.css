@@ -154,6 +154,7 @@
 
 /* Amount styling */
 .amount-debit {
+  color: var(--color-error);
   font-weight: 500;
 }
 
