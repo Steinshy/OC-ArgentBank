@@ -97,12 +97,26 @@
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
-@keyframes rotating-border {
+@keyframes moving-border {
   0% {
-    transform: rotate(0deg);
+    border-color: var(--color-border-light);
+    box-shadow: 0 0 0 1px var(--color-border-light);
+  }
+  25% {
+    border-color: var(--color-primary);
+    box-shadow: 2px 2px 8px rgba(0, 188, 119, 0.3);
+  }
+  50% {
+    border-color: var(--color-border-light);
+    box-shadow: 0 0 0 1px var(--color-border-light);
+  }
+  75% {
+    border-color: var(--color-primary);
+    box-shadow: -2px -2px 8px rgba(0, 188, 119, 0.3);
   }
   100% {
-    transform: rotate(360deg);
+    border-color: var(--color-border-light);
+    box-shadow: 0 0 0 1px var(--color-border-light);
   }
 }
 
@@ -116,26 +130,9 @@
   transition: all 0.3s ease;
 }
 
-.feature-card::before {
-  animation: rotating-border 4s linear infinite;
-  background: conic-gradient(
-    var(--color-primary) 0deg,
-    var(--color-primary) 90deg,
-    transparent 180deg,
-    transparent 360deg
-  );
-  border-radius: var(--radius-md);
-  content: '';
-  inset: -2px;
-  opacity: 0;
-  pointer-events: none;
-  position: absolute;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.feature-card:hover::before {
-  opacity: 1;
+.feature-card:hover {
+  animation: moving-border 3s ease infinite;
+  border-color: var(--color-primary);
 }
 
 .feature-card:hover {
