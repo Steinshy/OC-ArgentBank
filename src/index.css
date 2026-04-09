@@ -398,6 +398,16 @@ input[type='checkbox']:focus-visible {
   margin-top: 0;
 }
 
+.field-error {
+  background-color: var(--color-error-bg);
+  border-left: 3px solid var(--color-error);
+  border-radius: var(--radius-sm);
+  color: var(--color-error);
+  font-size: var(--font-size-sm);
+  margin: var(--spacing-sm) 0 0;
+  padding: var(--spacing-sm) var(--spacing-md);
+}
+
 /* ===== HELP TEXT ===== */
 .form-help {
   color: var(--color-text-disabled);

@@ -33,7 +33,7 @@ export const Layout = ({ children }: LayoutProps) => {
       <nav className="main-nav" aria-label="Main navigation">
         <Link className="main-nav-logo" to={ROUTES.HOME}>
           <img className="main-nav-logo-image" src={getPublicAssetUrl('assets/img/argentBankLogo-60x40.png')} alt={NAVIGATION.HOME_LOGO_ALT} />
-          <h1 className="sr-only">Argent Bank</h1>
+          <span className="sr-only">Argent Bank</span>
         </Link>
         <div className="main-nav-items">
           {isAuthenticated && user ? (
@@ -41,6 +41,7 @@ export const Layout = ({ children }: LayoutProps) => {
               <Link className="main-nav-user-cta" to={ROUTES.PROFILE}>
                 <CircleUser className="main-nav-user-cta__icon" aria-hidden strokeWidth={2} />
                 {user.firstName}
+                <span className="sr-only"> — View profile</span>
               </Link>
               <Link className="main-nav-user-cta" to={ROUTES.SETTINGS}>
                 <Settings className="main-nav-user-cta__icon" aria-hidden strokeWidth={2} />

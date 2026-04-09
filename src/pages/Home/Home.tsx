@@ -2,18 +2,22 @@ import { Link } from 'react-router';
 
 import { HeroGlobe } from '@/components/HeroGlobe/HeroGlobe';
 import { ROUTES, BUTTONS, FEATURES } from '@/constants';
+import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useAppSelector } from '@/store/store';
 import './styles/Home.css';
 
 export const Home = () => {
+  useDocumentTitle('Home');
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   return (
     <div className="home-container">
-      <section className="hero-section">
+      <section className="hero-section" aria-labelledby="hero-heading">
         <div className="hero-content-wrapper">
           <div className="hero-text">
-            <h1 className="hero-title">Argent Bank</h1>
+            <h1 id="hero-heading" className="hero-title">
+              Argent Bank
+            </h1>
             <p className="hero-subtitle">Experience the future of digital banking with Argent Bank. Secure, fast, and designed for you.</p>
             <div className="cta-button">
               <Link to={isAuthenticated ? ROUTES.PROFILE : ROUTES.LOGIN} className="btn btn-primary btn-elevated">
@@ -27,9 +31,9 @@ export const Home = () => {
         </div>
       </section>
 
-      <section className="features-section">
+      <section className="features-section" aria-labelledby="features-heading">
         <div className="features-header">
-          <h2>Why Choose Argent Bank?</h2>
+          <h2 id="features-heading">Why Choose Argent Bank?</h2>
           <p>Everything you need for modern money management</p>
         </div>
         <div className="features-grid">
@@ -49,9 +53,9 @@ export const Home = () => {
         </div>
       </section>
 
-      <section className="trust-section">
+      <section className="trust-section" aria-labelledby="trust-heading">
         <div className="trust-content">
-          <h2>Trusted by Thousands</h2>
+          <h2 id="trust-heading">Trusted by Thousands</h2>
           <div className="trust-stats">
             <div className="stat">
               <span className="stat-number">100K+</span>
