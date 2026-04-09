@@ -116,7 +116,7 @@ export const SignIn = () => {
                 aria-describedby={passwordDescribedBy}
               />
               {passwordError && (
-                <p className="field-error" id="sign-in-password-error" role="alert">
+                <p className="form-error" id="sign-in-password-error" role="alert">
                   {passwordError}
                 </p>
               )}

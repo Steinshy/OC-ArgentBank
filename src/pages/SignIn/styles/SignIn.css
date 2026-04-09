@@ -102,90 +102,11 @@
   margin-bottom: 0.5rem;
 }
 
-.input-wrapper input[type='email'],
-.input-wrapper input[type='password'] {
-  background: var(--color-bg);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text);
-  font-family: inherit;
-  font-size: 1rem;
-  line-height: 1.35;
-  padding: 0.5rem 0.875rem;
-  text-align: left;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-}
-
-.input-wrapper input[type='email']::placeholder,
-.input-wrapper input[type='password']::placeholder {
-  color: var(--color-text-disabled);
-}
-
-.input-wrapper input[type='email']:focus::placeholder,
-.input-wrapper input[type='password']:focus::placeholder {
-  color: transparent;
-}
-
-.input-wrapper input[type='email']:focus,
-.input-wrapper input[type='password']:focus {
-  background: var(--color-surface);
-  border-color: var(--color-primary);
-  box-shadow: var(--focus-ring);
-  outline: none;
-}
-
-.input-wrapper input[aria-invalid='true'] {
-  border-color: var(--color-error);
-}
-
 /* ===== REMEMBER ME ===== */
 .input-remember {
   align-items: center;
   display: flex;
   margin-bottom: 1.5rem;
-}
-
-.input-remember input[type='checkbox'] {
-  appearance: none;
-  background-color: var(--color-surface);
-  border: 1.5px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  flex-shrink: 0;
-  height: 17px;
-  margin-right: 0.5rem;
-  transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
-  width: 17px;
-}
-
-.input-remember input[type='checkbox']:checked {
-  background-color: var(--color-primary);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' fill='none'%3E%3Cpath stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2.5 6l2.5 3 4.5-5.5'/%3E%3C/svg%3E");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 10px 10px;
-  border-color: var(--color-primary);
-}
-
-.input-remember input[type='checkbox']:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
-
-.input-remember label {
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  font-size: 0.875rem;
-  margin: 0;
-  transition: color 0.2s;
-}
-
-.input-remember label:hover {
-  color: var(--color-primary);
 }
 
 /* ===== SUBMIT BUTTON ===== */

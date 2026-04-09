@@ -91,7 +91,7 @@ export const Settings = () => {
       <form key={user?.id} className="settings-form" onSubmit={handleSubmit}>
         <h2 className="settings-section-title">Profile Information</h2>
 
-        <div className="settings-field settings-field-full">
+        <div className="settings-field">
           <label htmlFor="email">Email</label>
           <input type="email" id="email" name="email" value={user.email} disabled aria-describedby="email-hint" autoComplete="email" />
           <span className="settings-hint" id="email-hint">

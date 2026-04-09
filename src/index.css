@@ -143,66 +143,56 @@ body {
 }
 
 /* ===== PRIMARY BUTTON ===== */
-.btn-primary,
-.btn.btn-primary {
+.btn-primary {
   background-color: var(--color-primary);
   color: var(--color-surface);
 }
 
-.btn-primary:hover:not(:disabled),
-.btn.btn-primary:hover:not(:disabled) {
+.btn-primary:hover:not(:disabled) {
   background-color: var(--color-primary-hover);
   box-shadow: var(--shadow-button-hover);
 }
 
-.btn-primary:active:not(:disabled),
-.btn.btn-primary:active:not(:disabled) {
+.btn-primary:active:not(:disabled) {
   transform: translateY(1px);
 }
 
-.btn-primary:focus-visible,
-.btn.btn-primary:focus-visible {
+.btn-primary:focus-visible {
   box-shadow: var(--focus-ring);
   outline: none;
 }
 
 /* ===== SECONDARY BUTTON ===== */
-.btn-secondary,
-.btn.btn-secondary {
+.btn-secondary {
   background-color: transparent;
   border: 1.5px solid var(--color-primary);
   color: var(--color-primary);
 }
 
-.btn-secondary:hover:not(:disabled),
-.btn.btn-secondary:hover:not(:disabled) {
+.btn-secondary:hover:not(:disabled) {
   background-color: color-mix(in srgb, var(--color-primary) 10%, transparent);
   border-color: var(--color-primary-hover);
   color: var(--color-primary-hover);
   transform: translateY(-2px);
 }
 
-.btn-secondary:focus-visible,
-.btn.btn-secondary:focus-visible {
+.btn-secondary:focus-visible {
   box-shadow: var(--focus-ring);
   outline: none;
 }
 
 /* ===== ELEVATED BUTTON (Gradient + Shadow) ===== */
-.btn-elevated,
-.btn.btn-elevated {
+.btn-elevated {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
 }
 
-.btn-elevated:hover:not(:disabled),
-.btn.btn-elevated:hover:not(:disabled) {
+.btn-elevated:hover:not(:disabled) {
   box-shadow: var(--shadow-button-hover);
   transform: translateY(-2px);
 }
 
 /* ===== TERTIARY BUTTON (Text-only) ===== */
-.btn-tertiary,
-.btn.btn-tertiary {
+.btn-tertiary {
   background: none;
   color: var(--color-info);
   font-size: var(--font-size-sm);
@@ -211,43 +201,33 @@ body {
   text-underline-offset: 2px;
 }
 
-.btn-tertiary:hover:not(:disabled),
-.btn.btn-tertiary:hover:not(:disabled) {
+.btn-tertiary:hover:not(:disabled) {
   opacity: 0.8;
 }
 
 /* ===== BUTTON SIZE VARIANTS ===== */
-.btn-sm,
-.btn.btn-sm {
+.btn-sm {
   font-size: var(--font-size-sm);
   min-height: auto;
   padding: 0.35rem 0.7rem;
 }
 
-.btn-lg,
-.btn.btn-lg {
+.btn-lg {
   font-size: var(--font-size-lg);
   min-height: 48px;
   padding: 1rem 2rem;
 }
 
 /* ===== FULL WIDTH BUTTON ===== */
-.btn-full,
-.btn.btn-full {
+.btn-full {
   width: 100%;
 }
 
 /* ===== BUTTON WITH ICON ===== */
-.btn-with-icon,
-.btn.btn-with-icon {
+.btn-with-icon {
   align-items: center;
   display: inline-flex;
   gap: 0.5rem;
-}
-
-/* ===== BACKWARD COMPATIBILITY: Keep old margin-top ===== */
-.btn-primary {
-  margin-top: 1rem;
 }
 
 /* ===== BASE FORM STYLES ===== */

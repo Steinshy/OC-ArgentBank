@@ -243,21 +243,21 @@
   box-sizing: border-box;
   display: flex;
   flex-shrink: 0;
-  height: 32px !important;
+  height: 32px;
   justify-content: center;
-  line-height: 1 !important;
-  margin-top: 0 !important;
-  min-height: unset !important;
-  padding: 0 0.7rem !important;
+  line-height: 1;
+  margin-top: 0;
+  min-height: unset;
+  padding: 0 0.7rem;
   white-space: nowrap;
 }
 
 .edit-inline-input,
 .edit-inline-select {
   appearance: none;
-  background-color: var(--color-surface) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: var(--radius-sm) !important;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   box-sizing: border-box;
   color: var(--color-text);
   font-family: inherit;
@@ -274,9 +274,9 @@
 
 .edit-inline-input:focus,
 .edit-inline-select:focus {
-  background-color: var(--color-surface) !important;
-  border-color: var(--color-primary) !important;
-  box-shadow: var(--focus-ring) !important;
+  background-color: var(--color-surface);
+  border-color: var(--color-primary);
+  box-shadow: var(--focus-ring);
   outline: none;
 }
 
