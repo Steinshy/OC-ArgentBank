@@ -123,6 +123,10 @@
   padding-top: 1.5rem;
 }
 
+.settings-actions button {
+  min-width: 120px;
+}
+
 /* Button styling moved to global system: .btn, .btn-primary, .btn-secondary */
 
 /* Mobile */
@@ -148,8 +152,7 @@
     flex-direction: column-reverse;
   }
 
-  .settings-save-btn,
-  .settings-cancel-btn {
+  .settings-actions button {
     width: 100%;
   }
 }
