@@ -53,10 +53,10 @@ export const Layout = ({ children }: LayoutProps) => {
             </>
           ) : (
             <div className="main-nav-auth">
-              <Link className="btn btn-secondary" to={ROUTES.LOGIN}>
+              <Link className="btn btn-secondary btn-sm" to={ROUTES.LOGIN}>
                 {BUTTONS.SIGN_IN}
               </Link>
-              <Link className="btn btn-primary btn-elevated" to={ROUTES.REGISTER}>
+              <Link className="btn btn-primary btn-elevated btn-sm" to={ROUTES.REGISTER}>
                 {BUTTONS.REGISTER}
               </Link>
             </div>
