@@ -31,7 +31,7 @@ export const BUTTONS = {
   VIEW_PROFILE: 'View Profile',
   SAVE: 'Save',
   CANCEL: 'Cancel',
-  BACK_TO_ACCOUNTS: '← Back to Accounts',
+  BACK_TO_ACCOUNTS: 'Back to Accounts',
 } as const;
 
 export const MESSAGES = {
