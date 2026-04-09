@@ -74,13 +74,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
             {transactions.map((tx: Transaction) => (
               <React.Fragment key={tx.id}>
                 <tr className="transaction-row" onClick={() => toggleRow(tx.id)} onKeyDown={(e) => handleRowKeyDown(e, tx.id)} tabIndex={0} role="button" aria-expanded={expandedRowId === tx.id}>
-                  <td>
-                    {expandedRowId === tx.id ? (
-                      <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} />
-                    ) : (
-                      <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />
-                    )}
-                  </td>
+                  <td>{expandedRowId === tx.id ? <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} /> : <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />}</td>
                   <td>{tx.date}</td>
                   <td>{tx.description}</td>
                   <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
