@@ -1,4 +1,5 @@
-import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
@@ -7,14 +8,21 @@ import { useGetProfileQuery } from '@/api/argentBankApi';
 import { buildTransactionsRoute, ROUTES, NAVIGATION, USE_MOCK } from '@/constants';
 import { MOCK_ACCOUNTS } from '@/mocks/accounts';
 import { logoutUser } from '@/features/Auth/authThunks';
-import type { AppDispatch } from '@/store/store';
+import type { AppDispatch, RootState } from '@/store/store';
 import './styles/Profile.css';
 
 export const Profile = () => {
   useDocumentTitle('Profile');
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { data: user, isLoading, isError } = useGetProfileQuery();
+  const { token } = useSelector((state: RootState) => state.auth);
+  const { data: user, isLoading, isError, refetch } = useGetProfileQuery(undefined, { skip: !token });
+
+  useEffect(() => {
+    if (token) {
+      refetch();
+    }
+  }, [token]);
 
   if (isError) {
     dispatch(logoutUser());
