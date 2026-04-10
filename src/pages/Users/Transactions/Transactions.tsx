@@ -35,60 +35,44 @@ interface TransactionRowProps {
 }
 
 /** Memoized transaction row to prevent re-renders when other rows expand/collapse */
-const TransactionRow = React.memo(
-  ({
-    tx,
-    isExpanded,
-    editingField,
-    editValue,
-    onToggleRow,
-    onStartEdit,
-    onSaveEdit,
-    onCancelEdit,
-    onEditValueChange,
-  }: TransactionRowProps) => (
-    <React.Fragment key={tx.id}>
-      <tr className="transaction-row" onClick={() => onToggleRow(tx.id)}>
-        <td>
-          <button
-            type="button"
-            className="row-toggle-btn"
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggleRow(tx.id);
-            }}
-            aria-expanded={isExpanded}
-            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} transaction ${tx.description}`}
-          >
-            {isExpanded ? (
-              <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} />
-            ) : (
-              <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />
-            )}
-          </button>
-        </td>
-        <td>{tx.date}</td>
-        <td>{tx.description}</td>
-        <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
-          {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}${Math.abs(tx.amount).toFixed(2)}
-        </td>
-        <td>${tx.balance.toFixed(2)}</td>
-      </tr>
-      {isExpanded && (
-        <TransactionDetail
-          key={`${tx.id}-detail`}
-          tx={tx}
-          editingField={editingField}
-          editValue={editValue}
-          onStartEdit={onStartEdit}
-          onSaveEdit={onSaveEdit}
-          onCancelEdit={onCancelEdit}
-          onEditValueChange={onEditValueChange}
-        />
-      )}
-    </React.Fragment>
-  )
-);
+const TransactionRow = React.memo(({ tx, isExpanded, editingField, editValue, onToggleRow, onStartEdit, onSaveEdit, onCancelEdit, onEditValueChange }: TransactionRowProps) => (
+  <React.Fragment key={tx.id}>
+    <tr className="transaction-row" onClick={() => onToggleRow(tx.id)}>
+      <td>
+        <button
+          type="button"
+          className="row-toggle-btn"
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggleRow(tx.id);
+          }}
+          aria-expanded={isExpanded}
+          aria-label={`${isExpanded ? 'Collapse' : 'Expand'} transaction ${tx.description}`}
+        >
+          {isExpanded ? <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} /> : <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />}
+        </button>
+      </td>
+      <td>{tx.date}</td>
+      <td>{tx.description}</td>
+      <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
+        {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}${Math.abs(tx.amount).toFixed(2)}
+      </td>
+      <td>${tx.balance.toFixed(2)}</td>
+    </tr>
+    {isExpanded && (
+      <TransactionDetail
+        key={`${tx.id}-detail`}
+        tx={tx}
+        editingField={editingField}
+        editValue={editValue}
+        onStartEdit={onStartEdit}
+        onSaveEdit={onSaveEdit}
+        onCancelEdit={onCancelEdit}
+        onEditValueChange={onEditValueChange}
+      />
+    )}
+  </React.Fragment>
+));
 
 TransactionRow.displayName = 'TransactionRow';
 
