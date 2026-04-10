@@ -2,9 +2,9 @@ import { useState } from 'react';
 
 import { usePatchTransactionMutation } from '@/api/argentBankApi';
 
-type EditableField = 'category' | 'notes';
+export type EditableField = 'category' | 'notes';
 
-interface EditingField {
+export interface EditingField {
   id: string;
   field: EditableField;
 }

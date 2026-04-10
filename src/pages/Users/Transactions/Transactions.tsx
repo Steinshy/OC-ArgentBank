@@ -15,11 +15,82 @@ import type { AppDispatch } from '@/store/store';
 import { TransactionHeader } from './TransactionHeader';
 import { TransactionDetail } from './TransactionDetail';
 import { useTransactionEdit } from './useTransactionEdit';
+import type { EditingField } from './useTransactionEdit';
 import './styles/Transactions.css';
 
 interface TransactionContentProps {
   accountId: string;
 }
+
+interface TransactionRowProps {
+  tx: Transaction;
+  isExpanded: boolean;
+  editingField: EditingField | null;
+  editValue: string;
+  onToggleRow: (id: string) => void;
+  onStartEdit: (id: string, field: 'category' | 'notes', value: string) => void;
+  onSaveEdit: (id: string, field: 'category' | 'notes') => void;
+  onCancelEdit: () => void;
+  onEditValueChange: (value: string) => void;
+}
+
+/** Memoized transaction row to prevent re-renders when other rows expand/collapse */
+const TransactionRow = React.memo(
+  ({
+    tx,
+    isExpanded,
+    editingField,
+    editValue,
+    onToggleRow,
+    onStartEdit,
+    onSaveEdit,
+    onCancelEdit,
+    onEditValueChange,
+  }: TransactionRowProps) => (
+    <React.Fragment key={tx.id}>
+      <tr className="transaction-row" onClick={() => onToggleRow(tx.id)}>
+        <td>
+          <button
+            type="button"
+            className="row-toggle-btn"
+            onClick={(e) => {
+              e.stopPropagation();
+              onToggleRow(tx.id);
+            }}
+            aria-expanded={isExpanded}
+            aria-label={`${isExpanded ? 'Collapse' : 'Expand'} transaction ${tx.description}`}
+          >
+            {isExpanded ? (
+              <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} />
+            ) : (
+              <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />
+            )}
+          </button>
+        </td>
+        <td>{tx.date}</td>
+        <td>{tx.description}</td>
+        <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
+          {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}${Math.abs(tx.amount).toFixed(2)}
+        </td>
+        <td>${tx.balance.toFixed(2)}</td>
+      </tr>
+      {isExpanded && (
+        <TransactionDetail
+          key={`${tx.id}-detail`}
+          tx={tx}
+          editingField={editingField}
+          editValue={editValue}
+          onStartEdit={onStartEdit}
+          onSaveEdit={onSaveEdit}
+          onCancelEdit={onCancelEdit}
+          onEditValueChange={onEditValueChange}
+        />
+      )}
+    </React.Fragment>
+  )
+);
+
+TransactionRow.displayName = 'TransactionRow';
 
 const TransactionContent = ({ accountId }: TransactionContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
@@ -66,42 +137,18 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
           </thead>
           <tbody>
             {transactions.map((tx: Transaction) => (
-              <React.Fragment key={tx.id}>
-                <tr className="transaction-row" onClick={() => toggleRow(tx.id)}>
-                  <td>
-                    <button
-                      type="button"
-                      className="row-toggle-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        toggleRow(tx.id);
-                      }}
-                      aria-expanded={expandedRowId === tx.id}
-                      aria-label={`${expandedRowId === tx.id ? 'Collapse' : 'Expand'} transaction ${tx.description}`}
-                    >
-                      {expandedRowId === tx.id ? <ChevronUp className="transaction-icon" aria-hidden strokeWidth={2} /> : <ChevronDown className="transaction-icon" aria-hidden strokeWidth={2} />}
-                    </button>
-                  </td>
-                  <td>{tx.date}</td>
-                  <td>{tx.description}</td>
-                  <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
-                    {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}${Math.abs(tx.amount).toFixed(2)}
-                  </td>
-                  <td>${tx.balance.toFixed(2)}</td>
-                </tr>
-                {expandedRowId === tx.id && (
-                  <TransactionDetail
-                    key={`${tx.id}-detail`}
-                    tx={tx}
-                    editingField={editingField}
-                    editValue={editValue}
-                    onStartEdit={startEdit}
-                    onSaveEdit={saveEdit}
-                    onCancelEdit={cancelEdit}
-                    onEditValueChange={setEditValue}
-                  />
-                )}
-              </React.Fragment>
+              <TransactionRow
+                key={tx.id}
+                tx={tx}
+                isExpanded={expandedRowId === tx.id}
+                editingField={editingField}
+                editValue={editValue}
+                onToggleRow={toggleRow}
+                onStartEdit={startEdit}
+                onSaveEdit={saveEdit}
+                onCancelEdit={cancelEdit}
+                onEditValueChange={setEditValue}
+              />
             ))}
           </tbody>
         </table>
