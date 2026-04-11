@@ -13,6 +13,10 @@
   <a href="https://github.com/steinshy/ArgentBank"><img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status" /></a>
 </p>
 
+<p align="center">
+  <img src="public\assets\mockup\mockup.png" alt="Argent-Bank responsive mockup" width="1024" />
+</p>
+
 ## 📋 Overview
 
 Argent Bank is a full-stack banking dashboard SPA: users sign in, manage their profile, and browse account transactions. The frontend is **React 19 + TypeScript + Vite** with **Redux Toolkit** (auth slice + RTK Query-style API layer). The backend is **Express** + **MongoDB** with JWT auth and Swagger docs.

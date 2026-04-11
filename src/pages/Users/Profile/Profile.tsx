@@ -22,7 +22,7 @@ export const Profile = () => {
     if (token) {
       refetch();
     }
-  }, [token]);
+  }, [token, refetch]);
 
   if (isError) {
     dispatch(logoutUser());

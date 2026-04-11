@@ -22,7 +22,6 @@ const ARC_RESOLUTION = 40;
 const NODE_BASE_RADIUS = 4;
 const NODE_PULSE_AMP = 1.5;
 const NODE_PULSE_SPEED = 0.002;
-
 const NODE_COUNT = 120;
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 const CONNECTION_THRESHOLD = 0.38;
@@ -163,7 +162,6 @@ export const HeroGlobe = ({ className }: Props) => {
 
       ctx!.clearRect(0, 0, w, h);
 
-      // Sphere background + rim
       const grad = ctx!.createRadialGradient(cx - radius * 0.25, cy - radius * 0.2, radius * 0.1, cx, cy, radius);
       grad.addColorStop(0, 'rgba(0, 188, 119, 0.08)');
       grad.addColorStop(0.5, 'rgba(0, 188, 119, 0.03)');
@@ -172,25 +170,24 @@ export const HeroGlobe = ({ className }: Props) => {
       ctx!.arc(cx, cy, radius, 0, TWO_PI);
       ctx!.fillStyle = grad;
       ctx!.fill();
+      ctx!.beginPath();
+      ctx!.arc(cx, cy, radius, 0, Math.PI * 2);
       ctx!.strokeStyle = 'rgba(0, 188, 119, 0.25)';
       ctx!.lineWidth = 1;
       ctx!.stroke();
 
-      // Meridians
       for (let i = 0; i < MERIDIAN_COUNT; i++) {
         const lon = (360 / MERIDIAN_COUNT) * i;
         const pts = generateMeridian(lon, radius, ARC_RESOLUTION);
         drawLine(pts, angle, AXIS_TILT, cx, cy, radius);
       }
 
-      // Parallels
       for (let i = 1; i < PARALLEL_COUNT; i++) {
         const lat = -60 + (120 / PARALLEL_COUNT) * i;
         const pts = generateArc(lat, -180, 180, radius, ARC_RESOLUTION);
         drawLine(pts, angle, AXIS_TILT, cx, cy, radius);
       }
 
-      // Project all nodes once
       const projected = NODES.map((n) => {
         const scaled = { x: n.x * radius, y: n.y * radius, z: n.z * radius };
         const r1 = rotateY(scaled, angle);
@@ -199,7 +196,6 @@ export const HeroGlobe = ({ className }: Props) => {
         return { sx: cx + r2.x, sy: cy - r2.y, depth };
       });
 
-      // Connection edges
       ctx!.lineWidth = 0.6;
       for (const [ai, bi] of EDGES) {
         const a = projected[ai]!;
@@ -214,7 +210,6 @@ export const HeroGlobe = ({ className }: Props) => {
         ctx!.stroke();
       }
 
-      // Nodes
       const pulse = NODE_BASE_RADIUS * 0.5 + Math.sin(time * NODE_PULSE_SPEED) * NODE_PULSE_AMP * 0.3;
       for (const p of projected) {
         if (p.depth < 0.25) continue;
@@ -232,7 +227,6 @@ export const HeroGlobe = ({ className }: Props) => {
         ctx!.fill();
       }
 
-      // Atmosphere glow
       const atmosGrad = ctx!.createRadialGradient(cx, cy, radius * 0.95, cx, cy, radius * 1.15);
       atmosGrad.addColorStop(0, 'rgba(0, 188, 119, 0.06)');
       atmosGrad.addColorStop(1, 'rgba(0, 188, 119, 0)');

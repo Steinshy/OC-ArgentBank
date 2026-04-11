@@ -13,6 +13,10 @@
   <a href="https://github.com/steinshy/ArgentBank"><img src="https://img.shields.io/badge/Statut-Actif-brightgreen?style=flat-square" alt="Statut" /></a>
 </p>
 
+<p align="center">
+  <img src="public\assets\mockup\mockup.png" alt="Argent-Bank responsive mockup" width="1024" />
+</p>
+
 ## 📋 Présentation
 
 Argent Bank est une application web complète de tableau de bord bancaire : connexion, profil et consultation des transactions. Le frontend repose sur **React 19**, **TypeScript**, **Vite** et **Redux Toolkit** (slice d’authentification + couche de type RTK Query). Le backend est **Express** + **MongoDB** avec authentification JWT et documentation Swagger.

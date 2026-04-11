@@ -111,7 +111,7 @@ export const SignIn = () => {
                 id="password"
                 name="password"
                 autoComplete="current-password"
-                placeholder="••••••••"
+                placeholder=""
                 value={password}
                 onChange={handlePasswordChange}
                 aria-invalid={passwordError || generalServerError ? true : undefined}

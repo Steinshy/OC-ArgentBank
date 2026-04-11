@@ -1,5 +1,1 @@
-/* Register page styles are inherited from global index.css
-   - Base input styles: input[type='text'], input[type='email'], input[type='password']
-   - Form group wrapper: .form-group, .form-error
-   - Button styles: .btn, .btn-primary, .btn-secondary
-   - No page-specific overrides needed - uses global form system */
+/* Register page styles are inherited from global index.css */

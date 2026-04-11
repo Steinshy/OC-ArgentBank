@@ -82,21 +82,6 @@
   --z-popover: 1060;
   --z-toast: 9999;
   --z-skip-link: 9999;
-
-  /* ===== RESPONSIVE BREAKPOINTS ===== */
-
-  /* Mobile-first approach (base styles apply to all, breakpoints add/override)
-     Standard breakpoints (matching Tailwind/Bootstrap conventions):
-     sm: 640px   - small tablets/landscape phones
-     md: 768px   - tablets
-     lg: 1024px  - small laptops/desktops
-     xl: 1280px  - desktops
-     2xl: 1536px - large screens
-     Media query pattern (use consistently):
-     @media (width >= 640px)  - tablet and up
-     @media (width >= 768px)  - tablet+
-     @media (width >= 1024px) - desktop and up
-     @media (width >= 1280px) - large desktop */
 }
 
 html {
@@ -114,7 +99,6 @@ body {
   min-height: 100vh;
 }
 
-/* ===== BASE BUTTON STYLES ===== */
 .btn {
   align-items: center;
   border: none;
@@ -142,7 +126,6 @@ body {
   outline: none;
 }
 
-/* ===== PRIMARY BUTTON ===== */
 .btn-primary {
   background-color: var(--color-primary);
   color: var(--color-surface);
@@ -162,7 +145,6 @@ body {
   outline: none;
 }
 
-/* ===== SECONDARY BUTTON ===== */
 .btn-secondary {
   background-color: transparent;
   border: 1.5px solid var(--color-primary);
@@ -181,7 +163,6 @@ body {
   outline: none;
 }
 
-/* ===== ELEVATED BUTTON (Gradient + Shadow) ===== */
 .btn-elevated {
   background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
 }
@@ -191,7 +172,6 @@ body {
   transform: translateY(-2px);
 }
 
-/* ===== TERTIARY BUTTON (Text-only) ===== */
 .btn-tertiary {
   background: none;
   color: var(--color-info);
@@ -205,7 +185,6 @@ body {
   opacity: 0.8;
 }
 
-/* ===== BUTTON SIZE VARIANTS ===== */
 .btn-sm {
   font-size: var(--font-size-sm);
   min-height: auto;
@@ -218,19 +197,16 @@ body {
   padding: 1rem 2rem;
 }
 
-/* ===== FULL WIDTH BUTTON ===== */
 .btn-full {
   width: 100%;
 }
 
-/* ===== BUTTON WITH ICON ===== */
 .btn-with-icon {
   align-items: center;
   display: inline-flex;
   gap: 0.5rem;
 }
 
-/* ===== BASE FORM STYLES ===== */
 input[type='text'],
 input[type='email'],
 input[type='password'],
@@ -297,7 +273,6 @@ select[aria-invalid='true']:focus {
   box-shadow: 0 0 0 2px var(--color-error-bg);
 }
 
-/* ===== FORM GROUP (Label + Input Wrapper) ===== */
 .form-group {
   display: flex;
   flex-direction: column;
@@ -316,7 +291,6 @@ select[aria-invalid='true']:focus {
   color: var(--color-error);
 }
 
-/* ===== INPUT SIZING ===== */
 .input-sm {
   font-size: var(--font-size-sm);
   min-height: 32px;
@@ -333,7 +307,6 @@ select[aria-invalid='true']:focus {
   width: 100%;
 }
 
-/* ===== CHECKBOX STYLING ===== */
 input[type='checkbox'] {
   appearance: none;
   background-color: var(--color-surface);
@@ -363,7 +336,6 @@ input[type='checkbox']:focus-visible {
   outline: none;
 }
 
-/* ===== CHECKBOX WITH LABEL WRAPPER ===== */
 .form-checkbox {
   align-items: center;
   display: flex;
@@ -382,7 +354,6 @@ input[type='checkbox']:focus-visible {
   color: var(--color-primary);
 }
 
-/* ===== ERROR MESSAGING ===== */
 .form-error {
   background-color: var(--color-error-bg);
   border-left: 3px solid var(--color-error);
@@ -416,12 +387,6 @@ input[type='checkbox']:focus-visible {
   margin-top: var(--spacing-xs);
 }
 
-/* ===== UTILITY-FIRST CSS CLASSES ===== */
-
-/* Tailwind-like utility classes but in plain CSS (no framework dependency)
-   Use these classes to compose styling directly in markup */
-
-/* ===== SPACING UTILITIES ===== */
 .p-1 {
   padding: var(--spacing-sm);
 }
@@ -489,7 +454,6 @@ input[type='checkbox']:focus-visible {
   gap: var(--spacing-lg);
 }
 
-/* ===== DISPLAY UTILITIES ===== */
 .flex {
   display: flex;
 }
@@ -562,7 +526,6 @@ input[type='checkbox']:focus-visible {
   display: none;
 }
 
-/* ===== SIZING UTILITIES ===== */
 .w-full {
   width: 100%;
 }
@@ -579,7 +542,6 @@ input[type='checkbox']:focus-visible {
   max-width: 100%;
 }
 
-/* ===== TEXT UTILITIES ===== */
 .text-xs {
   font-size: var(--font-size-xs);
 }
@@ -682,7 +644,6 @@ input[type='checkbox']:focus-visible {
   background-color: var(--color-info-bg);
 }
 
-/* ===== BORDER UTILITIES ===== */
 .border {
   border: 1px solid var(--color-border);
 }
@@ -708,7 +669,6 @@ input[type='checkbox']:focus-visible {
   border-radius: var(--radius-md);
 }
 
-/* ===== SHADOW UTILITIES ===== */
 .shadow-sm {
   box-shadow: var(--shadow-sm);
 }
@@ -722,7 +682,6 @@ input[type='checkbox']:focus-visible {
   box-shadow: var(--shadow-xl);
 }
 
-/* ===== CURSOR UTILITIES ===== */
 .cursor-pointer {
   cursor: pointer;
 }
@@ -733,7 +692,6 @@ input[type='checkbox']:focus-visible {
   cursor: not-allowed;
 }
 
-/* ===== OPACITY UTILITIES ===== */
 .opacity-50 {
   opacity: 0.5;
 }
@@ -744,7 +702,6 @@ input[type='checkbox']:focus-visible {
   opacity: 0.7;
 }
 
-/* ===== TRANSFORM UTILITIES ===== */
 .translate-y-1 {
   transform: translateY(0.25rem);
 }
@@ -752,7 +709,6 @@ input[type='checkbox']:focus-visible {
   transform: translateY(-0.25rem);
 }
 
-/* ===== SKELETON LOADERS ===== */
 @keyframes skeleton-loading {
   0% {
     background-position: 200% 0;
@@ -769,7 +725,6 @@ input[type='checkbox']:focus-visible {
   border-radius: var(--radius-md);
 }
 
-/* Skeleton variants */
 .skeleton-text {
   height: var(--font-size-base);
   width: 100%;
@@ -797,7 +752,6 @@ input[type='checkbox']:focus-visible {
   width: 120px;
 }
 
-/* Skeleton grid for multiple items */
 .skeleton-list {
   display: flex;
   flex-direction: column;
@@ -809,7 +763,6 @@ input[type='checkbox']:focus-visible {
   gap: var(--spacing-md);
 }
 
-/* Account card skeleton */
 .skeleton-account {
   display: grid;
   gap: var(--spacing-md);
@@ -833,7 +786,6 @@ input[type='checkbox']:focus-visible {
   width: 80%;
 }
 
-/* Transaction row skeleton */
 .skeleton-transaction-row {
   display: grid;
   gap: var(--spacing-md);
@@ -862,7 +814,6 @@ input[type='checkbox']:focus-visible {
   height: 44px;
 }
 
-/* Loading spinner */
 @keyframes spin {
   to {
     transform: rotate(360deg);
@@ -889,7 +840,6 @@ input[type='checkbox']:focus-visible {
   width: 64px;
 }
 
-/* Accessibility: Respect prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   .skeleton {
     animation: none;
