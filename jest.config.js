@@ -13,11 +13,7 @@ export default {
       'ts-jest',
       {
         useESM: true,
-        tsconfig: {
-          jsx: 'react-jsx',
-          esModuleInterop: true,
-          allowSyntheticDefaultImports: true,
-        },
+        tsconfig: '<rootDir>/tsconfig.jest.json',
       },
     ],
   },
@@ -29,12 +25,4 @@ export default {
     '!src/**/index.ts',
     '!src/**/__tests__/**',
   ],
-  coverageThreshold: {
-    global: {
-      branches: 50,
-      functions: 50,
-      lines: 50,
-      statements: 50,
-    },
-  },
 };

@@ -81,14 +81,11 @@
   gap: 0.65rem;
 }
 
-/* Header button alignment overrides */
 .layout .main-nav-auth .btn {
   margin-top: 0;
 }
 
-/* Button styling moved to global system: .btn, .btn-secondary, .btn-primary, .btn-elevated */
-
-/* Authenticated actions — white pills (nav bar) */
+/* Authenticated action */
 .layout .main-nav-user-cta {
   align-items: center;
   background: var(--color-surface);

@@ -32,7 +32,6 @@
   text-align: left;
 }
 
-/* Button styling moved to global system: .btn, .btn-primary */
 .back-button {
   align-items: center;
   display: flex !important;
@@ -53,9 +52,6 @@
   padding: 1rem;
 }
 
-/* ===== ICONS ===== */
-
-/* Base icon styling - flex sizing and alignment */
 .transaction-icon,
 .edit-pencil-icon {
   display: flex;
@@ -64,26 +60,22 @@
   vertical-align: middle;
 }
 
-/* Primary icon size (table expand/collapse arrows) */
 .transaction-icon {
   color: var(--color-primary);
   height: 1.05rem;
   width: 1.05rem;
 }
 
-/* Primary icon variant (white on green button) */
 .back-button .transaction-icon {
   color: var(--color-surface);
 }
 
-/* Edit icon size (pencil icon) */
 .edit-pencil-icon {
   color: var(--color-primary);
   height: 0.8rem;
   width: 0.8rem;
 }
 
-/* Table */
 .transaction-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -147,7 +139,6 @@
   border-bottom-right-radius: var(--radius-sm);
 }
 
-/* Row interactions */
 .transaction-row {
   cursor: pointer;
   transition: background-color 0.15s;
@@ -157,7 +148,6 @@
   background-color: var(--color-bg);
 }
 
-/* Toggle button in row */
 .row-toggle-btn {
   background: none;
   border: none;
@@ -183,7 +173,6 @@
   font-weight: 500;
 }
 
-/* Expanded detail row */
 .transaction-detail-row {
   background-color: var(--color-bg);
 }
@@ -217,7 +206,6 @@
   text-transform: capitalize;
 }
 
-/* Edit pencil icon */
 .edit-pencil {
   align-items: center;
   background: none;
@@ -238,7 +226,6 @@
   outline: none;
 }
 
-/* Edit controls - custom button sizing for inline edit context */
 .edit-controls {
   align-items: stretch;
   display: flex;
@@ -246,7 +233,6 @@
 }
 
 .edit-controls .btn {
-  /* Custom button sizing for compact inline edit buttons */
   align-items: center;
   box-sizing: border-box;
   display: flex;

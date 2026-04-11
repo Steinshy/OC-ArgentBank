@@ -4,7 +4,6 @@
   padding: 2rem 1.5rem;
 }
 
-/* Header with avatar */
 .settings-header {
   align-items: center;
   display: flex;
@@ -44,7 +43,6 @@
   margin: 0.25rem 0 0;
 }
 
-/* Form */
 .settings-form {
   background-color: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -62,7 +60,6 @@
   padding-bottom: 0.75rem;
 }
 
-/* Fields */
 .settings-field {
   margin-bottom: 1.25rem;
 }
@@ -106,14 +103,12 @@
   margin-top: 0.25rem;
 }
 
-/* Two-column name row */
 .settings-name-row {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
 }
 
-/* Actions */
 .settings-actions {
   border-top: 1px solid var(--color-border-light);
   display: flex;
@@ -127,8 +122,6 @@
   margin-top: 0;
   min-width: 120px;
 }
-
-/* Button styling moved to global system: .btn, .btn-primary, .btn-secondary */
 
 /* Mobile */
 @media (width <= 600px) {

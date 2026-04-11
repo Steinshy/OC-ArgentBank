@@ -39,7 +39,6 @@
   text-align: center;
 }
 
-/* Tablet and up */
 @media (width >= 768px) {
   .sign-in-panel {
     padding: 2.5rem clamp(1.5rem, 5vw, 3rem);
@@ -66,7 +65,6 @@
   }
 }
 
-/* Large desktop */
 @media (width >= 1280px) {
   .sign-in-content {
     max-width: min(760px, calc(100vw - 4rem));
@@ -87,7 +85,6 @@
   width: 100%;
 }
 
-/* ===== INPUTS ===== */
 .input-wrapper {
   display: flex;
   flex-direction: column;
@@ -102,25 +99,16 @@
   margin-bottom: 0.5rem;
 }
 
-/* ===== REMEMBER ME ===== */
 .input-remember {
   align-items: center;
   display: flex;
   margin-bottom: 1.5rem;
 }
 
-/* ===== SUBMIT BUTTON ===== */
-
-/* Button styling from global system with page-specific margin */
 .sign-in-content button {
   margin-top: 2rem;
 }
 
-/* ===== ERRORS ===== */
-
-/* Error styling moved to global system: .form-error, .form-error--server */
-
-/* ===== REGISTER LINK ===== */
 .register-link {
   color: var(--color-text-secondary);
   font-size: 0.875rem;
@@ -138,7 +126,6 @@
   text-decoration: underline;
 }
 
-/* ===== RESPONSIVE ===== */
 @media (width <= 600px) {
   .sign-in-panel {
     padding: 1.5rem 1rem;
