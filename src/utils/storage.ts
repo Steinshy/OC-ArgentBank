@@ -1,15 +1,7 @@
 /** In-memory token storage (most secure but lost on page refresh) */
 let inMemoryToken: string | null = null;
 
-/**
- * Storage strategy type.
- *
- * SECURITY NOTE: The `local` strategy uses `localStorage`, which persists the
- * token across browser sessions and is fully accessible to any JavaScript that
- * runs on the page — including injected scripts from XSS. Prefer `session` or
- * `memory` for production. `local` is provided only for development / opt-in
- * scenarios and should never be enabled by default.
- */
+/** Storage strategy type */
 type StorageStrategy = 'memory' | 'session' | 'local';
 
 /**

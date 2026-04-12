@@ -1,4 +1,3 @@
-// Vite injects `import.meta.env` at build time; in test / non-Vite runtimes it may be undefined.
 const viteEnv = (import.meta as ImportMeta & { env?: Record<string, string | undefined> }).env ?? {};
 
 export const API_BASE_URL = viteEnv.VITE_API_BASE_URL || 'http://localhost:3001';

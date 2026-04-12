@@ -65,7 +65,6 @@ export const argentBankApi = createApi({
           const token = getAuthToken(getState);
 
           if (USE_MOCK) {
-            // Strip transactions from mock accounts — the real API returns accounts without them
             const accounts = MOCK_ACCOUNTS.map(({ transactions: _t, ...rest }) => rest);
             return { data: accounts };
           }
