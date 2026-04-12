@@ -69,8 +69,16 @@ export const argentBankApi = createApi({
             return { data: accounts };
           }
 
-          const data = await apiCall<Account[]>(API_ENDPOINTS.USER_ACCOUNTS, { method: 'GET', token });
-          return { data };
+          try {
+            const data = await apiCall<Account[]>(API_ENDPOINTS.USER_ACCOUNTS, { method: 'GET', token });
+            return { data };
+          } catch (error) {
+            if (error instanceof Error && (error.message.includes('404') || error.message.includes('Not Found'))) {
+              const accounts = MOCK_ACCOUNTS.map(({ transactions: _t, ...rest }) => rest);
+              return { data: accounts };
+            }
+            throw error;
+          }
         } catch (error) {
           const errorMessage = extractErrorMessage(error, 'Failed to load accounts. Please try again.');
           return { error: errorMessage };
@@ -93,8 +101,20 @@ export const argentBankApi = createApi({
             return { data: transactions };
           }
 
-          const data = await apiCall<Transaction[]>(API_ENDPOINTS.ACCOUNT_TRANSACTIONS(accountId), { method: 'GET', token });
-          return { data };
+          try {
+            const data = await apiCall<Transaction[]>(API_ENDPOINTS.ACCOUNT_TRANSACTIONS(accountId), { method: 'GET', token });
+            return { data };
+          } catch (error) {
+            if (error instanceof Error && (error.message.includes('404') || error.message.includes('Not Found'))) {
+              const account = MOCK_ACCOUNTS.find((a) => a.id === accountId);
+              if (!account) {
+                return { error: `Account ${accountId} not found` };
+              }
+              const transactions = structuredClone(account.transactions ?? []);
+              return { data: transactions };
+            }
+            throw error;
+          }
         } catch (error) {
           const errorMessage = extractErrorMessage(error, 'Failed to load transactions. Please try again.');
           return { error: errorMessage };

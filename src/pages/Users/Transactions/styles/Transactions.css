@@ -101,6 +101,11 @@
   width: 180px;
 }
 
+.transaction-table td:nth-child(3),
+.transaction-table th:nth-child(3) {
+  width: 150px;
+}
+
 .table-amount-column {
   width: 120px;
 }
@@ -196,12 +201,15 @@
 
 .detail-label {
   color: var(--color-text-secondary);
+  flex-shrink: 0;
   font-weight: 600;
+  white-space: nowrap;
 }
 
 .detail-value {
   align-items: center;
   display: flex;
+  flex-wrap: wrap;
   gap: 0.4rem;
   text-transform: capitalize;
 }
@@ -302,9 +310,12 @@
   }
 
   .detail-row {
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.2rem;
+    font-size: 0.8rem;
+    gap: 0.3rem;
+  }
+
+  .detail-label {
+    min-width: auto;
   }
 }
 
@@ -343,11 +354,25 @@
 }
 
 @media (width <= 375px) {
+  .transaction-content {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
   .transaction-balance {
     font-size: 1.5rem;
   }
 
   .transaction-table {
-    min-width: 420px;
+    min-width: 560px;
+  }
+
+  .transaction-table td:nth-child(3),
+  .transaction-table th:nth-child(3) {
+    width: 100px;
+  }
+
+  .table-balance-column {
+    width: 120px;
   }
 }
