@@ -94,16 +94,16 @@ The codebase should stay navigable as features grow.
 
 Use **feature folders under `src/features/`** for Redux slices tied to a domain. Shared UI stays in `components/`, routes in `pages/`, HTTP primitives in `api/`.
 
-**Current state:** only `features/Auth/` exists. Transaction UI lives under `pages/Users/Transactions/` without a dedicated `features/Transactions` slice.
+**Current state:** `features/Auth/` and `features/Transactions/` exist. Each feature encapsulates its domain logic, with transaction UI and hooks co-located under `features/Transactions/`.
 
 ### Rationale
 
-- Clear place for `authSlice` / `authThunks`
-- Avoids premature abstraction when a feature is mostly UI + RTK Query endpoints
+- Clear place for domain-specific slices and thunks
+- Co-locations keep related logic together as features evolve
 
 ### Consequences
 
-- If transaction rules become complex, a `features/Transactions` slice or hooks module may be added later.
+- New domains should follow the same pattern: create a feature folder under `src/features/` when the domain complexity justifies it.
 
 ---
 

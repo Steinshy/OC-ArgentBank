@@ -89,7 +89,7 @@ src/
 ├── api/                 # Client fetch + slice RTK Query (argentBankApi)
 ├── components/          # Layout, ProtectedRoute, Toast, Loader, ErrorBoundary, …
 ├── constants/           # Routes, points de terminaison API, constantes UI
-├── features/            # Slices Redux et thunks (ex. Auth)
+├── features/            # Slices Redux et thunks (Auth, Transactions)
 ├── helpers/             # Validateurs
 ├── hooks/               # useAuth, …
 ├── mocks/               # Données mock en mémoire (auth, comptes, utilisateurs)

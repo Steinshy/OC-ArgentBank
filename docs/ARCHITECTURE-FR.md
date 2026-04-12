@@ -94,16 +94,16 @@ Le code doit rester navigable à mesure que les fonctionnalités grossissent.
 
 Placer les slices Redux liés à un domaine dans des **dossiers feature sous `src/features/`**. L’UI partagée reste dans `components/`, les écrans routés dans `pages/`, les primitives HTTP dans `api/`.
 
-**État actuel :** seul `features/Auth/` existe. L’UI des transactions est sous `pages/Users/Transactions/` sans slice dédié `features/Transactions`.
+**État actuel :** `features/Auth/` et `features/Transactions/` existent. Chaque feature encapsule sa logique métier, avec l’UI et les hooks des transactions co-localisés sous `features/Transactions/`.
 
 ### Justification
 
-- Emplacement clair pour `authSlice` / `authThunks`
-- Évite une abstraction prématurée lorsqu’une fonctionnalité est surtout de l’UI + endpoints RTK Query
+- Emplacement clair pour les slices et thunks spécifiques au domaine
+- La co-localisation conserve la logique connexe ensemble à mesure que les features évoluent
 
 ### Conséquences
 
-- Si les règles métier des transactions se complexifient, un slice `features/Transactions` ou un module de hooks pourra être ajouté plus tard.
+- Les nouveaux domaines doivent suivre le même motif : créer un dossier feature sous `src/features/` lorsque la complexité du domaine le justifie.
 
 ---
 
