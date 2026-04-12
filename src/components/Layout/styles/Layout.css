@@ -66,10 +66,11 @@
 .layout .main-nav-items {
   align-items: center;
   display: flex;
-  flex-shrink: 1;
+  flex-shrink: 0;
   flex-wrap: wrap;
   gap: 1.25rem;
   justify-content: flex-end;
+  margin-left: auto;
   min-width: 0;
 }
 

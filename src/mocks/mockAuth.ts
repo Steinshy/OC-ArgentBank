@@ -3,19 +3,47 @@ import { MOCK_USERS } from './users';
 import { MockUser, SignInRequest, SignInResponse, SignUpRequest, SignUpResponse, UserProfileResponse } from '@/types';
 
 const MOCK_DELAY = 1000;
+const MOCK_SECRET_KEY = 'mock-secret-key-for-encryption';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const encryptPayload = (payload: string): string => {
+  let encrypted = '';
+  for (let i = 0; i < payload.length; i++) {
+    const charCode = payload.charCodeAt(i);
+    const keyCharCode = MOCK_SECRET_KEY.charCodeAt(i % MOCK_SECRET_KEY.length);
+    encrypted += String.fromCharCode(charCode ^ keyCharCode);
+  }
+  return btoa(encrypted);
+};
+
+const decryptPayload = (encrypted: string): string => {
+  try {
+    const decoded = atob(encrypted);
+    let decrypted = '';
+    for (let i = 0; i < decoded.length; i++) {
+      const charCode = decoded.charCodeAt(i);
+      const keyCharCode = MOCK_SECRET_KEY.charCodeAt(i % MOCK_SECRET_KEY.length);
+      decrypted += String.fromCharCode(charCode ^ keyCharCode);
+    }
+    return decrypted;
+  } catch {
+    return '';
+  }
+};
+
 const generateMockToken = (userId: string): string => {
-  const payload = btoa(JSON.stringify({ id: userId, iat: Date.now() }));
-  return `mock.${payload}.signature`;
+  const payload = JSON.stringify({ id: userId, iat: Date.now() });
+  const encrypted = encryptPayload(payload);
+  return `mock.${encrypted}.signature`;
 };
 
 const getUserFromToken = (token: string): MockUser | null => {
   try {
     const payload = token.split('.')[1];
     if (!payload) return null;
-    const { id } = JSON.parse(atob(payload));
+    const decrypted = decryptPayload(payload);
+    const { id } = JSON.parse(decrypted);
     return MOCK_USERS.find((u) => u.id === id) || null;
   } catch {
     return null;
