@@ -292,7 +292,7 @@
 
 @media (width <= 600px) {
   .hero-section {
-    padding: 3rem 1rem;
+    padding: 3rem 1.5rem;
   }
 
   .hero-text h1 {
@@ -308,7 +308,7 @@
   }
 
   .features-section {
-    padding: 3rem 1rem;
+    padding: 3rem 1.5rem;
   }
 
   .features-header {
@@ -325,7 +325,7 @@
   }
 
   .trust-section {
-    padding: 3rem 1rem;
+    padding: 3rem 1.5rem;
   }
 
   .trust-stats {

@@ -1,3 +1,5 @@
+import { jest } from '@jest/globals';
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
