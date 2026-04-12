@@ -7,13 +7,14 @@ interface Props {
   tx: Transaction;
   editingField: { id: string; field: 'category' | 'notes' } | null;
   editValue: string;
+  isSaving?: boolean;
   onStartEdit: (id: string, field: 'category' | 'notes', currentValue: string) => void;
   onSaveEdit: (id: string, field: 'category' | 'notes') => void;
   onCancelEdit: () => void;
   onEditValueChange: (value: string) => void;
 }
 
-export const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, onSaveEdit, onCancelEdit, onEditValueChange }: Props) => (
+export const TransactionDetail = ({ tx, editingField, editValue, isSaving = false, onStartEdit, onSaveEdit, onCancelEdit, onEditValueChange }: Props) => (
   <tr className="transaction-detail-row">
     <td colSpan={5}>
       <div className="transaction-detail-content">
@@ -43,10 +44,10 @@ export const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, on
                     </option>
                   ))}
                 </select>
-                <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'category')}>
-                  {BUTTONS.SAVE}
+                <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'category')} disabled={isSaving} aria-busy={isSaving}>
+                  {isSaving ? '…' : BUTTONS.SAVE}
                 </button>
-                <button className="btn btn-secondary btn-sm" onClick={onCancelEdit}>
+                <button className="btn btn-secondary btn-sm" onClick={onCancelEdit} disabled={isSaving}>
                   {BUTTONS.CANCEL}
                 </button>
               </div>
@@ -78,10 +79,10 @@ export const TransactionDetail = ({ tx, editingField, editValue, onStartEdit, on
                   aria-labelledby={`notes-label-${tx.id}`}
                   placeholder={FORMS.ADD_NOTE_PLACEHOLDER}
                 />
-                <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'notes')}>
-                  {BUTTONS.SAVE}
+                <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'notes')} disabled={isSaving} aria-busy={isSaving}>
+                  {isSaving ? '…' : BUTTONS.SAVE}
                 </button>
-                <button className="btn btn-secondary btn-sm" onClick={onCancelEdit}>
+                <button className="btn btn-secondary btn-sm" onClick={onCancelEdit} disabled={isSaving}>
                   {BUTTONS.CANCEL}
                 </button>
               </div>

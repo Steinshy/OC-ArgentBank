@@ -4,7 +4,7 @@ import { apiCall } from './client';
 import { mockAuthApi } from '@/mocks';
 import { updateMockTransaction, MOCK_ACCOUNTS } from '@/mocks/accounts';
 import { RootState } from '@/store/store';
-import { UserProfile, UserProfileResponse, Transaction } from '@/types';
+import { UserProfile, UserProfileResponse, Transaction, Account } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { USE_MOCK, API_ENDPOINTS } from '@/constants';
 
@@ -13,7 +13,7 @@ const getAuthToken = (getState: () => unknown): string => (getState() as RootSta
 export const argentBankApi = createApi({
   reducerPath: 'argentBankApi',
   baseQuery: fakeBaseQuery<string>(),
-  tagTypes: ['User', 'Transaction'],
+  tagTypes: ['User', 'Account', 'Transaction'],
   endpoints: (builder) => ({
     getProfile: builder.query<UserProfile, void>({
       queryFn: async (_arg, { getState }) => {
@@ -57,6 +57,27 @@ export const argentBankApi = createApi({
         }
       },
       invalidatesTags: [{ type: 'User', id: 'CURRENT' }],
+    }),
+
+    getAccounts: builder.query<Account[], void>({
+      queryFn: async (_arg, { getState }) => {
+        try {
+          const token = getAuthToken(getState);
+
+          if (USE_MOCK) {
+            // Strip transactions from mock accounts — the real API returns accounts without them
+            const accounts = MOCK_ACCOUNTS.map(({ transactions: _t, ...rest }) => rest);
+            return { data: accounts };
+          }
+
+          const data = await apiCall<Account[]>(API_ENDPOINTS.USER_ACCOUNTS, { method: 'GET', token });
+          return { data };
+        } catch (error) {
+          const errorMessage = extractErrorMessage(error, 'Failed to load accounts. Please try again.');
+          return { error: errorMessage };
+        }
+      },
+      providesTags: [{ type: 'Account', id: 'LIST' }],
     }),
 
     getTransactions: builder.query<Transaction[], string>({
@@ -115,4 +136,4 @@ export const argentBankApi = createApi({
   }),
 });
 
-export const { useGetProfileQuery, useUpdateProfileMutation, useGetTransactionsQuery, usePatchTransactionMutation } = argentBankApi;
+export const { useGetProfileQuery, useUpdateProfileMutation, useGetAccountsQuery, useGetTransactionsQuery, usePatchTransactionMutation } = argentBankApi;
