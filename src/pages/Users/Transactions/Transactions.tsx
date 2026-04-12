@@ -6,8 +6,7 @@ import { useNavigate, useParams } from 'react-router';
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS } from '@/constants';
-import { useGetTransactionsQuery } from '@/api/argentBankApi';
-import { MOCK_ACCOUNTS } from '@/mocks/accounts';
+import { useGetTransactionsQuery, useGetAccountsQuery } from '@/api/argentBankApi';
 import { Transaction } from '@/types';
 import { extractErrorMessage } from '@/utils/errorHandler';
 import { logoutUser } from '@/features/Auth/authThunks';
@@ -27,6 +26,7 @@ interface TransactionRowProps {
   isExpanded: boolean;
   editingField: EditingField | null;
   editValue: string;
+  isSaving: boolean;
   onToggleRow: (id: string) => void;
   onStartEdit: (id: string, field: 'category' | 'notes', value: string) => void;
   onSaveEdit: (id: string, field: 'category' | 'notes') => void;
@@ -35,9 +35,21 @@ interface TransactionRowProps {
 }
 
 /** Memoized transaction row to prevent re-renders when other rows expand/collapse */
-const TransactionRow = React.memo(({ tx, isExpanded, editingField, editValue, onToggleRow, onStartEdit, onSaveEdit, onCancelEdit, onEditValueChange }: TransactionRowProps) => (
+const TransactionRow = React.memo(({ tx, isExpanded, editingField, editValue, isSaving, onToggleRow, onStartEdit, onSaveEdit, onCancelEdit, onEditValueChange }: TransactionRowProps) => (
   <React.Fragment key={tx.id}>
-    <tr className="transaction-row" onClick={() => onToggleRow(tx.id)}>
+    <tr
+      className="transaction-row"
+      onClick={() => onToggleRow(tx.id)}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onToggleRow(tx.id);
+        }
+      }}
+      tabIndex={0}
+      role="button"
+      aria-expanded={isExpanded}
+    >
       <td>
         <button
           type="button"
@@ -65,6 +77,7 @@ const TransactionRow = React.memo(({ tx, isExpanded, editingField, editValue, on
         tx={tx}
         editingField={editingField}
         editValue={editValue}
+        isSaving={isSaving && editingField?.id === tx.id}
         onStartEdit={onStartEdit}
         onSaveEdit={onSaveEdit}
         onCancelEdit={onCancelEdit}
@@ -80,7 +93,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
   const { data: transactions = [], isLoading: loading, error, isError } = useGetTransactionsQuery(accountId, { refetchOnFocus: true });
-  const { expandedRowId, editingField, editValue, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit } = useTransactionEdit(accountId);
+  const { expandedRowId, editingField, editValue, isSaving, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit } = useTransactionEdit(accountId);
 
   useEffect(() => {
     if (isError) {
@@ -127,6 +140,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
                 isExpanded={expandedRowId === tx.id}
                 editingField={editingField}
                 editValue={editValue}
+                isSaving={isSaving}
                 onToggleRow={toggleRow}
                 onStartEdit={startEdit}
                 onSaveEdit={saveEdit}
@@ -143,11 +157,20 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
 
 export const Transactions = () => {
   const { accountId } = useParams<{ accountId: string }>();
-  const account = accountId ? MOCK_ACCOUNTS.find((a) => a.id === accountId) : undefined;
+  const { data: accounts = [], isLoading: isAccountsLoading } = useGetAccountsQuery();
+  const account = accountId ? accounts.find((a) => a.id === accountId) : undefined;
 
   useDocumentTitle(account ? `Transactions — ${account.title}` : 'Transactions');
 
-  if (!account || !accountId) {
+  if (!accountId) {
+    return <p>{MESSAGES.ACCOUNT_NOT_FOUND}</p>;
+  }
+
+  if (isAccountsLoading && !account) {
+    return <SkeletonLoader variant="account" count={1} label="Loading account" />;
+  }
+
+  if (!account) {
     return <p>{MESSAGES.ACCOUNT_NOT_FOUND}</p>;
   }
 

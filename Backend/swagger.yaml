@@ -52,7 +52,7 @@ paths:
         '200':
           description: Signup Successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/SignUpResponse'
         '400':
           description: Invalid Fields
         '500':
@@ -76,7 +76,7 @@ paths:
         '200':
           description: User profile retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/UserProfileResponse'
         '400':
           description: Invalid Fields
         '500':
@@ -98,14 +98,14 @@ paths:
           description: Update user profile attributes
           required: true
           schema:
-            $ref: '#/definitions/UserProfile'
+            $ref: '#/definitions/UserProfileUpdate'
       produces:
         - application/json
       responses:
         '200':
           description: User profile retrieved successully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            $ref: '#/definitions/UserProfileResponse'
         '400':
           description: Invalid Fields
         '500':
@@ -130,7 +130,9 @@ paths:
         '200':
           description: Accounts retrieved successfully
           schema:
-            $ref: '#/definitions/AccountsResponse'
+            type: array
+            items:
+              $ref: '#/definitions/Account'
         '401':
           description: Unauthorized
         '500':
@@ -160,7 +162,9 @@ paths:
         '200':
           description: Transactions retrieved successfully
           schema:
-            $ref: '#/definitions/TransactionsResponse'
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
         '401':
           description: Unauthorized
         '404':
@@ -197,7 +201,7 @@ paths:
         '200':
           description: Transaction retrieved successfully
           schema:
-            $ref: '#/definitions/TransactionDetailResponse'
+            $ref: '#/definitions/Transaction'
         '401':
           description: Unauthorized
         '404':
@@ -239,7 +243,7 @@ paths:
         '200':
           description: Transaction updated successfully
           schema:
-            $ref: '#/definitions/TransactionDetailResponse'
+            $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
         '401':
@@ -276,7 +280,7 @@ definitions:
       password:
         type: string
         description: user password
-  ApiResponse:
+  LoginResponse:
     type: object
     properties:
       status:
@@ -286,22 +290,48 @@ definitions:
       body:
         type: object
         properties:
-          id:
+          token:
             type: string
-          email:
-            type: string
-  LoginResponse:
+  SignUpResponse:
     type: object
     properties:
-      token:
+      status:
+        type: integer
+      message:
         type: string
-  UserProfile:
+      body:
+        type: object
+        properties:
+          token:
+            type: string
+  UserProfileUpdate:
     type: object
+    description: Payload for updating a user profile (writable fields only)
     properties:
       firstName:
         type: string
       lastName:
         type: string
+  UserProfile:
+    type: object
+    properties:
+      id:
+        type: string
+      email:
+        type: string
+      firstName:
+        type: string
+      lastName:
+        type: string
+  UserProfileResponse:
+    type: object
+    properties:
+      status:
+        type: integer
+      message:
+        type: string
+      body:
+        $ref: '#/definitions/UserProfile'
   Account:
     type: object
     properties:
@@ -318,17 +348,6 @@ definitions:
       description:
         type: string
         description: Balance type description
-  AccountsResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: array
-        items:
-          $ref: '#/definitions/Account'
   Transaction:
     type: object
     properties:
@@ -362,26 +381,6 @@ definitions:
       notes:
         type: string
         description: User notes for the transaction
-  TransactionsResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        type: array
-        items:
-          $ref: '#/definitions/Transaction'
-  TransactionDetailResponse:
-    type: object
-    properties:
-      status:
-        type: integer
-      message:
-        type: string
-      body:
-        $ref: '#/definitions/Transaction'
   TransactionUpdate:
     type: object
     properties:
