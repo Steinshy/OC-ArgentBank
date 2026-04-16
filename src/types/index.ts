@@ -94,10 +94,6 @@ export interface UserProfile {
   lastName: string;
 }
 
-export interface MockUser extends UserProfile {
-  password: string;
-}
-
 export interface UserProfileResponse {
   status: number;
   message: string;

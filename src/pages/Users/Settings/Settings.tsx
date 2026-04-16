@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router';
 import { useToast } from '@/components/Toast/ToastContext';
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { validateName } from '@/helpers/validator';
 import { useAppDispatch, useAppSelector } from '@/store/store';
@@ -13,7 +12,6 @@ import { logoutUser } from '@/features/Auth/authThunks';
 import './styles/Settings.css';
 
 export const Settings = () => {
-  useDocumentTitle('Settings');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { isAuthenticated } = useAppSelector((state) => state.auth);

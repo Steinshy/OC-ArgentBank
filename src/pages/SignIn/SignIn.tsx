@@ -2,18 +2,18 @@ import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router';
 
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { clearError } from '@/features/Auth/authSlice';
 import { signInUser } from '@/features/Auth/authThunks';
 import { classifySignInError } from '@/utils/errorHandler';
+import { joinDescribedBy } from '@/helpers/formUtils';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { joinDescribedBy } from '@/utils/aria';
+import { storage } from '@/utils/storage';
 import './styles/SignIn.css';
 
 export const SignIn = () => {
-  useDocumentTitle('Sign In');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [rememberMe, setRememberMe] = useState(false);
   const [emailValidationError, setEmailValidationError] = useState('');
   const [passwordValidationError, setPasswordValidationError] = useState('');
   const dispatch = useAppDispatch();
@@ -64,6 +64,7 @@ export const SignIn = () => {
     if (!validateForm()) {
       return;
     }
+    storage.setStrategy(rememberMe ? 'local' : 'session');
     const result = await dispatch(signInUser({ email: email.trim(), password }));
     if (signInUser.fulfilled.match(result)) {
       navigate(ROUTES.PROFILE);
@@ -122,6 +123,10 @@ export const SignIn = () => {
                   {passwordError}
                 </p>
               )}
+            </div>
+            <div className="input-remember">
+              <input type="checkbox" id="remember-me" name="remember-me" checked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)} />
+              <label htmlFor="remember-me">Remember me</label>
             </div>
             {generalServerError && (
               <p className="form-error form-error--server" id="sign-in-server-error" role="alert">

@@ -2,12 +2,10 @@ import { Link } from 'react-router';
 
 import { HeroGlobe } from '@/components/HeroGlobe/HeroGlobe';
 import { ROUTES, BUTTONS, FEATURES } from '@/constants';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { useAppSelector } from '@/store/store';
 import './styles/Home.css';
 
 export const Home = () => {
-  useDocumentTitle('Home');
   const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
 
   return (

@@ -4,12 +4,19 @@ import { signInUser, signUpUser, logoutUser } from '@/features/Auth/authThunks';
 import { AuthState } from '@/types';
 import { storage } from '@/utils/storage';
 
-const initialState: AuthState = {
-  token: storage.getAuthToken(),
-  loading: false,
-  error: null,
-  isAuthenticated: !!storage.getAuthToken(),
+const initializeAuthState = (): AuthState => {
+  const detectedStrategy = storage.detectTokenLocation();
+  storage.setStrategy(detectedStrategy);
+  const token = storage.getAuthToken();
+  return {
+    token,
+    loading: false,
+    error: null,
+    isAuthenticated: !!token,
+  };
 };
+
+const initialState: AuthState = initializeAuthState();
 
 const authSlice = createSlice({
   name: 'auth',

@@ -1,9 +1,0 @@
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "rootDir": "./src",
-    "allowImportingTsExtensions": false,
-    "esModuleInterop": true,
-    "ignoreDeprecations": "6.0"
-  }
-}

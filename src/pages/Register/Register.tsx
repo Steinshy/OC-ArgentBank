@@ -3,20 +3,18 @@ import { Link, useNavigate } from 'react-router';
 
 import { useToast } from '@/components/Toast/ToastContext';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { clearError } from '@/features/Auth/authSlice';
 import { signUpUser } from '@/features/Auth/authThunks';
 import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
 import { validateEmail, validatePassword, validateName } from '@/helpers/validator';
+import { joinDescribedBy } from '@/helpers/formUtils';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { joinDescribedBy } from '@/utils/aria';
 import { FieldErrors } from '@/types';
 import './styles/Register.css';
 
 const initialFieldErrors: FieldErrors = { email: null, password: null, firstName: null, lastName: null };
 
 export const Register = () => {
-  useDocumentTitle('Register');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');

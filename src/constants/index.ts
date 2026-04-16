@@ -1,4 +1,4 @@
-export { API_BASE_URL, API_CONFIG, API_ENDPOINTS, USE_MOCK } from './api';
+export { API_BASE_URL, API_CONFIG, API_ENDPOINTS } from './api';
 
 export { getPublicAssetUrl } from './publicAssets';
 

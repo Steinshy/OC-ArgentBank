@@ -4,14 +4,12 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
-import { useDocumentTitle } from '@/hooks/useDocumentTitle';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS } from '@/constants';
-import { useGetTransactionsQuery, useGetAccountsQuery } from '@/api/argentBankApi';
+import { useGetTransactionsQuery } from '@/api/argentBankApi';
 import { Transaction } from '@/types';
 import { extractErrorMessage } from '@/utils/errorHandler';
 import { logoutUser } from '@/features/Auth/authThunks';
 import type { AppDispatch } from '@/store/store';
-import { TransactionHeader } from './TransactionHeader';
 import { TransactionDetail } from './TransactionDetail';
 import { useTransactionEdit } from './useTransactionEdit';
 import type { EditingField } from './useTransactionEdit';
@@ -157,27 +155,10 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
 
 export const Transactions = () => {
   const { accountId } = useParams<{ accountId: string }>();
-  const { data: accounts = [], isLoading: isAccountsLoading } = useGetAccountsQuery();
-  const account = accountId ? accounts.find((a) => a.id === accountId) : undefined;
-
-  useDocumentTitle(account ? `Transactions — ${account.title}` : 'Transactions');
 
   if (!accountId) {
     return <p>{MESSAGES.ACCOUNT_NOT_FOUND}</p>;
   }
 
-  if (isAccountsLoading && !account) {
-    return <SkeletonLoader variant="account" count={1} label="Loading account" />;
-  }
-
-  if (!account) {
-    return <p>{MESSAGES.ACCOUNT_NOT_FOUND}</p>;
-  }
-
-  return (
-    <>
-      <TransactionHeader account={account} />
-      <TransactionContent accountId={accountId} />
-    </>
-  );
+  return <TransactionContent accountId={accountId} />;
 };

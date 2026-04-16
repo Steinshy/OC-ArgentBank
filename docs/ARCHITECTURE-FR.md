@@ -18,7 +18,7 @@ Navigateur (React)
 **Authentification vs état serveur**
 
 - **Connexion / inscription / déconnexion** passent par `createAsyncThunk` dans `authThunks.ts` et mettent à jour `authSlice`. Les jetons sont persistés via `utils/storage.ts` (localStorage).
-- **Profil et transactions** utilisent une instance RTK Query `createApi` (`argentBankApi.ts`) avec `fakeBaseQuery` : chaque endpoint exécute un `queryFn` qui appelle soit `apiCall`, soit des mocks en mémoire lorsque `VITE_USE_MOCK=true`.
+- **Profil et transactions** utilisent une instance RTK Query `createApi` (`argentBankApi.ts`) avec `fakeBaseQuery` : chaque endpoint exécute un `queryFn` qui appelle `apiCall`.
 - **`setupListeners(store.dispatch)`** dans `main.tsx` active le rechargement RTK Query au retour au focus / à la reconnexion.
 
 **Routes protégées**
@@ -37,7 +37,6 @@ src/
 ├── features/Auth/    # authSlice.ts, authThunks.ts (seul slice « feature » aujourd’hui)
 ├── helpers/          # p. ex. validateur
 ├── hooks/            # useAuth (compose slice + hooks profil)
-├── mocks/            # mockAuthApi, comptes/utilisateurs fictifs pour USE_MOCK
 ├── pages/            # Écrans de route (Home, SignIn, Register, Profile, …)
 ├── store/            # configureStore, hooks typés
 ├── types/            # Types TS partagés + env.d.ts
@@ -122,7 +121,7 @@ Centraliser la configuration dans `src/constants/` :
 
 | Fichier     | Rôle |
 | ----------- | ---- |
-| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `USE_MOCK`, `API_CONFIG` |
+| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `API_CONFIG` |
 | `routes.ts` | `ROUTES`, `buildTransactionsRoute` |
 | `ui.ts`     | Libellés, messages, textes de navigation, catégories/types de transaction, cartes d’accueil |
 
@@ -291,11 +290,11 @@ Implémenter **`useAuth`** dans `hooks/useAuth.ts` : lit le slice `auth`, s’ab
 
 ### Contexte
 
-L’URL de base de l’API, le chemin de base optionnel pour GitHub Pages et le mode mock doivent varier selon l’environnement.
+L’URL de base de l’API et le chemin de base optionnel pour GitHub Pages doivent varier selon l’environnement.
 
 ### Décision
 
-Utiliser les variables d’environnement Vite avec le **préfixe `VITE_`** pour le code client. Documenter les clés attendues dans `.env.example`. Déclarer les types dans `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_BASE_PATH`, `VITE_USE_MOCK`).
+Utiliser les variables d’environnement Vite avec le **préfixe `VITE_`** pour le code client. Documenter les clés attendues dans `.env.example`. Déclarer les types dans `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_BASE_PATH`).
 
 ### Justification
 
@@ -320,8 +319,8 @@ Les données de profil et de transaction profitent du cache, de l’invalidation
 
 Définir **`argentBankApi`** avec `createApi`, `reducerPath: 'argentBankApi'`, `fakeBaseQuery`, et des endpoints implémentés via **`queryFn`** :
 
-- `getProfile` / `updateProfile` — POST/PUT profil ; branche mock via `mockAuthApi`
-- `getTransactions` / `patchTransaction` — GET/PATCH ressources transaction ; branche mock qui mute `MOCK_ACCOUNTS`
+- `getProfile` / `updateProfile` — POST/PUT profil
+- `getTransactions` / `patchTransaction` — GET/PATCH ressources transaction
 
 Enregistrer `argentBankApi.reducer` et `argentBankApi.middleware` dans `store.ts`. Appeler **`argentBankApi.util.resetApiState()`** à la déconnexion pour vider le cache utilisateur.
 
@@ -334,30 +333,6 @@ Enregistrer `argentBankApi.reducer` et `argentBankApi.middleware` dans `store.ts
 
 - Il faut comprendre les options `skip` (p. ex. chargement du profil seulement si authentifié).
 - `App.tsx` précharge le profil lorsque l’utilisateur est connecté pour alimenter layout / navigation.
-
----
-
-## ADR-012 : Backend fictif optionnel (`VITE_USE_MOCK`)
-
-**Statut :** Accepté  
-**Date :** avril 2026
-
-### Contexte
-
-Les démos et l’hébergement statique doivent fonctionner sans MongoDB ni Express.
-
-### Décision
-
-Lorsque `import.meta.env.VITE_USE_MOCK === 'true'`, les **thunks d’auth** et les **`queryFn` de `argentBankApi`** lisent/écrivent **`src/mocks`** au lieu d’appeler `apiCall`.
-
-### Justification
-
-- Même UI et mêmes chemins Redux en dev et en builds de démo
-- Bascule explicite à la frontière API
-
-### Conséquences
-
-- Les données fictives peuvent diverger de `swagger.yaml` ; traiter les mocks comme **test de contrat** pour l’UI, pas comme référence de l’API de production.
 
 ---
 

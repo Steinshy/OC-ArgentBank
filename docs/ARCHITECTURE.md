@@ -18,7 +18,7 @@ Browser (React)
 **Auth vs server state**
 
 - **Login / register / logout** use `createAsyncThunk` in `authThunks.ts` and update `authSlice`. Tokens are persisted with `utils/storage.ts` (localStorage).
-- **Profile and transactions** use an RTK Query `createApi` instance (`argentBankApi.ts`) with `fakeBaseQuery`: each endpoint runs `queryFn` that either calls `apiCall` or in-memory mocks when `VITE_USE_MOCK=true`.
+- **Profile and transactions** use an RTK Query `createApi` instance (`argentBankApi.ts`) with `fakeBaseQuery`: each endpoint runs `queryFn` that calls `apiCall`.
 - **`setupListeners(store.dispatch)`** in `main.tsx` enables refetch-on-focus/reconnect behavior for RTK Query.
 
 **Protected routes**
@@ -37,7 +37,6 @@ src/
 ├── features/Auth/    # authSlice.ts, authThunks.ts (only feature slice today)
 ├── helpers/          # e.g. validator
 ├── hooks/            # useAuth (composes slice + profile hooks)
-├── mocks/            # mockAuthApi, mock accounts/users for USE_MOCK
 ├── pages/            # Route-level screens (Home, SignIn, Register, Profile, …)
 ├── store/            # configureStore, typed hooks
 ├── types/            # Shared TS types + env.d.ts
@@ -122,7 +121,7 @@ Centralize configuration in `src/constants/`:
 
 | File        | Role |
 | ----------- | ---- |
-| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `USE_MOCK`, `API_CONFIG` |
+| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `API_CONFIG` |
 | `routes.ts` | `ROUTES`, `buildTransactionsRoute` |
 | `ui.ts`     | Labels, messages, nav copy, transaction categories/types, home feature cards |
 
@@ -291,11 +290,11 @@ Implement **`useAuth`** in `hooks/useAuth.ts`: reads `auth` slice, subscribes to
 
 ### Context
 
-API base URL, optional GitHub Pages base path, and mock mode must vary by environment.
+API base URL and optional GitHub Pages base path must vary by environment.
 
 ### Decision
 
-Use Vite env with **`VITE_` prefix** for client code. Document expected keys in `.env.example`. Declare typings in `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_BASE_PATH`, `VITE_USE_MOCK`).
+Use Vite env with **`VITE_` prefix** for client code. Document expected keys in `.env.example`. Declare typings in `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_BASE_PATH`).
 
 ### Rationale
 
@@ -320,8 +319,8 @@ Profile and transaction data benefit from caching, tag invalidation, and shared 
 
 Define **`argentBankApi`** with `createApi`, `reducerPath: 'argentBankApi'`, `fakeBaseQuery`, and endpoints implemented via **`queryFn`**:
 
-- `getProfile` / `updateProfile` — POST/PUT profile; mock branch uses `mockAuthApi`
-- `getTransactions` / `patchTransaction` — GET/PATCH transaction resources; mock branch mutates `MOCK_ACCOUNTS`
+- `getProfile` / `updateProfile` — POST/PUT profile
+- `getTransactions` / `patchTransaction` — GET/PATCH transaction resources
 
 Register `argentBankApi.reducer` and `argentBankApi.middleware` in `store.ts`. Call **`argentBankApi.util.resetApiState()`** on logout to clear cached user data.
 
@@ -334,30 +333,6 @@ Register `argentBankApi.reducer` and `argentBankApi.middleware` in `store.ts`. C
 
 - Developers must understand `skip` options (e.g. profile fetch only when authenticated).
 - `App.tsx` prefetches profile when authenticated to hydrate layout/nav.
-
----
-
-## ADR-012: Optional mock backend (`VITE_USE_MOCK`)
-
-**Status:** Accepted  
-**Date:** April 2026
-
-### Context
-
-Demos and static hosting should work without MongoDB or Express.
-
-### Decision
-
-When `import.meta.env.VITE_USE_MOCK === 'true'`, **auth thunks** and **`argentBankApi` queryFns** read/write **`src/mocks`** instead of calling `apiCall`.
-
-### Rationale
-
-- Same UI and Redux paths in dev and demo builds
-- Clear switch at the API boundary
-
-### Consequences
-
-- Mock data can drift from `swagger.yaml`; treat mocks as a **contract test** for the UI, not the source of truth for production API behavior.
 
 ---
 

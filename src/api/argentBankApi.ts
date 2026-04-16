@@ -1,12 +1,10 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { apiCall } from './client';
-import { mockAuthApi } from '@/mocks';
-import { updateMockTransaction, MOCK_ACCOUNTS } from '@/mocks/accounts';
 import { RootState } from '@/store/store';
-import { UserProfile, UserProfileResponse, Transaction, Account } from '@/types';
+import { UserProfile, UserProfileResponse, Transaction } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
-import { USE_MOCK, API_ENDPOINTS } from '@/constants';
+import { API_ENDPOINTS } from '@/constants';
 
 const getAuthToken = (getState: () => unknown): string => (getState() as RootState).auth.token ?? '';
 
@@ -19,11 +17,6 @@ export const argentBankApi = createApi({
       queryFn: async (_arg, { getState }) => {
         try {
           const token = getAuthToken(getState);
-
-          if (USE_MOCK) {
-            const response = await mockAuthApi.getProfile(token);
-            return { data: response.body };
-          }
 
           const response = await apiCall<UserProfileResponse>(API_ENDPOINTS.USER_PROFILE, { method: 'POST', token });
           return { data: response.body };
@@ -40,11 +33,6 @@ export const argentBankApi = createApi({
         try {
           const token = getAuthToken(getState);
 
-          if (USE_MOCK) {
-            const response = await mockAuthApi.updateProfile(token, args);
-            return { data: response.body };
-          }
-
           const response = await apiCall<UserProfileResponse>(API_ENDPOINTS.USER_PROFILE, {
             method: 'PUT',
             body: JSON.stringify(args),
@@ -59,62 +47,13 @@ export const argentBankApi = createApi({
       invalidatesTags: [{ type: 'User', id: 'CURRENT' }],
     }),
 
-    getAccounts: builder.query<Account[], void>({
-      queryFn: async (_arg, { getState }) => {
-        try {
-          const token = getAuthToken(getState);
-
-          if (USE_MOCK) {
-            const accounts = MOCK_ACCOUNTS.map(({ transactions: _t, ...rest }) => rest);
-            return { data: accounts };
-          }
-
-          try {
-            const data = await apiCall<Account[]>(API_ENDPOINTS.USER_ACCOUNTS, { method: 'GET', token });
-            return { data };
-          } catch (error) {
-            if (error instanceof Error && (error.message.includes('404') || error.message.includes('Not Found'))) {
-              const accounts = MOCK_ACCOUNTS.map(({ transactions: _t, ...rest }) => rest);
-              return { data: accounts };
-            }
-            throw error;
-          }
-        } catch (error) {
-          const errorMessage = extractErrorMessage(error, 'Failed to load accounts. Please try again.');
-          return { error: errorMessage };
-        }
-      },
-      providesTags: [{ type: 'Account', id: 'LIST' }],
-    }),
-
     getTransactions: builder.query<Transaction[], string>({
       queryFn: async (accountId, { getState }) => {
         try {
           const token = getAuthToken(getState);
 
-          if (USE_MOCK) {
-            const account = MOCK_ACCOUNTS.find((a) => a.id === accountId);
-            if (!account) {
-              return { error: `Account ${accountId} not found` };
-            }
-            const transactions = structuredClone(account.transactions ?? []);
-            return { data: transactions };
-          }
-
-          try {
-            const data = await apiCall<Transaction[]>(API_ENDPOINTS.ACCOUNT_TRANSACTIONS(accountId), { method: 'GET', token });
-            return { data };
-          } catch (error) {
-            if (error instanceof Error && (error.message.includes('404') || error.message.includes('Not Found'))) {
-              const account = MOCK_ACCOUNTS.find((a) => a.id === accountId);
-              if (!account) {
-                return { error: `Account ${accountId} not found` };
-              }
-              const transactions = structuredClone(account.transactions ?? []);
-              return { data: transactions };
-            }
-            throw error;
-          }
+          const data = await apiCall<Transaction[]>(API_ENDPOINTS.ACCOUNT_TRANSACTIONS(accountId), { method: 'GET', token });
+          return { data };
         } catch (error) {
           const errorMessage = extractErrorMessage(error, 'Failed to load transactions. Please try again.');
           return { error: errorMessage };
@@ -134,11 +73,6 @@ export const argentBankApi = createApi({
         try {
           const token = getAuthToken(getState);
 
-          if (USE_MOCK) {
-            updateMockTransaction(accountId, transactionId, data);
-            return { data: undefined };
-          }
-
           await apiCall(API_ENDPOINTS.TRANSACTION_DETAIL(accountId, transactionId), {
             method: 'PATCH',
             body: JSON.stringify(data),
@@ -155,4 +89,4 @@ export const argentBankApi = createApi({
   }),
 });
 
-export const { useGetProfileQuery, useUpdateProfileMutation, useGetAccountsQuery, useGetTransactionsQuery, usePatchTransactionMutation } = argentBankApi;
+export const { useGetProfileQuery, useUpdateProfileMutation, useGetTransactionsQuery, usePatchTransactionMutation } = argentBankApi;

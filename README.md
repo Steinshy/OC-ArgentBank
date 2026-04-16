@@ -26,7 +26,6 @@ Argent Bank is a full-stack banking dashboard SPA: users sign in, manage their p
 - ✅ JWT authentication (login, register) with protected routes
 - ✅ User profile read/update
 - ✅ Transaction list and detail UI with category/notes editing
-- ✅ Mock mode for static hosting without a live API (`VITE_USE_MOCK=true`)
 - ⏳ Account/transaction REST routes: frontend targets paths under `/api/v1/user/...`; ensure `Backend/routes` matches your deployment (see `Backend/swagger.yaml`)
 
 ## 🚀 Getting Started
@@ -46,7 +45,6 @@ npm install
 
 cp .env.example .env.local
 # VITE_API_BASE_URL=http://localhost:3001
-# VITE_USE_MOCK=false
 
 cd Backend
 npm install
@@ -92,7 +90,6 @@ src/
 ├── features/            # Redux slices & thunks (Auth, Transactions)
 ├── helpers/             # Validators
 ├── hooks/               # useAuth, …
-├── mocks/               # Mock auth, accounts, users (in-memory dev data)
 ├── pages/               # Home, SignIn, Register, Profile, Settings, Transactions, …
 ├── store/               # Redux store configuration
 ├── types/               # Shared TypeScript contracts (API + UI)
@@ -121,12 +118,7 @@ Backend/
 
 - Profile: load and update first/last name
 - Settings placeholder page
-- Transactions: list by account, detail view, edit category/notes (mock or API per env)
-
-### Data modes
-
-- **API mode** (`VITE_USE_MOCK=false`): HTTP calls to `VITE_API_BASE_URL`
-- **Mock mode** (`VITE_USE_MOCK=true`): in-memory users/accounts for demos and GitHub Pages–style deploys
+- Transactions: list by account, detail view, edit category/notes
 
 ## 📚 Documentation
 
@@ -155,30 +147,14 @@ PUT /api/v1/user/profile
 
 ### Accounts & transactions (frontend contract)
 
-The SPA calls paths such as `GET /api/v1/user/accounts/:accountId/transactions` and `PATCH` on a transaction resource when mock mode is off. These are documented in `Backend/swagger.yaml`; wire or extend `Backend/routes` to match your backend implementation.
-
-### Mock vs live API
-
-**Mock**
-
-```bash
-# .env.local
-VITE_USE_MOCK=true
-```
-
-**Live API**
-
-```bash
-VITE_USE_MOCK=false
-VITE_API_BASE_URL=http://localhost:3001
-```
+The SPA calls paths such as `GET /api/v1/user/accounts/:accountId/transactions` and `PATCH` on a transaction resource. These are documented in `Backend/swagger.yaml`; wire or extend `Backend/routes` to match your backend implementation.
 
 ## 🛠️ Development Guidelines
 
 ### Data flow
 
 1. Auth thunks update the Redux auth slice (token, user id).
-2. `argentBankApi` endpoints use `apiCall` (fetch wrapper) or mocks based on `USE_MOCK`.
+2. `argentBankApi` endpoints use `apiCall` (fetch wrapper) to call the backend.
 3. Pages consume hooks from RTK Query and/or `useAuth`.
 
 ### Adding features

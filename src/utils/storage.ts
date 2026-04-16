@@ -1,19 +1,8 @@
-/** In-memory token storage (most secure but lost on page refresh) */
 let inMemoryToken: string | null = null;
 
 /** Storage strategy type */
 type StorageStrategy = 'memory' | 'session' | 'local';
 
-/**
- * Token storage manager with multiple strategies
- *
- * Strategy comparison:
- * - 'memory': Most secure (not persisted), lost on page refresh
- * - 'session': Good balance (cleared when tab closes), survives page refresh
- * - 'local': Traditional approach (persists across sessions), XSS vulnerable
- *
- * Recommendation: Use 'session' by default
- */
 class TokenStorageManager {
   private strategy: StorageStrategy = 'session';
 
@@ -33,6 +22,17 @@ class TokenStorageManager {
       default:
         return null;
     }
+  }
+
+  /** Detect token location (used on app initialization) */
+  detectTokenLocation(): StorageStrategy {
+    if (localStorage.getItem('authToken')) {
+      return 'local';
+    }
+    if (sessionStorage.getItem('authToken')) {
+      return 'session';
+    }
+    return 'session';
   }
 
   /** Set auth token */
@@ -89,4 +89,5 @@ export const storage = {
   removeAuthToken: () => storageManager.removeAuthToken(),
   setStrategy: (strategy: StorageStrategy) => storageManager.setStrategy(strategy),
   getStrategy: () => storageManager.getStrategy(),
+  detectTokenLocation: () => storageManager.detectTokenLocation(),
 };
