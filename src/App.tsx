@@ -10,6 +10,7 @@ import { ProtectedRoute } from '@/components/ProtectedRoute/ProtectedRoute';
 import { ROUTES } from '@/constants';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { store, useAppSelector } from '@/store/store';
+import { selectIsAuthenticated, selectAuthToken } from '@/store/selectors';
 import '@/index.css';
 
 const Home = lazy(() => import('@/pages/Home/Home').then((m) => ({ default: m.Home })));
@@ -21,7 +22,8 @@ const Settings = lazy(() => import('@/pages/Users/Settings/Settings').then((m) =
 const Transactions = lazy(() => import('@/pages/Users/Transactions/Transactions').then((m) => ({ default: m.Transactions })));
 
 const AppRoutes = () => {
-  const { isAuthenticated, token } = useAppSelector((state) => state.auth);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const token = useAppSelector(selectAuthToken);
   useGetProfileQuery(undefined, { skip: !isAuthenticated || !token });
 
   return (

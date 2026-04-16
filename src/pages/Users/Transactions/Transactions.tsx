@@ -1,15 +1,14 @@
 import React, { useEffect } from 'react';
 import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
-import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS } from '@/constants';
 import { useGetTransactionsQuery } from '@/api/argentBankApi';
 import { Transaction } from '@/types';
-import { extractErrorMessage } from '@/utils/errorHandler';
+import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { logoutUser } from '@/features/Auth/authThunks';
-import type { AppDispatch } from '@/store/store';
+import { useAppDispatch } from '@/store/store';
 import { TransactionDetail } from './TransactionDetail';
 import { useTransactionEdit } from './useTransactionEdit';
 import type { EditingField } from './useTransactionEdit';
@@ -88,7 +87,7 @@ const TransactionRow = React.memo(({ tx, isExpanded, editingField, editValue, is
 TransactionRow.displayName = 'TransactionRow';
 
 const TransactionContent = ({ accountId }: TransactionContentProps) => {
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { data: transactions = [], isLoading: loading, error, isError } = useGetTransactionsQuery(accountId, { refetchOnFocus: true });
   const { expandedRowId, editingField, editValue, isSaving, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit } = useTransactionEdit(accountId);
@@ -109,7 +108,7 @@ const TransactionContent = ({ accountId }: TransactionContentProps) => {
 
       {error && (
         <p className="transaction-error" role="alert">
-          {extractErrorMessage(error, 'Failed to load transactions. Please try again.')}
+          {extractErrorMessage(error, ERROR_MESSAGES.TRANSACTIONS_LOAD_FAILED)}
         </p>
       )}
 

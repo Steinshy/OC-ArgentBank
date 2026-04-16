@@ -2,14 +2,12 @@ import type { ComponentType } from 'react';
 import type { TransactionType } from '@/constants';
 
 // Validation Types
-
 export interface ValidationResult {
   isValid: boolean;
   error: string | null;
 }
 
 // Form Types
-
 export interface FieldErrors {
   email: string | null;
   password: string | null;
@@ -18,7 +16,6 @@ export interface FieldErrors {
 }
 
 // UI Component Types
-
 export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 export interface ToastAction {
@@ -44,14 +41,12 @@ export interface Feature {
 }
 
 // API Contract Types
-
 export interface UpdateProfileData {
   firstName: string;
   lastName: string;
 }
 
 // API Response Types
-
 export interface ApiErrorResponse {
   status?: number;
   message?: string;
@@ -120,7 +115,6 @@ export interface Account {
 }
 
 /* Redux State Types */
-
 export interface AuthState {
   token: string | null;
   loading: boolean;

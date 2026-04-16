@@ -55,7 +55,7 @@ export const argentBankApi = createApi({
           const data = await apiCall<Transaction[]>(API_ENDPOINTS.ACCOUNT_TRANSACTIONS(accountId), { method: 'GET', token });
           return { data };
         } catch (error) {
-          const errorMessage = extractErrorMessage(error, 'Failed to load transactions. Please try again.');
+          const errorMessage = extractErrorMessage(error, ERROR_MESSAGES.TRANSACTIONS_LOAD_FAILED);
           return { error: errorMessage };
         }
       },
@@ -80,7 +80,7 @@ export const argentBankApi = createApi({
           });
           return { data: undefined };
         } catch (error) {
-          const errorMessage = extractErrorMessage(error, 'Failed to update transaction');
+          const errorMessage = extractErrorMessage(error, ERROR_MESSAGES.TRANSACTION_UPDATE_FAILED);
           return { error: errorMessage };
         }
       },

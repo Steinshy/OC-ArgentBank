@@ -7,14 +7,15 @@ import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { validateName } from '@/helpers/validator';
 import { useAppDispatch, useAppSelector } from '@/store/store';
-import { extractErrorMessage } from '@/utils/errorHandler';
+import { selectIsAuthenticated } from '@/store/selectors';
+import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { logoutUser } from '@/features/Auth/authThunks';
 import './styles/Settings.css';
 
 export const Settings = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const { data: user, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
   const [firstName, setFirstName] = useState(user?.firstName ?? '');
   const [lastName, setLastName] = useState(user?.lastName ?? '');
@@ -35,8 +36,8 @@ export const Settings = () => {
 
     const firstNameValidation = validateName(firstName, 'First name');
     const lastNameValidation = validateName(lastName, 'Last name');
-    const fnError = firstNameValidation.isValid ? null : (firstNameValidation.error ?? 'Invalid first name');
-    const lnError = lastNameValidation.isValid ? null : (lastNameValidation.error ?? 'Invalid last name');
+    const fnError = firstNameValidation.isValid ? null : firstNameValidation.error;
+    const lnError = lastNameValidation.isValid ? null : lastNameValidation.error;
     setFirstNameError(fnError);
     setLastNameError(lnError);
 
@@ -49,7 +50,7 @@ export const Settings = () => {
       toast.show('Profile updated', MESSAGES.PROFILE_UPDATED);
       setTimeout(() => navigate(ROUTES.PROFILE), 500);
     } else {
-      const message = extractErrorMessage(result.error, 'Failed to update profile');
+      const message = extractErrorMessage(result.error, ERROR_MESSAGES.PROFILE_UPDATE_FAILED);
       toast.show('Error', message, 'error');
     }
   };

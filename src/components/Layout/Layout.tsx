@@ -2,10 +2,12 @@ import { ReactNode } from 'react';
 import { CircleUser, LogOut, Settings } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router';
 
-import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText, getPublicAssetUrl } from '@/constants';
+import argentBankLogo from '@/assets/img/argentBankLogo-60x40.png';
+import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText } from '@/constants';
 import { logoutUser } from '@/features/Auth/authThunks';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { selectIsAuthenticated } from '@/store/selectors';
 import './styles/Layout.css';
 
 interface LayoutProps {
@@ -13,7 +15,7 @@ interface LayoutProps {
 }
 
 export const Layout = ({ children }: LayoutProps) => {
-  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const { data: user } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -32,7 +34,7 @@ export const Layout = ({ children }: LayoutProps) => {
       </a>
       <nav className="main-nav" aria-label="Main navigation">
         <Link className="main-nav-logo" to={ROUTES.HOME}>
-          <img className="main-nav-logo-image" src={getPublicAssetUrl('assets/img/argentBankLogo-60x40.png')} alt={NAVIGATION.HOME_LOGO_ALT} />
+          <img className="main-nav-logo-image" src={argentBankLogo} alt={NAVIGATION.HOME_LOGO_ALT} />
           <span className="sr-only">Argent Bank</span>
         </Link>
         <div className="main-nav-items">

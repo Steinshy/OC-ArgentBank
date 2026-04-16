@@ -36,7 +36,6 @@ export const BUTTONS = {
 
 export const MESSAGES = {
   LOADING_PROFILE: 'Loading profile...',
-  LOADING_TRANSACTIONS: 'Loading transactions...',
   SIGNIN_PENDING: 'Signing in...',
   SIGNUP_PENDING: 'Creating account...',
   REGISTER_SUCCESS: 'Account created! Welcome to Argent Bank.',
@@ -46,7 +45,6 @@ export const MESSAGES = {
 } as const;
 
 export const NAVIGATION = {
-  VIEW_TRANSACTIONS: 'View transactions',
   HOME_LOGO_ALT: 'Argent Bank Logo',
 } as const;
 
@@ -70,8 +68,3 @@ export const getCopyrightText = (): string => {
   const yearRange = APP.COPYRIGHT_START_YEAR === currentYear ? `${currentYear}` : `${APP.COPYRIGHT_START_YEAR}-${currentYear}`;
   return `Copyright ${yearRange} ${APP.NAME}`;
 };
-
-export const HOME_PAGE = {
-  TITLE: 'Welcome to Argent Bank',
-  SUBTITLE: 'Experience premium banking services with Argent Bank.',
-} as const;

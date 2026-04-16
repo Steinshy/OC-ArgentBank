@@ -64,9 +64,9 @@ export default defineConfig(({ mode }) => {
     plugins: [
       mode !== 'production' && checker({ typescript: true }),
       react(),
-      mode === 'production' &&
+      mode !== 'production' &&
         visualizer({
-          open: true,
+          open: false,
           gzipSize: true,
           brotliSize: true,
           filename: 'dist/stats.html',

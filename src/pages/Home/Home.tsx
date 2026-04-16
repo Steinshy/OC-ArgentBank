@@ -3,10 +3,11 @@ import { Link } from 'react-router';
 import { HeroGlobe } from '@/components/HeroGlobe/HeroGlobe';
 import { ROUTES, BUTTONS, FEATURES } from '@/constants';
 import { useAppSelector } from '@/store/store';
+import { selectIsAuthenticated } from '@/store/selectors';
 import './styles/Home.css';
 
 export const Home = () => {
-  const isAuthenticated = useAppSelector((state) => state.auth.isAuthenticated);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
 
   return (
     <div className="home-container">

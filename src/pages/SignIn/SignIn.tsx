@@ -5,20 +5,25 @@ import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { signInUser } from '@/features/Auth/authThunks';
 import { classifySignInError } from '@/utils/errorHandler';
+import { validateEmail, validateSignInPassword } from '@/helpers/validator';
 import { joinDescribedBy } from '@/helpers/formUtils';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { selectAuthLoading, selectAuthError, selectAuthToken } from '@/store/selectors';
 import { storage } from '@/utils/storage';
 import './styles/SignIn.css';
 
 export const SignIn = () => {
-  const [email, setEmail] = useState('');
+  const savedEmail = localStorage.getItem('rememberMeEmail');
+  const [email, setEmail] = useState(savedEmail ?? '');
   const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(!!savedEmail);
   const [emailValidationError, setEmailValidationError] = useState('');
   const [passwordValidationError, setPasswordValidationError] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { loading, error, token } = useAppSelector((state) => state.auth);
+  const loading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
+  const token = useAppSelector(selectAuthToken);
 
   useEffect(() => {
     if (token) {
@@ -47,22 +52,22 @@ export const SignIn = () => {
   };
 
   const validateForm = (): boolean => {
-    let isValid = true;
-    if (!email.trim()) {
-      setEmailValidationError('Email is required');
-      isValid = false;
-    }
-    if (!password) {
-      setPasswordValidationError('Password is required');
-      isValid = false;
-    }
-    return isValid;
+    const emailResult = validateEmail(email);
+    const passwordResult = validateSignInPassword(password);
+    if (!emailResult.isValid) setEmailValidationError(emailResult.error ?? '');
+    if (!passwordResult.isValid) setPasswordValidationError(passwordResult.error ?? '');
+    return emailResult.isValid && passwordResult.isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateForm()) {
       return;
+    }
+    if (rememberMe) {
+      localStorage.setItem('rememberMeEmail', email.trim());
+    } else {
+      localStorage.removeItem('rememberMeEmail');
     }
     storage.setStrategy(rememberMe ? 'local' : 'session');
     const result = await dispatch(signInUser({ email: email.trim(), password }));
@@ -100,7 +105,7 @@ export const SignIn = () => {
                 aria-describedby={emailDescribedBy}
               />
               {emailError && (
-                <p className="form-error" id="sign-in-email-error" role="alert">
+                <p className="field-error" id="sign-in-email-error" role="alert">
                   {emailError}
                 </p>
               )}
@@ -119,7 +124,7 @@ export const SignIn = () => {
                 aria-describedby={passwordDescribedBy}
               />
               {passwordError && (
-                <p className="form-error" id="sign-in-password-error" role="alert">
+                <p className="field-error" id="sign-in-password-error" role="alert">
                   {passwordError}
                 </p>
               )}
@@ -129,7 +134,7 @@ export const SignIn = () => {
               <label htmlFor="remember-me">Remember me</label>
             </div>
             {generalServerError && (
-              <p className="form-error form-error--server" id="sign-in-server-error" role="alert">
+              <p className="field-error field-error--server" id="sign-in-server-error" role="alert">
                 {generalServerError}
               </p>
             )}

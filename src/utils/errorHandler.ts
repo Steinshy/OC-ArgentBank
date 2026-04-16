@@ -44,12 +44,15 @@ export const handleHttpError = async (response: Response): Promise<string> => {
 };
 
 export const ERROR_MESSAGES = {
+  GENERIC: 'An error occurred',
   INVALID_CREDENTIALS: 'Invalid email or password',
   SESSION_EXPIRED: 'Your session has expired. Please sign in again.',
   SIGNIN_FAILED: 'Sign in failed. Please try again.',
   SIGNUP_FAILED: 'Registration failed. Please try again.',
   PROFILE_UPDATE_FAILED: 'Failed to update profile. Please try again.',
   PROFILE_LOAD_FAILED: 'Failed to load profile. Please try again.',
+  TRANSACTIONS_LOAD_FAILED: 'Failed to load transactions. Please try again.',
+  TRANSACTION_UPDATE_FAILED: 'Failed to update transaction',
 } as const;
 
 /** Server response messages — matched to backend error messages */

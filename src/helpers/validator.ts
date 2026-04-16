@@ -12,6 +12,13 @@ export const validateEmail = (value: string): ValidationResult => {
   return { isValid: true, error: null };
 };
 
+/** Sign-in: presence only; the API validates credentials. */
+export const validateSignInPassword = (value: string): ValidationResult => {
+  if (!value) return { isValid: false, error: 'Password is required' };
+  return { isValid: true, error: null };
+};
+
+/** Registration: explicit requirements for UX and API alignment. */
 export const validatePassword = (value: string): ValidationResult => {
   if (!value) return { isValid: false, error: 'Password is required' };
   if (value.length < 8) return { isValid: false, error: 'Password must be at least 8 characters' };

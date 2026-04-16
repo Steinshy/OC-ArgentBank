@@ -5,6 +5,7 @@ import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
 import { useGetProfileQuery } from '@/api/argentBankApi';
 import { ROUTES, MESSAGES } from '@/constants';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { selectIsAuthenticated, selectAuthToken } from '@/store/selectors';
 import { logoutUser } from '@/features/Auth/authThunks';
 
 interface ProtectedRouteProps {
@@ -13,7 +14,8 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const dispatch = useAppDispatch();
-  const { isAuthenticated, token } = useAppSelector((state) => state.auth);
+  const isAuthenticated = useAppSelector(selectIsAuthenticated);
+  const token = useAppSelector(selectAuthToken);
   const { data: user, isLoading, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated || !token });
 
   useEffect(() => {

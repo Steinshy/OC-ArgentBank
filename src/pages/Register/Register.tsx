@@ -9,6 +9,7 @@ import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler
 import { validateEmail, validatePassword, validateName } from '@/helpers/validator';
 import { joinDescribedBy } from '@/helpers/formUtils';
 import { useAppDispatch, useAppSelector } from '@/store/store';
+import { selectAuthLoading, selectAuthError, selectAuthToken } from '@/store/selectors';
 import { FieldErrors } from '@/types';
 import './styles/Register.css';
 
@@ -23,7 +24,9 @@ export const Register = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const toast = useToast();
-  const { loading, error, token } = useAppSelector((state) => state.auth);
+  const loading = useAppSelector(selectAuthLoading);
+  const error = useAppSelector(selectAuthError);
+  const token = useAppSelector(selectAuthToken);
 
   useEffect(() => {
     if (token) {
@@ -50,10 +53,10 @@ export const Register = () => {
     const lastNameResult = validateName(lastName, 'Last name');
 
     const newErrors: FieldErrors = {
-      email: emailResult.isValid ? null : (emailResult.error ?? 'Invalid email'),
-      password: passwordResult.isValid ? null : (passwordResult.error ?? 'Invalid password'),
-      firstName: firstNameResult.isValid ? null : (firstNameResult.error ?? 'Invalid first name'),
-      lastName: lastNameResult.isValid ? null : (lastNameResult.error ?? 'Invalid last name'),
+      email: emailResult.isValid ? null : emailResult.error,
+      password: passwordResult.isValid ? null : passwordResult.error,
+      firstName: firstNameResult.isValid ? null : firstNameResult.error,
+      lastName: lastNameResult.isValid ? null : lastNameResult.error,
     };
 
     if (!emailResult.isValid || !passwordResult.isValid || !firstNameResult.isValid || !lastNameResult.isValid) {
@@ -154,7 +157,7 @@ export const Register = () => {
                 id="password"
                 name="password"
                 autoComplete="new-password"
-                placeholder="••••••••"
+                placeholder=""
                 value={password}
                 onChange={handleChange(setPassword, 'password')}
                 aria-invalid={fieldErrors.password || generalServerError ? true : undefined}
@@ -171,7 +174,7 @@ export const Register = () => {
             </div>
 
             {generalServerError && (
-              <p className="field-error field-error-server" id="register-server-error" role="alert">
+              <p className="field-error field-error--server" id="register-server-error" role="alert">
                 {generalServerError}
               </p>
             )}
