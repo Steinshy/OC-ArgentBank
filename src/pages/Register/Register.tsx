@@ -34,29 +34,16 @@ export const Register = () => {
     }
   }, [token, navigate]);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    if (emailError) setEmailError('');
+  const makeHandler = (setter: (v: string) => void, clearFieldError: () => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    setter(e.target.value);
+    clearFieldError();
     if (error) dispatch(clearError());
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    if (passwordError) setPasswordError('');
-    if (error) dispatch(clearError());
-  };
-
-  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFirstName(e.target.value);
-    if (firstNameError) setFirstNameError('');
-    if (error) dispatch(clearError());
-  };
-
-  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setLastName(e.target.value);
-    if (lastNameError) setLastNameError('');
-    if (error) dispatch(clearError());
-  };
+  const handleEmailChange = makeHandler(setEmail, () => setEmailError(''));
+  const handlePasswordChange = makeHandler(setPassword, () => setPasswordError(''));
+  const handleFirstNameChange = makeHandler(setFirstName, () => setFirstNameError(''));
+  const handleLastNameChange = makeHandler(setLastName, () => setLastNameError(''));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();

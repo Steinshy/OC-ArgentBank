@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useLayoutEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useToast } from '@/components/Toast/ToastContext';
@@ -17,10 +17,10 @@ export const Settings = () => {
   const navigate = useNavigate();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const { data: user, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
-  const [firstName, setFirstName] = useState(user?.firstName ?? '');
-  const [lastName, setLastName] = useState(user?.lastName ?? '');
+  const [formData, setFormData] = useState({ firstName: '', lastName: '' });
   const [firstNameError, setFirstNameError] = useState<string | null>(null);
   const [lastNameError, setLastNameError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const [updateProfile] = useUpdateProfileMutation();
   const toast = useToast();
 
@@ -31,11 +31,24 @@ export const Settings = () => {
     }
   }, [isError, dispatch, navigate]);
 
+  useLayoutEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFormData({
+      firstName: user?.firstName ?? '',
+      lastName: user?.lastName ?? '',
+    });
+  }, [user?.firstName, user?.lastName]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const firstNameValidation = validateName(firstName, 'First name');
-    const lastNameValidation = validateName(lastName, 'Last name');
+    const firstNameValidation = validateName(formData.firstName, 'First name');
+    const lastNameValidation = validateName(formData.lastName, 'Last name');
     const fnError = firstNameValidation.isValid ? null : firstNameValidation.error;
     const lnError = lastNameValidation.isValid ? null : lastNameValidation.error;
     setFirstNameError(fnError);
@@ -45,7 +58,7 @@ export const Settings = () => {
       return;
     }
 
-    const result = await updateProfile({ firstName, lastName });
+    const result = await updateProfile({ firstName: formData.firstName, lastName: formData.lastName });
     if ('data' in result) {
       toast.show('Profile updated', MESSAGES.PROFILE_UPDATED);
       setTimeout(() => navigate(ROUTES.PROFILE), 500);
@@ -59,19 +72,16 @@ export const Settings = () => {
     navigate(ROUTES.PROFILE);
   };
 
-  if (!user) {
+  if (loading) {
     return (
       <div className="settings-page">
-        <div className="settings-header">
-          <div className="skeleton skeleton-avatar" />
-          <div className="settings-header-info">
-            <div style={{ height: '1.5rem', width: '60%' }} className="skeleton" />
-            <div style={{ height: '1rem', width: '40%', marginTop: '0.5rem' }} className="skeleton" />
-          </div>
-        </div>
-        <SkeletonLoader variant="form-field" count={3} label="Loading profile form" />
+        <SkeletonLoader variant="settings" label="Loading settings" />
       </div>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
@@ -109,9 +119,9 @@ export const Settings = () => {
               id="settings-firstName"
               name="firstName"
               autoComplete="given-name"
-              value={firstName}
+              value={formData.firstName}
               onChange={(e) => {
-                setFirstName(e.target.value);
+                setFormData({ ...formData, firstName: e.target.value });
                 if (firstNameError) setFirstNameError(null);
               }}
               aria-invalid={firstNameError ? true : undefined}
@@ -131,9 +141,9 @@ export const Settings = () => {
               id="settings-lastName"
               name="lastName"
               autoComplete="family-name"
-              value={lastName}
+              value={formData.lastName}
               onChange={(e) => {
-                setLastName(e.target.value);
+                setFormData({ ...formData, lastName: e.target.value });
                 if (lastNameError) setLastNameError(null);
               }}
               aria-invalid={lastNameError ? true : undefined}

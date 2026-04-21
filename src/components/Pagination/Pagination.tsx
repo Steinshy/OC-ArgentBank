@@ -7,9 +7,10 @@ interface PaginationProps {
   maxVisiblePages?: number;
   itemsPerPage?: number;
   totalItems?: number;
+  leftElement?: React.ReactNode;
 }
 
-export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, itemsPerPage = 7, totalItems }: PaginationProps) => {
+export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, itemsPerPage = 7, totalItems, leftElement }: PaginationProps) => {
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
 
@@ -77,7 +78,10 @@ export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, items
       </div>
 
       <div className="pagination-info">
-        Showing {displayTotal} of {displayTotal} results
+        {leftElement}
+        <span>
+          Showing {displayTotal} of {displayTotal} results
+        </span>
       </div>
     </nav>
   );

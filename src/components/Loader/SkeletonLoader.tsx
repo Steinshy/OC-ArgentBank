@@ -1,6 +1,6 @@
 import './styles/SkeletonLoader.css';
 
-type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'heading' | 'avatar' | 'card' | 'button' | 'account' | 'transaction' | 'transaction-detail' | 'form-field';
+type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'heading' | 'avatar' | 'card' | 'button' | 'account' | 'transaction' | 'transaction-detail' | 'form-field' | 'settings';
 
 interface SkeletonLoaderProps {
   variant?: SkeletonVariant;
@@ -86,6 +86,38 @@ export const SkeletonLoader = ({ variant = 'rectangular', count = 1, height, wid
             <div className="skeleton skeleton-input" />
           </div>
         ))
+      ) : variant === 'settings' ? (
+        // Settings page skeleton with header and form
+        <div className="skeleton-settings-block">
+          <div className="skeleton-settings-header">
+            <div className="skeleton skeleton-settings-avatar" />
+            <div className="skeleton-settings-header-info">
+              <div className="skeleton skeleton-settings-title" />
+              <div className="skeleton skeleton-settings-email" />
+            </div>
+          </div>
+          <div className="skeleton-settings-form">
+            <div className="skeleton skeleton-settings-section-title" />
+            <div className="skeleton-settings-form-field">
+              <div className="skeleton skeleton-label" />
+              <div className="skeleton skeleton-input" />
+            </div>
+            <div className="skeleton-settings-form-row">
+              <div className="skeleton-settings-form-field">
+                <div className="skeleton skeleton-label" />
+                <div className="skeleton skeleton-input" />
+              </div>
+              <div className="skeleton-settings-form-field">
+                <div className="skeleton skeleton-label" />
+                <div className="skeleton skeleton-input" />
+              </div>
+            </div>
+            <div className="skeleton-settings-actions">
+              <div className="skeleton skeleton-button" />
+              <div className="skeleton skeleton-button" />
+            </div>
+          </div>
+        </div>
       ) : (
         // Standard skeleton variants
         items.map((i) => <div key={i} className={`skeleton skeleton-${mappedVariant}`} style={skeletonStyle} />)

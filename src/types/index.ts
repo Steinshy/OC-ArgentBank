@@ -71,7 +71,7 @@ export interface Account {
 
 // === UI Component Types ===
 
-type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 export interface ToastAction {
   type: ToastType;

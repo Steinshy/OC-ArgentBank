@@ -48,17 +48,24 @@ export const TransactionsTable = ({ accountId }: { accountId: UserAccountId }) =
 
   return (
     <div className="transaction-content">
-      <button className="btn btn-secondary back-button" onClick={() => navigate(ROUTES.PROFILE)}>
-        <ArrowLeft className="transaction-icon" aria-hidden strokeWidth={2} />
-        {BUTTONS.BACK_TO_ACCOUNTS}
-      </button>
-
       {loading ? (
-        <SkeletonLoader variant="transaction" count={5} label="Loading transactions" />
+        <>
+          <SkeletonLoader variant="account" count={1} label="Loading account" />
+          <SkeletonLoader variant="transaction" count={5} label="Loading transactions" />
+        </>
       ) : transactions.length === 0 ? (
         <p>{MESSAGES.NO_TRANSACTIONS}</p>
       ) : (
         <>
+          {account && (
+            <div className="account-block">
+              <div className="account-info">
+                <h3 className="account-title">{account.title}</h3>
+                <p className="account-amount">${account.amount.toFixed(2)}</p>
+                <p className="account-label">{account.description}</p>
+              </div>
+            </div>
+          )}
           <table className="transaction-table">
             <thead>
               <tr>
@@ -89,7 +96,17 @@ export const TransactionsTable = ({ accountId }: { accountId: UserAccountId }) =
               ))}
             </tbody>
           </table>
-          <Pagination currentPage={1} totalPages={5} totalItems={transactions.length} />
+          <Pagination
+            currentPage={1}
+            totalPages={5}
+            totalItems={transactions.length}
+            leftElement={
+              <button className="btn btn-secondary btn-sm back-button" onClick={() => navigate(ROUTES.PROFILE)}>
+                <ArrowLeft className="transaction-icon" aria-hidden strokeWidth={2} />
+                {BUTTONS.BACK_TO_ACCOUNTS}
+              </button>
+            }
+          />
         </>
       )}
     </div>
