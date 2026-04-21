@@ -1,12 +1,11 @@
 import { Lock, Zap, BarChart3 } from 'lucide-react';
-import { Feature } from '@/types';
 
 export const APP = {
   NAME: 'Argent Bank',
   COPYRIGHT_START_YEAR: 2020,
 } as const;
 
-export const FEATURES: Feature[] = [
+export const FEATURES = [
   {
     icon: Lock,
     title: 'Bank-Grade Security',
@@ -60,8 +59,6 @@ export const TRANSACTION_TYPES = {
   DEBIT: 'debit',
   CREDIT: 'credit',
 } as const;
-
-export type TransactionType = (typeof TRANSACTION_TYPES)[keyof typeof TRANSACTION_TYPES];
 
 export const getCopyrightText = (): string => {
   const currentYear = new Date().getFullYear();

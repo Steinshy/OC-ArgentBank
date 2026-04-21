@@ -1,10 +1,10 @@
-import { ValidationResult } from '@/types';
+import { FieldValidationResult } from '@/types';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_REGEX = /^[\p{L}\s'-]+$/u;
 
 /** Registration / profile: explicit requirements for UX and API alignment. */
-export const validateEmail = (value: string): ValidationResult => {
+export const validateEmail = (value: string): FieldValidationResult => {
   const v = value.trim();
   if (!v) return { isValid: false, error: 'Email is required' };
   if (!EMAIL_REGEX.test(v)) return { isValid: false, error: 'Please enter a valid email address' };
@@ -13,13 +13,13 @@ export const validateEmail = (value: string): ValidationResult => {
 };
 
 /** Sign-in: presence only; the API validates credentials. */
-export const validateSignInPassword = (value: string): ValidationResult => {
+export const validateSignInPassword = (value: string): FieldValidationResult => {
   if (!value) return { isValid: false, error: 'Password is required' };
   return { isValid: true, error: null };
 };
 
 /** Registration: explicit requirements for UX and API alignment. */
-export const validatePassword = (value: string): ValidationResult => {
+export const validatePassword = (value: string): FieldValidationResult => {
   if (!value) return { isValid: false, error: 'Password is required' };
   if (value.length < 8) return { isValid: false, error: 'Password must be at least 8 characters' };
   if (!/[A-Z]/.test(value)) return { isValid: false, error: 'Password must contain at least one uppercase letter' };
@@ -27,7 +27,7 @@ export const validatePassword = (value: string): ValidationResult => {
   return { isValid: true, error: null };
 };
 
-export const validateName = (value: string, fieldLabel: string): ValidationResult => {
+export const validateName = (value: string, fieldLabel: string): FieldValidationResult => {
   const v = value.trim();
   if (!v) return { isValid: false, error: `${fieldLabel} is required` };
   if (v.length < 2) return { isValid: false, error: `${fieldLabel} must be at least 2 characters` };

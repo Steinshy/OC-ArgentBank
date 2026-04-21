@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiCall } from '@/api/client';
 import { argentBankApi } from '@/api/argentBankApi';
-import { SignInRequest, SignUpRequest, SignInResponse } from '@/types';
+import { SignInRequest, SignUpRequest, AuthTokenResponse } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { API_ENDPOINTS } from '@/constants';
 import { storage } from '@/utils/storage';
@@ -10,7 +10,7 @@ import type { AppDispatch } from '@/store/store';
 
 export const signInUser = createAsyncThunk<{ token: string }, SignInRequest, { rejectValue: string }>('auth/signInUser', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await apiCall<SignInResponse>(API_ENDPOINTS.AUTH_LOGIN, { method: 'POST', body: JSON.stringify(credentials) });
+    const response = await apiCall<AuthTokenResponse>(API_ENDPOINTS.AUTH_LOGIN, { method: 'POST', body: JSON.stringify(credentials) });
     return { token: response.body.token };
   } catch (error) {
     return rejectWithValue(extractErrorMessage(error, ERROR_MESSAGES.SIGNIN_FAILED));
@@ -29,7 +29,7 @@ export const signUpUser = createAsyncThunk<{ token: string }, SignUpRequest, { r
       return { token: tokenFromSignup };
     }
 
-    const loginResponse = await apiCall<SignInResponse>(API_ENDPOINTS.AUTH_LOGIN, {
+    const loginResponse = await apiCall<AuthTokenResponse>(API_ENDPOINTS.AUTH_LOGIN, {
       method: 'POST',
       body: JSON.stringify({ email: data.email, password: data.password }),
     });

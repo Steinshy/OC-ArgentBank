@@ -1,24 +1,80 @@
-import type { ComponentType } from 'react';
-import type { TransactionType } from '@/constants';
+// === Foundation Types ===
 
-// Validation Types
-export interface ValidationResult {
+export type UserAccountId = string;
+
+export type TransactionType = 'debit' | 'credit';
+
+export interface FieldValidationResult {
   isValid: boolean;
   error: string | null;
 }
 
-// Form Types
-export interface FieldErrors {
-  email: string | null;
-  password: string | null;
-  firstName: string | null;
-  lastName: string | null;
+// === Auth Types ===
+
+export interface AuthCredentials {
+  email: string;
+  password: string;
 }
 
-// UI Component Types
-export type ToastType = 'success' | 'error' | 'warning' | 'info';
+export type SignInRequest = AuthCredentials;
+
+export interface SignUpRequest extends AuthCredentials {
+  firstName: string;
+  lastName: string;
+}
+
+export type AuthTokenResponse = ApiResponse<{ token: string }>;
+
+export interface AuthState {
+  token: string | null;
+  loading: boolean;
+  error: string | null;
+  isAuthenticated: boolean;
+}
+
+// === User & Profile Types ===
+
+export interface UserProfile {
+  id: UserAccountId;
+  email: string;
+  firstName: string;
+  lastName: string;
+}
+
+export type UserProfileResponse = ApiResponse<UserProfile>;
+
+export interface UpdateProfileData {
+  firstName: string;
+  lastName: string;
+}
+
+// === Transaction & Account Types ===
+
+export interface Transaction {
+  id: UserAccountId;
+  date: string;
+  description: string;
+  amount: number;
+  balance: number;
+  type: TransactionType;
+  category: string;
+  notes?: string;
+}
+
+export interface Account {
+  id: UserAccountId;
+  title: string;
+  amount: number;
+  description: string;
+  transactions?: Transaction[];
+}
+
+// === UI Component Types ===
+
+type ToastType = 'success' | 'error' | 'warning' | 'info';
 
 export interface ToastAction {
+  type: ToastType;
   label: string;
   onClick: () => void;
 }
@@ -34,19 +90,14 @@ export interface ToastItem {
   action?: ToastAction;
 }
 
-export interface Feature {
-  icon: ComponentType<{ className?: string }>;
-  title: string;
-  description: string;
+// === API Response Types ===
+
+export interface ApiResponse<T> {
+  status: number;
+  message: string;
+  body: T;
 }
 
-// API Contract Types
-export interface UpdateProfileData {
-  firstName: string;
-  lastName: string;
-}
-
-// API Response Types
 export interface ApiErrorResponse {
   status?: number;
   message?: string;
@@ -54,75 +105,4 @@ export interface ApiErrorResponse {
   body?: {
     message?: string;
   };
-}
-
-export interface SignInRequest {
-  email: string;
-  password: string;
-}
-
-export interface SignInResponse {
-  status: number;
-  message: string;
-  body: {
-    token: string;
-  };
-}
-
-export interface SignUpRequest {
-  email: string;
-  password: string;
-  firstName: string;
-  lastName: string;
-}
-
-export interface SignUpResponse {
-  status: number;
-  message: string;
-  body: { token: string };
-}
-
-export interface UserProfile {
-  id: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-}
-
-export interface UserProfileResponse {
-  status: number;
-  message: string;
-  body: UserProfile;
-}
-
-export interface Transaction {
-  id: string;
-  date: string;
-  description: string;
-  amount: number;
-  balance: number;
-  type: TransactionType;
-  category: string;
-  notes?: string;
-}
-
-export interface Account {
-  id: string;
-  title: string;
-  amount: number;
-  description: string;
-  transactions?: Transaction[];
-}
-
-/* Redux State Types */
-export interface AuthState {
-  token: string | null;
-  loading: boolean;
-  error: string | null;
-  isAuthenticated: boolean;
-}
-
-export interface ApiError {
-  status: number;
-  message: string;
 }

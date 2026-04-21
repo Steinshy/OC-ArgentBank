@@ -1,14 +1,13 @@
-import { useEffect } from 'react';
-import { Wallet } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
-import { EmptyState } from '@/components/EmptyState/EmptyState';
 import { useGetProfileQuery } from '@/api/argentBankApi';
-import { ROUTES } from '@/constants';
+import { ROUTES, buildTransactionsRoute } from '@/constants';
 import { logoutUser } from '@/features/Auth/authThunks';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectAuthToken } from '@/store/selectors';
+import { STATIC_ACCOUNTS } from '@/pages/Users/Transactions/staticAccounts';
 import './styles/Profile.css';
 
 export const Profile = () => {
@@ -16,12 +15,18 @@ export const Profile = () => {
   const navigate = useNavigate();
   const token = useAppSelector(selectAuthToken);
   const { data: user, isLoading, isError, refetch } = useGetProfileQuery(undefined, { skip: !token });
+  const [loadingAccounts, setLoadingAccounts] = useState(true);
 
   useEffect(() => {
     if (token) {
       refetch();
     }
   }, [token, refetch]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoadingAccounts(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
 
   if (isError) {
     void dispatch(logoutUser());
@@ -46,12 +51,26 @@ export const Profile = () => {
             </h1>
           </div>
 
-          <section className="accounts-section" aria-labelledby="accounts-heading">
-            <h2 id="accounts-heading" className="sr-only">
-              Your Accounts
-            </h2>
-            <EmptyState icon={<Wallet strokeWidth={1.5} />} title="No accounts yet" description="Your accounts will appear here once you set them up." />
-          </section>
+          <h2 className="sr-only">Accounts</h2>
+
+          {loadingAccounts ? (
+            <SkeletonLoader variant="account" count={3} label="Loading accounts" />
+          ) : (
+            STATIC_ACCOUNTS.map((account) => (
+              <section key={account.id} className="account">
+                <div className="account-content-wrapper">
+                  <h3 className="account-title">{account.title}</h3>
+                  <p className="account-amount">${account.amount.toFixed(2)}</p>
+                  <p className="account-amount-description">{account.description}</p>
+                </div>
+                <div className="account-content-wrapper cta">
+                  <button className="btn btn-primary transaction-button" onClick={() => navigate(buildTransactionsRoute(account.id))}>
+                    View Transactions
+                  </button>
+                </div>
+              </section>
+            ))
+          )}
         </>
       )}
     </div>

@@ -8,14 +8,14 @@
 .skip-link {
   background: var(--color-dark);
   border-radius: var(--radius-sm);
-  color: #fff;
+  color: var(--color-surface);
   font-weight: 600;
   left: 1rem;
   padding: 0.5rem 1rem;
   position: absolute;
   text-decoration: none;
   top: -100%;
-  z-index: 9999;
+  z-index: var(--z-skip-link);
 }
 
 .skip-link:focus {
@@ -140,7 +140,7 @@
 }
 
 .layout .main-nav-user-cta--logout:hover .main-nav-user-cta__icon--danger {
-  color: #c62828;
+  color: var(--color-error-hover);
 }
 
 /* Footer */

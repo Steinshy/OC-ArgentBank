@@ -31,7 +31,7 @@
 .not-found a {
   background-color: var(--color-primary);
   border-radius: var(--radius-sm);
-  color: #fff;
+  color: var(--color-surface);
   display: inline-block;
   font-size: 0.95rem;
   font-weight: 600;

@@ -48,39 +48,220 @@
   width: 120px;
 }
 
-
-.skeleton-account {
-  display: grid;
-  gap: var(--spacing-md);
-  grid-template-columns: auto 1fr;
-  padding: var(--spacing-md);
+.skeleton-account-card {
+  align-items: center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: space-between;
+  margin: 0 auto 2rem;
+  max-width: 900px;
+  padding: 1.5rem;
+  width: 90%;
 }
 
-.skeleton-account .skeleton-avatar {
-  grid-row: 1 / 3;
+.skeleton-account-content {
+  width: 100%;
 }
 
-.skeleton-account .skeleton-title {
-  grid-column: 2;
-  height: 1.5rem;
+.skeleton-account-title {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+  width: 40%;
+}
+
+.skeleton-account-amount {
+  height: 2.5rem;
+  margin-bottom: 0.5rem;
+  width: 50%;
+}
+
+.skeleton-account-description {
+  height: 0.95rem;
   width: 60%;
 }
 
-.skeleton-account .skeleton-amount {
-  grid-column: 2;
-  height: 2rem;
-  width: 80%;
+.skeleton-account-button {
+  align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.skeleton-account-button .skeleton-button {
+  width: 200px;
+}
+
+@media (width >= 768px) {
+  .skeleton-account-card {
+    flex-direction: row;
+    gap: 0;
+  }
+
+  .skeleton-account-content {
+    flex: 1;
+  }
+
+  .skeleton-account-button {
+    flex: 0;
+  }
+}
+
+@media (width <= 600px) {
+  .skeleton-account-card {
+    padding: 1.25rem;
+    width: 95%;
+  }
+
+  .skeleton-account-title {
+    height: 0.95rem;
+  }
+
+  .skeleton-account-amount {
+    height: 2rem;
+  }
+}
+
+@media (width <= 375px) {
+  .skeleton-account-card {
+    padding: 1rem;
+    width: 98%;
+  }
+
+  .skeleton-account-amount {
+    height: 1.75rem;
+  }
+
+  .skeleton-account-button .skeleton-button {
+    max-width: 200px;
+    width: 100%;
+  }
+}
+
+.skeleton-transaction-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  width: 100%;
 }
 
 .skeleton-transaction-row {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   display: grid;
-  gap: var(--spacing-md);
-  grid-template-columns: repeat(5, 1fr);
-  padding: var(--spacing-md) 0;
+  gap: 1rem;
+  grid-template-columns: 40px 180px 150px 120px 140px;
+  padding: 0.85rem 1rem;
 }
 
-.skeleton-transaction-row > .skeleton {
+.skeleton-transaction-col {
   height: 1.5rem;
+}
+
+@media (width <= 768px) {
+  .skeleton-transaction-row {
+    gap: 0.5rem;
+    grid-template-columns: 30px 120px 100px 80px 100px;
+    padding: 0.65rem 0.5rem;
+  }
+
+  .skeleton-transaction-col {
+    height: 1.25rem;
+  }
+}
+
+@media (width <= 600px) {
+  .skeleton-transaction-wrapper {
+    gap: 0.5rem;
+  }
+
+  .skeleton-transaction-row {
+    gap: 0.3rem;
+    grid-template-columns: 25px 80px 70px 60px 80px;
+    padding: 0.5rem;
+  }
+
+  .skeleton-transaction-col {
+    height: 1rem;
+  }
+}
+
+.skeleton-transaction-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.skeleton-detail-field {
+  align-items: center;
+  display: flex;
+  font-size: 0.9rem;
+  gap: 0.5rem;
+}
+
+.skeleton-detail-label {
+  flex-shrink: 0;
+  font-weight: 600;
+  height: 0.9rem;
+  min-width: 110px;
+  white-space: nowrap;
+  width: auto;
+}
+
+.skeleton-detail-value {
+  flex: 1;
+  height: 0.9rem;
+  max-width: 350px;
+}
+
+@media (width <= 768px) {
+  .skeleton-transaction-detail {
+    gap: 0.3rem;
+  }
+
+  .skeleton-detail-field {
+    font-size: 0.8rem;
+    gap: 0.3rem;
+  }
+
+  .skeleton-detail-label {
+    height: 0.8rem;
+    min-width: auto;
+  }
+
+  .skeleton-detail-value {
+    height: 0.8rem;
+    max-width: 250px;
+  }
+}
+
+@media (width <= 600px) {
+  .skeleton-transaction-detail {
+    gap: 0.3rem;
+  }
+
+  .skeleton-detail-field {
+    flex-direction: column;
+    font-size: 0.8rem;
+    gap: 0.3rem;
+  }
+
+  .skeleton-detail-label {
+    height: 0.8rem;
+    min-width: auto;
+    width: auto;
+  }
+
+  .skeleton-detail-value {
+    height: 0.8rem;
+    max-width: 100%;
+  }
 }
 
 .skeleton-form-field {
@@ -97,6 +278,62 @@
 
 .skeleton-form-field .skeleton-input {
   height: 44px;
+}
+
+.skeleton-transaction-block {
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  width: 100%;
+}
+
+.skeleton-transaction-header {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: 40px 180px 150px 120px 140px;
+  padding: 1rem;
+}
+
+.skeleton-header-col {
+  height: 1.5rem;
+}
+
+.skeleton-transaction-footer {
+  background-color: var(--color-surface);
+  border-top: 1px solid var(--color-border);
+  padding: 1.5rem;
+}
+
+.skeleton-footer-bar {
+  height: 0.875rem;
+  width: 100%;
+}
+
+@media (width <= 768px) {
+  .skeleton-transaction-header {
+    gap: 0.5rem;
+    grid-template-columns: 30px 120px 100px 80px 100px;
+    padding: 0.65rem 0.5rem;
+  }
+
+  .skeleton-header-col {
+    height: 1.25rem;
+  }
+}
+
+@media (width <= 600px) {
+  .skeleton-transaction-header {
+    gap: 0.3rem;
+    grid-template-columns: 25px 80px 70px 60px 80px;
+    padding: 0.5rem;
+  }
+
+  .skeleton-header-col {
+    height: 1rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -10,17 +10,17 @@ import { validateEmail, validatePassword, validateName } from '@/helpers/validat
 import { joinDescribedBy } from '@/helpers/formUtils';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectAuthLoading, selectAuthError, selectAuthToken } from '@/store/selectors';
-import { FieldErrors } from '@/types';
 import './styles/Register.css';
-
-const initialFieldErrors: FieldErrors = { email: null, password: null, firstName: null, lastName: null };
 
 export const Register = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  const [fieldErrors, setFieldErrors] = useState<FieldErrors>(initialFieldErrors);
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
+  const [firstNameError, setFirstNameError] = useState('');
+  const [lastNameError, setLastNameError] = useState('');
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const toast = useToast();
@@ -34,13 +34,27 @@ export const Register = () => {
     }
   }, [token, navigate]);
 
-  const clearFieldError = (field: keyof FieldErrors) => {
-    setFieldErrors((prev) => ({ ...prev, [field]: null }));
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (emailError) setEmailError('');
+    if (error) dispatch(clearError());
   };
 
-  const handleChange = (setter: React.Dispatch<React.SetStateAction<string>>, field: keyof FieldErrors) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter(e.target.value);
-    clearFieldError(field);
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    if (passwordError) setPasswordError('');
+    if (error) dispatch(clearError());
+  };
+
+  const handleFirstNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFirstName(e.target.value);
+    if (firstNameError) setFirstNameError('');
+    if (error) dispatch(clearError());
+  };
+
+  const handleLastNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLastName(e.target.value);
+    if (lastNameError) setLastNameError('');
     if (error) dispatch(clearError());
   };
 
@@ -52,15 +66,12 @@ export const Register = () => {
     const firstNameResult = validateName(firstName, 'First name');
     const lastNameResult = validateName(lastName, 'Last name');
 
-    const newErrors: FieldErrors = {
-      email: emailResult.isValid ? null : emailResult.error,
-      password: passwordResult.isValid ? null : passwordResult.error,
-      firstName: firstNameResult.isValid ? null : firstNameResult.error,
-      lastName: lastNameResult.isValid ? null : lastNameResult.error,
-    };
+    setEmailError(emailResult.isValid ? '' : (emailResult.error ?? ''));
+    setPasswordError(passwordResult.isValid ? '' : (passwordResult.error ?? ''));
+    setFirstNameError(firstNameResult.isValid ? '' : (firstNameResult.error ?? ''));
+    setLastNameError(lastNameResult.isValid ? '' : (lastNameResult.error ?? ''));
 
     if (!emailResult.isValid || !passwordResult.isValid || !firstNameResult.isValid || !lastNameResult.isValid) {
-      setFieldErrors(newErrors);
       return;
     }
 
@@ -70,17 +81,17 @@ export const Register = () => {
       toast.show('Account created', MESSAGES.REGISTER_SUCCESS, 'success');
       navigate(ROUTES.PROFILE);
     } else if (signUpUser.rejected.match(result) && result.payload === SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS) {
-      setFieldErrors((prev) => ({ ...prev, email: SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS }));
+      setEmailError(SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS);
       dispatch(clearError());
     }
   };
 
   const { generalError: generalServerError } = classifySignUpError(error);
 
-  const emailDescribedBy = joinDescribedBy(fieldErrors.email && 'register-email-error', generalServerError && 'register-server-error');
-  const passwordDescribedBy = joinDescribedBy('register-password-hint', fieldErrors.password && 'register-password-error', generalServerError && 'register-server-error');
-  const firstNameDescribedBy = joinDescribedBy(fieldErrors.firstName && 'register-first-name-error');
-  const lastNameDescribedBy = joinDescribedBy(fieldErrors.lastName && 'register-last-name-error');
+  const emailDescribedBy = joinDescribedBy(emailError && 'register-email-error', generalServerError && 'register-server-error');
+  const passwordDescribedBy = joinDescribedBy('register-password-hint', passwordError && 'register-password-error', generalServerError && 'register-server-error');
+  const firstNameDescribedBy = joinDescribedBy(firstNameError && 'register-first-name-error');
+  const lastNameDescribedBy = joinDescribedBy(lastNameError && 'register-last-name-error');
 
   return (
     <div className="sign-in-page">
@@ -99,13 +110,13 @@ export const Register = () => {
                 autoComplete="given-name"
                 placeholder="John"
                 value={firstName}
-                onChange={handleChange(setFirstName, 'firstName')}
-                aria-invalid={fieldErrors.firstName ? true : undefined}
+                onChange={handleFirstNameChange}
+                aria-invalid={firstNameError ? true : undefined}
                 aria-describedby={firstNameDescribedBy}
               />
-              {fieldErrors.firstName && (
+              {firstNameError && (
                 <p className="field-error" id="register-first-name-error" role="alert">
-                  {fieldErrors.firstName}
+                  {firstNameError}
                 </p>
               )}
             </div>
@@ -119,13 +130,13 @@ export const Register = () => {
                 autoComplete="family-name"
                 placeholder="Doe"
                 value={lastName}
-                onChange={handleChange(setLastName, 'lastName')}
-                aria-invalid={fieldErrors.lastName ? true : undefined}
+                onChange={handleLastNameChange}
+                aria-invalid={lastNameError ? true : undefined}
                 aria-describedby={lastNameDescribedBy}
               />
-              {fieldErrors.lastName && (
+              {lastNameError && (
                 <p className="field-error" id="register-last-name-error" role="alert">
-                  {fieldErrors.lastName}
+                  {lastNameError}
                 </p>
               )}
             </div>
@@ -139,13 +150,13 @@ export const Register = () => {
                 autoComplete="email"
                 placeholder="you@example.com"
                 value={email}
-                onChange={handleChange(setEmail, 'email')}
-                aria-invalid={fieldErrors.email || generalServerError ? true : undefined}
+                onChange={handleEmailChange}
+                aria-invalid={emailError || generalServerError ? true : undefined}
                 aria-describedby={emailDescribedBy}
               />
-              {fieldErrors.email && (
+              {emailError && (
                 <p className="field-error" id="register-email-error" role="alert">
-                  {fieldErrors.email}
+                  {emailError}
                 </p>
               )}
             </div>
@@ -159,16 +170,16 @@ export const Register = () => {
                 autoComplete="new-password"
                 placeholder=""
                 value={password}
-                onChange={handleChange(setPassword, 'password')}
-                aria-invalid={fieldErrors.password || generalServerError ? true : undefined}
+                onChange={handlePasswordChange}
+                aria-invalid={passwordError || generalServerError ? true : undefined}
                 aria-describedby={passwordDescribedBy}
               />
               <p className="form-help" id="register-password-hint">
                 At least 8 characters, one uppercase letter, and one number.
               </p>
-              {fieldErrors.password && (
+              {passwordError && (
                 <p className="field-error" id="register-password-error" role="alert">
-                  {fieldErrors.password}
+                  {passwordError}
                 </p>
               )}
             </div>

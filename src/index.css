@@ -20,6 +20,7 @@
 
   /* Feedback */
   --color-error: #d32f2f;
+  --color-error-hover: #c62828;
   --color-error-bg: #ffebee;
   --color-success: #2e7d32;
   --color-success-bg: #e8f5e9;

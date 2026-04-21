@@ -18,12 +18,64 @@
   flex-direction: column;
 }
 
-.accounts-section {
-  flex: 1;
+.account {
+  align-items: center;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 4px rgb(0 0 0 / 10%);
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  margin: 0 auto 2rem;
+  max-width: 900px;
+  padding: 1.5rem;
+  text-align: left;
+  transition: box-shadow 0.3s ease;
+  width: 90%;
+}
+
+.account:hover {
+  box-shadow: 0 4px 8px rgb(0 0 0 / 15%);
+}
+
+.account-content-wrapper {
+  flex: 1;
+  width: 100%;
+}
+
+.account-content-wrapper.cta {
   align-items: center;
-  justify-content: center;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.transaction-button {
+  max-width: 200px;
+  width: 100%;
+}
+
+.account-title {
+  color: var(--color-text);
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+  padding: 0;
+}
+
+.account-amount {
+  color: var(--color-primary);
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+}
+
+.account-amount-description {
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+  margin: 0;
 }
 
 /* Responsive */
@@ -35,6 +87,19 @@
   .header h1 {
     font-size: 2.5rem;
   }
+
+  .account {
+    flex-direction: row;
+  }
+
+  .account-content-wrapper.cta {
+    flex: 0;
+    margin-top: 0;
+  }
+
+  .transaction-button {
+    width: 200px;
+  }
 }
 
 @media (width <= 600px) {
@@ -45,6 +110,19 @@
   .header h1 {
     font-size: 1.5rem;
   }
+
+  .account {
+    padding: 1.25rem;
+    width: 95%;
+  }
+
+  .account-title {
+    font-size: 0.95rem;
+  }
+
+  .account-amount {
+    font-size: 2rem;
+  }
 }
 
 @media (width <= 375px) {
@@ -54,5 +132,27 @@
 
   .header h1 {
     font-size: 1.25rem;
+  }
+
+  .account {
+    padding: 1rem;
+    width: 98%;
+  }
+
+  .account-amount {
+    font-size: 1.75rem;
+  }
+
+  .account-amount-description {
+    font-size: 0.875rem;
+  }
+
+  .account-title {
+    font-size: 0.875rem;
+  }
+
+  .transaction-button {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
   }
 }
