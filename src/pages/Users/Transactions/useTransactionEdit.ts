@@ -1,19 +1,14 @@
 import { useCallback, useState } from 'react';
-
-import { usePatchTransactionMutation } from '@/api/argentBankApi';
+import { UserAccountId } from '@/types';
+import { STATIC_ACCOUNTS } from './staticAccounts';
 
 export type EditableField = 'category' | 'notes';
 
-export interface EditingField {
-  id: string;
-  field: EditableField;
-}
-
-export const useTransactionEdit = (accountId: string) => {
-  const [patchTransaction, { isLoading: isSaving }] = usePatchTransactionMutation();
+export const useTransactionEdit = (accountId: UserAccountId) => {
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
-  const [editingField, setEditingField] = useState<EditingField | null>(null);
+  const [editingField, setEditingField] = useState<{ id: string; field: EditableField } | null>(null);
   const [editValue, setEditValue] = useState('');
+  const [isSaving, setIsSaving] = useState(false);
 
   const toggleRow = useCallback((id: string) => {
     setExpandedRowId((prev) => (prev === id ? null : id));
@@ -26,15 +21,22 @@ export const useTransactionEdit = (accountId: string) => {
   }, []);
 
   const saveEdit = useCallback(
-    async (id: string, field: EditableField) => {
-      try {
-        await patchTransaction({ accountId, transactionId: id, data: { [field]: editValue } }).unwrap();
-      } finally {
+    (id: string, field: EditableField) => {
+      setIsSaving(true);
+      setTimeout(() => {
+        const account = STATIC_ACCOUNTS.find((a) => a.id === accountId);
+        if (account?.transactions) {
+          const transaction = account.transactions.find((t) => t.id === id);
+          if (transaction && (field === 'category' || field === 'notes')) {
+            transaction[field] = editValue;
+          }
+        }
         setEditingField(null);
         setEditValue('');
-      }
+        setIsSaving(false);
+      }, 300);
     },
-    [accountId, editValue, patchTransaction]
+    [accountId, editValue]
   );
 
   const cancelEdit = useCallback(() => {
