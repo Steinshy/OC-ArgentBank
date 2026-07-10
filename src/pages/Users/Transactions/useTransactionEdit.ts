@@ -1,14 +1,18 @@
 import { useCallback, useState } from 'react';
-import { UserAccountId } from '@/types';
-import { STATIC_ACCOUNTS } from './staticAccounts';
 
 export type EditableField = 'category' | 'notes';
+type FieldEdits = Partial<Record<EditableField, string>>;
 
-export const useTransactionEdit = (accountId: UserAccountId) => {
+/**
+ * Edits are kept in local state instead of mutating STATIC_ACCOUNTS: there is no
+ * backend endpoint for transactions yet (see docs/ARCHITECTURE.md), so nothing persists.
+ */
+export const useTransactionEdit = () => {
   const [expandedRowId, setExpandedRowId] = useState<string | null>(null);
   const [editingField, setEditingField] = useState<{ id: string; field: EditableField } | null>(null);
   const [editValue, setEditValue] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  const [edits, setEdits] = useState<Record<string, FieldEdits>>({});
 
   const toggleRow = useCallback((id: string) => {
     setExpandedRowId((prev) => (prev === id ? null : id));
@@ -24,19 +28,13 @@ export const useTransactionEdit = (accountId: UserAccountId) => {
     (id: string, field: EditableField) => {
       setIsSaving(true);
       setTimeout(() => {
-        const account = STATIC_ACCOUNTS.find((a) => a.id === accountId);
-        if (account?.transactions) {
-          const transaction = account.transactions.find((t) => t.id === id);
-          if (transaction && (field === 'category' || field === 'notes')) {
-            transaction[field] = editValue;
-          }
-        }
+        setEdits((prev) => ({ ...prev, [id]: { ...prev[id], [field]: editValue } }));
         setEditingField(null);
         setEditValue('');
         setIsSaving(false);
       }, 300);
     },
-    [accountId, editValue]
+    [editValue]
   );
 
   const cancelEdit = useCallback(() => {
@@ -44,5 +42,5 @@ export const useTransactionEdit = (accountId: UserAccountId) => {
     setEditValue('');
   }, []);
 
-  return { expandedRowId, editingField, editValue, isSaving, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit };
+  return { expandedRowId, editingField, editValue, isSaving, edits, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit };
 };

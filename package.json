@@ -3,9 +3,13 @@
   "version": "1.0.0",
   "description": "Argent Bank financial dashboard",
   "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "dev": "vite",
-    "dev:all": "pkill -f \"vite\" || true; pkill -f \"nodemon\" || true; concurrently \"npm run dev\" \"npm run dev:server --prefix Backend\"",
+    "dev:all": "pkill -f \"vite\" || true; pkill -f \"nodemon\" || true; concurrently \"pnpm dev\" \"pnpm --filter argent-bank-api dev:server\"",
     "build": "vite build",
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
@@ -51,5 +55,8 @@
     "typescript-eslint": "^8.58.1",
     "vite": "^8.0.7",
     "vite-plugin-checker": "^0.12.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["bcrypt"]
   }
 }

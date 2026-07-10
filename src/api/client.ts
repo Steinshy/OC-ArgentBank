@@ -25,6 +25,10 @@ export const apiCall = async <T>(endpoint: string, options: RequestInit & { toke
       throw new Error(errorMessage);
     }
 
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
     return response.json();
   } finally {
     clearTimeout(timeoutId);

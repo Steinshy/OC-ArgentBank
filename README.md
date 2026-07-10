@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  <img src="public\assets\mockup\mockup.png" alt="Argent-Bank responsive mockup" width="1024" />
+  <img src="public/assets/mockup/mockup.png" alt="Argent-Bank responsive mockup" width="1024" />
 </p>
 
 ## 📋 Overview
@@ -26,13 +26,13 @@ Argent Bank is a full-stack banking dashboard SPA: users sign in, manage their p
 - ✅ JWT authentication (login, register) with protected routes
 - ✅ User profile read/update
 - ✅ Transaction list and detail UI with category/notes editing
-- ⏳ Account/transaction REST routes: frontend targets paths under `/api/v1/user/...`; ensure `Backend/routes` matches your deployment (see `Backend/swagger.yaml`)
+- ⏳ Account/transaction REST routes: the frontend renders static seed data (`src/pages/Users/Transactions/staticAccounts.ts`) because `Backend/routes` doesn't implement accounts/transactions yet, even though `Backend/swagger.yaml` documents the contract — see [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) ADR-013
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and npm
+- Node.js 18+ and [pnpm](https://pnpm.io) (`corepack enable` gives you the version pinned in `package.json`)
 - MongoDB (local or remote) when running the backend
 - Backend running on port **3001** (or set `VITE_API_BASE_URL` accordingly)
 
@@ -41,17 +41,16 @@ Argent Bank is a full-stack banking dashboard SPA: users sign in, manage their p
 ```bash
 git clone https://github.com/steinshy/ArgentBank.git
 cd ArgentBank
-npm install
+pnpm install   # installs both the frontend (root) and Backend/ via the pnpm workspace
 
 cp .env.example .env.local
 # VITE_API_BASE_URL=http://localhost:3001
 
 cd Backend
-npm install
 cp .env.example .env
-# DATABASE_URL, JWT_SECRET / SECRET_KEY, PORT=3001
+# DATABASE_URL, JWT_SECRET, PORT=3001
 
-npm run populate-db
+pnpm populate-db
 cd ..
 ```
 
@@ -59,25 +58,25 @@ cd ..
 
 ```bash
 # Frontend only (http://localhost:5173)
-npm run dev
+pnpm dev
 
 # Backend only (from Backend/)
-npm run dev:server
+pnpm dev:server
 
 # Frontend + backend (stops other Vite/nodemon processes first)
-npm run dev:all
+pnpm dev:all
 ```
 
 ### Build & quality
 
 ```bash
-npm run build
-npm run preview
-npm run type-check
-npm run lint
-npm run lint:fix
-npm run lint:styles
-npm run format:check
+pnpm build
+pnpm preview
+pnpm type-check
+pnpm lint
+pnpm lint:fix
+pnpm lint:styles
+pnpm format:check
 ```
 
 ## 📁 Project Structure
@@ -87,9 +86,9 @@ src/
 ├── api/                 # fetch client + RTK Query API slice (argentBankApi)
 ├── components/          # Layout, ProtectedRoute, Toast, Loader, ErrorBoundary, …
 ├── constants/           # Routes, API endpoints, UI constants
-├── features/            # Redux slices & thunks (Auth, Transactions)
-├── helpers/             # Validators
-├── hooks/               # useAuth, …
+├── features/Auth/       # Redux slice & thunks for authentication
+├── helpers/             # Validators, form helpers
+├── hooks/               # useAuth, useMinimumLoadingDelay, …
 ├── pages/               # Home, SignIn, Register, Profile, Settings, Transactions, …
 ├── store/               # Redux store configuration
 ├── types/               # Shared TypeScript contracts (API + UI)
@@ -123,9 +122,8 @@ Backend/
 ## 📚 Documentation
 
 - **[Architecture notes →](./docs/ARCHITECTURE.md)** — ADRs and structural decisions
-- **Swagger UI** (non-production): `http://localhost:3001/api-docs`
+- **Swagger UI** (non-production): `http://localhost:3001/api-docs` (spec: [Backend/swagger.yaml](./Backend/swagger.yaml))
 - **Backend deep dive** → [Backend/README.md](./Backend/README.md)
-- **API examples** → [Backend/API_TESTING.md](./Backend/API_TESTING.md), [Backend/HTTPIE_DESKTOP.md](./Backend/HTTPIE_DESKTOP.md)
 
 ## 🔌 API Integration
 
@@ -145,9 +143,9 @@ PUT /api/v1/user/profile
 → Body: firstName, lastName
 ```
 
-### Accounts & transactions (frontend contract)
+### Accounts & transactions (documented, not yet implemented)
 
-The SPA calls paths such as `GET /api/v1/user/accounts/:accountId/transactions` and `PATCH` on a transaction resource. These are documented in `Backend/swagger.yaml`; wire or extend `Backend/routes` to match your backend implementation.
+`Backend/swagger.yaml` documents `GET /api/v1/user/accounts/:accountId/transactions` and a `PATCH` on a transaction resource, but `Backend/routes` doesn't implement them. The Transactions UI renders static seed data (`src/pages/Users/Transactions/staticAccounts.ts`) instead; edits are local-only and reset on reload. Implement those routes in `Backend/` to wire real persistence.
 
 ## 🛠️ Development Guidelines
 
@@ -212,21 +210,21 @@ Transaction {
 
 | Command                | Purpose                                             |
 | ---------------------- | --------------------------------------------------- |
-| `npm run dev`          | Vite dev server                                     |
-| `npm run dev:all`      | Frontend + backend (stops other Vite/nodemon first) |
-| `npm run build`        | Production build to `dist/`                         |
-| `npm run preview`      | Preview production build                            |
-| `npm run type-check`   | `tsc --noEmit`                                      |
-| `npm run lint`         | ESLint on `src/`                                    |
-| `npm run lint:fix`     | ESLint with fix                                     |
-| `npm run lint:styles`  | Stylelint on CSS/SCSS                               |
-| `npm run format`       | Prettier write                                      |
-| `npm run format:check` | Prettier check                                      |
+| `pnpm dev`             | Vite dev server                                     |
+| `pnpm dev:all`         | Frontend + backend (stops other Vite/nodemon first) |
+| `pnpm build`           | Production build to `dist/`                         |
+| `pnpm preview`         | Preview production build                            |
+| `pnpm type-check`      | `tsc --noEmit`                                      |
+| `pnpm lint`            | ESLint on `src/`                                    |
+| `pnpm lint:fix`        | ESLint with fix                                     |
+| `pnpm lint:styles`     | Stylelint on CSS/SCSS                               |
+| `pnpm format`          | Prettier write                                      |
+| `pnpm format:check`    | Prettier check                                      |
 
 ## 🚀 Deployment
 
 ```bash
-npm run build
+pnpm build
 ```
 
 Serve the `dist/` folder behind any static host; set `VITE_API_BASE_URL` and `VITE_BASE_PATH` at build time for your environment.
@@ -238,7 +236,7 @@ Serve the `dist/` folder behind any static host; set `VITE_API_BASE_URL` and `VI
 | `tony@stark.com`   | `password123` |
 | `steve@rogers.com` | `password456` |
 
-Create users with `npm run populate-db` in `Backend/`.
+Create users with `pnpm populate-db` in `Backend/`.
 
 ---
 

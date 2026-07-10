@@ -1,69 +1,26 @@
 const userService = require('../services/userService')
 
-module.exports.createUser = async (req, res) => {
-  let response = {}
-
+const runService = (serviceCall, successMessage) => async (req, res) => {
   try {
-    const responseFromService = await userService.createUser(req.body)
-    response.status = 200
-    response.message = 'User successfully created'
-    response.body = responseFromService
+    const body = await serviceCall(req)
+    return res.status(200).send({ status: 200, message: successMessage, body })
   } catch (error) {
-    console.error('Something went wrong in userController.js', error)
-    response.status = 400
-    response.message = error.message
+    console.error('Error in userController.js', error)
+    const status = error.statusCode || 500
+    return res.status(status).send({ status, message: error.message })
   }
-
-  return res.status(response.status).send(response)
 }
 
-module.exports.loginUser = async (req, res) => {
-  let response = {}
+module.exports.createUser = runService((req) => userService.createUser(req.body), 'User successfully created')
 
-  try {
-    const responseFromService = await userService.loginUser(req.body)
-    response.status = 200
-    response.message = 'User successfully logged in'
-    response.body = responseFromService
-  } catch (error) {
-    console.error('Error in loginUser (userController.js)')
-    response.status = 400
-    response.message = error.message
-  }
+module.exports.loginUser = runService((req) => userService.loginUser(req.body), 'User successfully logged in')
 
-  return res.status(response.status).send(response)
-}
+module.exports.getUserProfile = runService(
+  (req) => userService.getUserProfile({ userId: req.userId }),
+  'Successfully got user profile data'
+)
 
-module.exports.getUserProfile = async (req, res) => {
-  let response = {}
-
-  try {
-    const responseFromService = await userService.getUserProfile(req)
-    response.status = 200
-    response.message = 'Successfully got user profile data'
-    response.body = responseFromService
-  } catch (error) {
-    console.log('Error in userController.js')
-    response.status = 400
-    response.message = error.message
-  }
-
-  return res.status(response.status).send(response)
-}
-
-module.exports.updateUserProfile = async (req, res) => {
-  let response = {}
-
-  try {
-    const responseFromService = await userService.updateUserProfile(req)
-    response.status = 200
-    response.message = 'Successfully updated user profile data'
-    response.body = responseFromService
-  } catch (error) {
-    console.log('Error in updateUserProfile - userController.js')
-    response.status = 400
-    response.message = error.message
-  }
-
-  return res.status(response.status).send(response)
-}
+module.exports.updateUserProfile = runService(
+  (req) => userService.updateUserProfile({ userId: req.userId, firstName: req.body.firstName, lastName: req.body.lastName }),
+  'Successfully updated user profile data'
+)

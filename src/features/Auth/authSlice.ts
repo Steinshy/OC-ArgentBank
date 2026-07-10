@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 
 import { signInUser, signUpUser, logoutUser } from '@/features/Auth/authThunks';
 import { AuthState } from '@/types';
@@ -22,23 +22,6 @@ const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
-    },
-    setToken: (state, action: PayloadAction<string>) => {
-      state.token = action.payload;
-      state.isAuthenticated = true;
-      storage.setAuthToken(action.payload);
-    },
-    setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
-    },
-    clearAuth: (state) => {
-      state.token = null;
-      state.isAuthenticated = false;
-      state.error = null;
-      storage.removeAuthToken();
-    },
     clearError: (state) => {
       state.error = null;
     },
@@ -93,5 +76,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setLoading, setToken, setError, clearAuth, clearError } = authSlice.actions;
+export const { clearError } = authSlice.actions;
 export default authSlice.reducer;

@@ -6,6 +6,8 @@ export interface Point3D {
 
 export const DEG_TO_RAD = Math.PI / 180;
 export const TWO_PI = Math.PI * 2;
+/** Matches --color-primary (#00bc77) in src/index.css */
+export const GLOBE_COLOR = '0, 188, 119';
 const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5));
 const CONNECTION_THRESHOLD = 0.38;
 const CONNECTION_THRESHOLD_SQ = CONNECTION_THRESHOLD * CONNECTION_THRESHOLD;
@@ -101,7 +103,7 @@ export function drawLine(ctx: CanvasRenderingContext2D, points: Point3D[], angle
     }
   }
 
-  ctx.strokeStyle = 'rgba(0, 188, 119, 0.18)';
+  ctx.strokeStyle = `rgba(${GLOBE_COLOR}, 0.18)`;
   ctx.lineWidth = 0.7;
   ctx.stroke();
 }
@@ -124,8 +126,8 @@ export function projectNodes(nodes: Point3D[], angle: number, tilt: number, cx: 
 
 export function drawGlobeBg(ctx: CanvasRenderingContext2D, cx: number, cy: number, radius: number): void {
   const grad = ctx.createRadialGradient(cx - radius * 0.25, cy - radius * 0.2, radius * 0.1, cx, cy, radius);
-  grad.addColorStop(0, 'rgba(0, 188, 119, 0.08)');
-  grad.addColorStop(0.5, 'rgba(0, 188, 119, 0.03)');
+  grad.addColorStop(0, `rgba(${GLOBE_COLOR}, 0.08)`);
+  grad.addColorStop(0.5, `rgba(${GLOBE_COLOR}, 0.03)`);
   grad.addColorStop(1, 'rgba(0, 0, 0, 0.15)');
   ctx.beginPath();
   ctx.arc(cx, cy, radius, 0, TWO_PI);
@@ -133,15 +135,15 @@ export function drawGlobeBg(ctx: CanvasRenderingContext2D, cx: number, cy: numbe
   ctx.fill();
   ctx.beginPath();
   ctx.arc(cx, cy, radius, 0, TWO_PI);
-  ctx.strokeStyle = 'rgba(0, 188, 119, 0.25)';
+  ctx.strokeStyle = `rgba(${GLOBE_COLOR}, 0.25)`;
   ctx.lineWidth = 1;
   ctx.stroke();
 }
 
 export function drawGlobeAtmosphere(ctx: CanvasRenderingContext2D, cx: number, cy: number, radius: number): void {
   const atmosGrad = ctx.createRadialGradient(cx, cy, radius * 0.95, cx, cy, radius * 1.15);
-  atmosGrad.addColorStop(0, 'rgba(0, 188, 119, 0.06)');
-  atmosGrad.addColorStop(1, 'rgba(0, 188, 119, 0)');
+  atmosGrad.addColorStop(0, `rgba(${GLOBE_COLOR}, 0.06)`);
+  atmosGrad.addColorStop(1, `rgba(${GLOBE_COLOR}, 0)`);
   ctx.beginPath();
   ctx.arc(cx, cy, radius * 1.15, 0, TWO_PI);
   ctx.fillStyle = atmosGrad;

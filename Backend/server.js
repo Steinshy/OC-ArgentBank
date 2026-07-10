@@ -1,12 +1,14 @@
+const path = require('path')
 const express = require('express')
 const dotEnv = require('dotenv')
 const cors = require('cors')
 const swaggerUi = require('swagger-ui-express')
 const yaml = require('yamljs')
-const swaggerDocs = yaml.load('./swagger.yaml')
 const dbConnection = require('./database/connection')
 
 dotEnv.config()
+
+const swaggerDocs = yaml.load(path.join(__dirname, 'swagger.yaml'))
 
 const app = express()
 const PORT = process.env.PORT || 3001
@@ -15,7 +17,7 @@ const PORT = process.env.PORT || 3001
 dbConnection()
 
 // Handle CORS issues
-app.use(cors())
+app.use(cors({ origin: process.env.CORS_ORIGIN || true }))
 
 // Request payload middleware
 app.use(express.json())

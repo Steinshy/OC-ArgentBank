@@ -10,7 +10,4 @@ export const API_ENDPOINTS = {
   AUTH_LOGIN: '/api/v1/user/login',
   AUTH_SIGNUP: '/api/v1/user/signup',
   USER_PROFILE: '/api/v1/user/profile',
-  USER_ACCOUNTS: '/api/v1/user/accounts',
-  ACCOUNT_TRANSACTIONS: (accountId: string) => `/api/v1/user/accounts/${accountId}/transactions`,
-  TRANSACTION_DETAIL: (accountId: string, transactionId: string) => `/api/v1/user/accounts/${accountId}/transactions/${transactionId}`,
 } as const;

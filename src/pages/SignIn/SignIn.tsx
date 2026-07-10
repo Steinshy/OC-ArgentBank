@@ -6,7 +6,7 @@ import { clearError } from '@/features/Auth/authSlice';
 import { signInUser } from '@/features/Auth/authThunks';
 import { classifySignInError } from '@/utils/errorHandler';
 import { validateEmail, validateSignInPassword } from '@/helpers/validator';
-import { joinDescribedBy } from '@/helpers/formUtils';
+import { joinDescribedBy, makeFieldChangeHandler } from '@/helpers/formUtils';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectAuthLoading, selectAuthError, selectAuthToken } from '@/store/selectors';
 import { storage } from '@/utils/storage';
@@ -31,25 +31,12 @@ export const SignIn = () => {
     }
   }, [token, navigate]);
 
-  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
-    if (emailValidationError) {
-      setEmailValidationError('');
-    }
-    if (error) {
-      dispatch(clearError());
-    }
+  const clearServerError = () => {
+    if (error) dispatch(clearError());
   };
 
-  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setPassword(e.target.value);
-    if (passwordValidationError) {
-      setPasswordValidationError('');
-    }
-    if (error) {
-      dispatch(clearError());
-    }
-  };
+  const handleEmailChange = makeFieldChangeHandler(setEmail, () => setEmailValidationError(''), clearServerError);
+  const handlePasswordChange = makeFieldChangeHandler(setPassword, () => setPasswordValidationError(''), clearServerError);
 
   const validateForm = (): boolean => {
     const emailResult = validateEmail(email);
@@ -70,10 +57,7 @@ export const SignIn = () => {
       localStorage.removeItem('rememberMeEmail');
     }
     storage.setStrategy(rememberMe ? 'local' : 'session');
-    const result = await dispatch(signInUser({ email: email.trim(), password }));
-    if (signInUser.fulfilled.match(result)) {
-      navigate(ROUTES.PROFILE);
-    }
+    await dispatch(signInUser({ email: email.trim(), password }));
   };
 
   const { emailError: emailServerError, passwordError: passwordServerError, generalError: generalServerError } = classifySignInError(error);

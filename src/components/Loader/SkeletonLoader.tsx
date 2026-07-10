@@ -1,6 +1,6 @@
 import './styles/SkeletonLoader.css';
 
-type SkeletonVariant = 'text' | 'circular' | 'rectangular' | 'heading' | 'avatar' | 'card' | 'button' | 'account' | 'transaction' | 'transaction-detail' | 'form-field' | 'settings';
+type SkeletonVariant = 'avatar' | 'card' | 'button' | 'account' | 'transaction' | 'transaction-detail' | 'settings';
 
 interface SkeletonLoaderProps {
   variant?: SkeletonVariant;
@@ -11,20 +11,12 @@ interface SkeletonLoaderProps {
   animated?: boolean;
 }
 
-export const SkeletonLoader = ({ variant = 'rectangular', count = 1, height, width, label = 'Loading content', animated = true }: SkeletonLoaderProps) => {
+export const SkeletonLoader = ({ variant = 'card', count = 1, height, width, label = 'Loading content', animated = true }: SkeletonLoaderProps) => {
   const items = Array.from({ length: count }, (_, i) => i);
 
   const skeletonStyle: React.CSSProperties = {};
   if (height) skeletonStyle.height = height;
   if (width) skeletonStyle.width = width;
-
-  // Map old variants to new ones for backward compatibility
-  const variantMap: Record<string, SkeletonVariant> = {
-    circular: 'avatar',
-    rectangular: 'card',
-  };
-
-  const mappedVariant = variantMap[variant] || variant;
 
   return (
     <div className="skeleton-wrapper" role="status" aria-busy={animated} aria-label={label}>
@@ -78,14 +70,6 @@ export const SkeletonLoader = ({ variant = 'rectangular', count = 1, height, wid
             <div className="skeleton skeleton-detail-value" />
           </div>
         </div>
-      ) : variant === 'form-field' ? (
-        // Form field skeleton
-        items.map((i) => (
-          <div key={i} className="skeleton-form-field">
-            <div className="skeleton skeleton-label" />
-            <div className="skeleton skeleton-input" />
-          </div>
-        ))
       ) : variant === 'settings' ? (
         // Settings page skeleton with header and form
         <div className="skeleton-settings-block">
@@ -119,8 +103,8 @@ export const SkeletonLoader = ({ variant = 'rectangular', count = 1, height, wid
           </div>
         </div>
       ) : (
-        // Standard skeleton variants
-        items.map((i) => <div key={i} className={`skeleton skeleton-${mappedVariant}`} style={skeletonStyle} />)
+        // Standard skeleton variants (card, avatar, button)
+        items.map((i) => <div key={i} className={`skeleton skeleton-${variant}`} style={skeletonStyle} />)
       )}
     </div>
   );

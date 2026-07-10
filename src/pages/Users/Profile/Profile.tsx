@@ -1,40 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
-import { useGetProfileQuery } from '@/api/argentBankApi';
+import { useAuth } from '@/hooks/useAuth';
+import { useMinimumLoadingDelay } from '@/hooks/useMinimumLoadingDelay';
 import { ROUTES, buildTransactionsRoute } from '@/constants';
-import { logoutUser } from '@/features/Auth/authThunks';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { selectAuthToken } from '@/store/selectors';
 import { STATIC_ACCOUNTS } from '@/pages/Users/Transactions/staticAccounts';
 import './styles/Profile.css';
 
 export const Profile = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const token = useAppSelector(selectAuthToken);
-  const { data: user, isLoading, isError, refetch } = useGetProfileQuery(undefined, { skip: !token });
-  const [loadingAccounts, setLoadingAccounts] = useState(true);
+  const { user, isProfileLoading, isProfileError, logout } = useAuth();
+  const loadingAccounts = useMinimumLoadingDelay();
 
   useEffect(() => {
-    if (token) {
-      refetch();
+    if (isProfileError) {
+      logout();
+      navigate(ROUTES.LOGIN);
     }
-  }, [token, refetch]);
+  }, [isProfileError, logout, navigate]);
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoadingAccounts(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
-
-  if (isError) {
-    void dispatch(logoutUser());
-    navigate(ROUTES.LOGIN);
+  if (isProfileError) {
     return null;
   }
 
-  const isContentLoading = isLoading || loadingAccounts;
+  const isContentLoading = isProfileLoading || loadingAccounts;
 
   return (
     <div className="profile-page">

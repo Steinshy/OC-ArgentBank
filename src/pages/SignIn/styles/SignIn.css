@@ -54,12 +54,6 @@
     font-size: clamp(1.75rem, 2.5vw, 2.125rem);
   }
 
-  .sign-in-content .sign-in-button {
-    font-size: 1.0625rem;
-    min-height: 3.25rem;
-    padding: 1rem;
-  }
-
   .sign-in-content form {
     max-width: min(26rem, 100%);
   }

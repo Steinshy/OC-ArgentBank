@@ -23,7 +23,7 @@ export const Layout = ({ children }: LayoutProps) => {
   const isAuthPage = location.pathname === ROUTES.LOGIN || location.pathname === ROUTES.REGISTER;
 
   const handleLogout = () => {
-    dispatch(logoutUser());
+    void dispatch(logoutUser());
     navigate(ROUTES.HOME);
   };
 

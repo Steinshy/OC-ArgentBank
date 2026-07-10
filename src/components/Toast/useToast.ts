@@ -1,7 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { ToastAction, ToastItem } from '@/types';
-
-type ToastType = 'success' | 'error' | 'warning' | 'info';
+import { ToastAction, ToastItem, ToastType } from '@/types';
 
 const DISMISS_ANIMATION_DURATION = 250;
 const DEFAULT_DURATIONS: Record<ToastType, number> = {
