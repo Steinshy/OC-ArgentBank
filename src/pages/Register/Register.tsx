@@ -7,7 +7,7 @@ import { clearError } from '@/features/Auth/authSlice';
 import { signUpUser } from '@/features/Auth/authThunks';
 import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
 import { validateEmail, validatePassword, validateName } from '@/helpers/validator';
-import { joinDescribedBy } from '@/helpers/formUtils';
+import { joinDescribedBy, makeFieldChangeHandler } from '@/helpers/formUtils';
 import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectAuthLoading, selectAuthError, selectAuthToken } from '@/store/selectors';
 import './styles/Register.css';
@@ -34,16 +34,14 @@ export const Register = () => {
     }
   }, [token, navigate]);
 
-  const makeHandler = (setter: (v: string) => void, clearFieldError: () => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
-    setter(e.target.value);
-    clearFieldError();
+  const clearServerError = () => {
     if (error) dispatch(clearError());
   };
 
-  const handleEmailChange = makeHandler(setEmail, () => setEmailError(''));
-  const handlePasswordChange = makeHandler(setPassword, () => setPasswordError(''));
-  const handleFirstNameChange = makeHandler(setFirstName, () => setFirstNameError(''));
-  const handleLastNameChange = makeHandler(setLastName, () => setLastNameError(''));
+  const handleEmailChange = makeFieldChangeHandler(setEmail, () => setEmailError(''), clearServerError);
+  const handlePasswordChange = makeFieldChangeHandler(setPassword, () => setPasswordError(''), clearServerError);
+  const handleFirstNameChange = makeFieldChangeHandler(setFirstName, () => setFirstNameError(''), clearServerError);
+  const handleLastNameChange = makeFieldChangeHandler(setLastName, () => setLastNameError(''), clearServerError);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,7 +64,6 @@ export const Register = () => {
 
     if (signUpUser.fulfilled.match(result)) {
       toast.show('Account created', MESSAGES.REGISTER_SUCCESS, 'success');
-      navigate(ROUTES.PROFILE);
     } else if (signUpUser.rejected.match(result) && result.payload === SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS) {
       setEmailError(SERVER_ERROR_MESSAGES.SIGN_UP_EMAIL_EXISTS);
       dispatch(clearError());

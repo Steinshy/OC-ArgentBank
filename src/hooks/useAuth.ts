@@ -10,7 +10,7 @@ export const useAuth = () => {
   const loading = useAppSelector(selectAuthLoading);
   const error = useAppSelector(selectAuthError);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const { data: user } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
+  const { data: user, isLoading: isProfileLoading, isError: isProfileError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
   const [updateProfile] = useUpdateProfileMutation();
 
   return {
@@ -19,6 +19,8 @@ export const useAuth = () => {
     error,
     isAuthenticated,
     user: user ?? null,
+    isProfileLoading,
+    isProfileError,
     signIn: (credentials: SignInRequest) => dispatch(signInUser(credentials)),
     logout: () => dispatch(logoutUser()),
     updateProfile: (data: UpdateProfileData) => updateProfile(data),

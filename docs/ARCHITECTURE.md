@@ -93,7 +93,7 @@ The codebase should stay navigable as features grow.
 
 Use **feature folders under `src/features/`** for Redux slices tied to a domain. Shared UI stays in `components/`, routes in `pages/`, HTTP primitives in `api/`.
 
-**Current state:** `features/Auth/` and `features/Transactions/` exist. Each feature encapsulates its domain logic, with transaction UI and hooks co-located under `features/Transactions/`.
+**Current state:** only `features/Auth/` exists (`authSlice.ts` + `authThunks.ts`). Transactions has no Redux slice — its UI, hooks, and static seed data are co-located under `pages/Users/Transactions/` instead, since there's no backend endpoint to fetch from yet (see ADR-013).
 
 ### Rationale
 
@@ -270,7 +270,7 @@ Screens need token state, user display name, sign-in, logout, and profile update
 
 ### Decision
 
-Implement **`useAuth`** in `hooks/useAuth.ts`: reads `auth` slice, subscribes to `useGetProfileQuery` (skipped when logged out), exposes `updateProfile` from `useUpdateProfileMutation`, and wraps `signInUser` / `logoutUser` dispatch.
+Implement **`useAuth`** in `hooks/useAuth.ts`: reads `auth` slice, subscribes to `useGetProfileQuery` (skipped when logged out, exposes `isProfileLoading`/`isProfileError`), exposes `updateProfile` from `useUpdateProfileMutation`, and wraps `signInUser` / `logoutUser` dispatch. `Profile` and `Settings` use it directly; `Layout`, `ProtectedRoute`, and `App` call `useGetProfileQuery`/selectors directly since their loading/redirect behavior at the route-guard level differs from the simple hook contract.
 
 ### Rationale
 
@@ -279,7 +279,7 @@ Implement **`useAuth`** in `hooks/useAuth.ts`: reads `auth` slice, subscribes to
 
 ### Consequences
 
-- There is **no** separate `useTransactions` hook; transaction pages use RTK Query hooks (`useGetTransactionsQuery`, etc.) directly.
+- There is **no** separate `useTransactions` hook; the Transactions page reads static seed data (see ADR-013) since there's no backend endpoint yet.
 
 ---
 
@@ -320,7 +320,8 @@ Profile and transaction data benefit from caching, tag invalidation, and shared 
 Define **`argentBankApi`** with `createApi`, `reducerPath: 'argentBankApi'`, `fakeBaseQuery`, and endpoints implemented via **`queryFn`**:
 
 - `getProfile` / `updateProfile` — POST/PUT profile
-- `getTransactions` / `patchTransaction` — GET/PATCH transaction resources
+
+There are no `getTransactions`/`patchTransaction` endpoints: `Backend/routes` doesn't implement accounts/transactions (see ADR-013), so the Transactions page reads `pages/Users/Transactions/staticAccounts.ts` and keeps edits in local component state instead.
 
 Register `argentBankApi.reducer` and `argentBankApi.middleware` in `store.ts`. Call **`argentBankApi.util.resetApiState()`** on logout to clear cached user data.
 
@@ -350,11 +351,12 @@ The API must stay testable and easy to extend for coursework and maintenance.
 Follow **route → controller → service → model** in `Backend/`:
 
 - **Routes** declare paths and attach middleware (e.g. JWT validation).
-- **Controllers** parse requests and return HTTP responses.
-- **Services** hold bcrypt/JWT and business rules.
-- **Mongoose models** define persistence.
+- **Middleware** (`tokenValidation.js`) verifies the JWT once and attaches `req.userId`; services never re-parse the `Authorization` header.
+- **Controllers** are a thin `runService` wrapper: call a service with plain data, map the result/error to an HTTP response (`error.statusCode` if the service set one, else `500`).
+- **Services** hold bcrypt/JWT and business rules, always take a plain data object (never the raw Express `req`), and validate string inputs before they reach a Mongoose query (defense against NoSQL operator injection, e.g. `{ email: { $ne: null } }`). `mongoose.set('sanitizeFilter', true)` (`database/connection.js`) adds a second layer.
+- **Mongoose models** define persistence and required/unique field validation.
 
-Expose **Swagger UI** at `/api-docs` when `NODE_ENV !== 'production'`, driven by `swagger.yaml`.
+Expose **Swagger UI** at `/api-docs` when `NODE_ENV !== 'production'`, driven by `Backend/swagger.yaml` (the single source of truth — `docs/swagger.yaml` was a hand-synced duplicate and has been removed).
 
 ### Rationale
 
@@ -363,12 +365,14 @@ Expose **Swagger UI** at `/api-docs` when `NODE_ENV !== 'production'`, driven by
 
 ### Consequences
 
-- `swagger.yaml` may describe endpoints that are not all wired in `routes/` yet; keep docs and code in sync when shipping features.
+- `swagger.yaml` documents `GET /accounts`, `GET/PATCH /accounts/:id/transactions/...` that aren't implemented in `routes/` — the frontend uses static seed data for these until the routes exist (see "Future considerations").
+- `JWT_SECRET` is required at runtime (no insecure hardcoded fallback); requests fail if it's unset rather than silently signing with a known value.
 
 ---
 
 ## Build tooling notes
 
+- **pnpm workspace**: `pnpm-workspace.yaml` includes `Backend/`, so a single `pnpm install` at the repo root installs both the frontend and backend. Run backend-only scripts with `pnpm --filter argent-bank-api <script>` or `cd Backend && pnpm <script>`.
 - **Vite 8** with `@vitejs/plugin-react`, **oxc** minify, optional **rollup-plugin-visualizer** in production builds (`dist/stats.html`).
 - **vite-plugin-checker** runs TypeScript checking in dev.
 - **ESLint** + **Prettier** + **Stylelint** — see root `package.json` scripts.
@@ -378,7 +382,6 @@ Expose **Swagger UI** at `/api-docs` when `NODE_ENV !== 'production'`, driven by
 ## Future considerations
 
 1. **Testing** — Unit tests for thunks/reducers and integration tests for `ProtectedRoute` + API slice; optional Playwright for critical paths.
-2. **API parity** — Implement or trim `swagger.yaml` entries so accounts/transactions match production routes.
+2. **API parity** — Implement `Backend/routes` for accounts/transactions so `swagger.yaml` matches production routes and the Transactions page can drop its static seed data.
 3. **i18n** — If required, extract `constants/ui.ts` strings behind a library (e.g. react-i18next).
-4. **Route-level code splitting** — `React.lazy` for heavy pages if bundle size grows.
-5. **Centralize `authToken` key** — Move literal to `constants/` if more modules need it.
+4. **Centralize `authToken` key** — Move the literal `'authToken'` to `constants/` if more modules need it.

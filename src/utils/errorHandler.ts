@@ -51,8 +51,6 @@ export const ERROR_MESSAGES = {
   SIGNUP_FAILED: 'Registration failed. Please try again.',
   PROFILE_UPDATE_FAILED: 'Failed to update profile. Please try again.',
   PROFILE_LOAD_FAILED: 'Failed to load profile. Please try again.',
-  TRANSACTIONS_LOAD_FAILED: 'Failed to load transactions. Please try again.',
-  TRANSACTION_UPDATE_FAILED: 'Failed to update transaction',
 } as const;
 
 /** Server response messages — matched to backend error messages */

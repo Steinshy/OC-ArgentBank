@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, ArrowLeft, Edit } from 'lucide-react';
 import { useNavigate } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS, FORMS, TRANSACTION_CATEGORIES } from '@/constants';
+import { useMinimumLoadingDelay } from '@/hooks/useMinimumLoadingDelay';
 import { Transaction, UserAccountId } from '@/types';
 import { useTransactionEdit, type EditableField } from './useTransactionEdit';
 import { STATIC_ACCOUNTS } from './staticAccounts';
+
+const TRANSACTIONS_PER_PAGE = 7;
 
 interface TransactionsRowProps {
   tx: Transaction;
@@ -16,8 +19,8 @@ interface TransactionsRowProps {
   editValue: string;
   isSaving: boolean;
   onToggleRow: (id: string) => void;
-  onStartEdit: (id: string, field: 'category' | 'notes', value: string) => void;
-  onSaveEdit: (id: string, field: 'category' | 'notes') => void;
+  onStartEdit: (id: string, field: EditableField, value: string) => void;
+  onSaveEdit: (id: string, field: EditableField) => void;
   onCancelEdit: () => void;
   onEditValueChange: (value: string) => void;
 }
@@ -28,23 +31,28 @@ interface TransactionsDetailProps {
   editValue: string;
   isSaving?: boolean;
   isLoading?: boolean;
-  onStartEdit: (id: string, field: 'category' | 'notes', currentValue: string) => void;
-  onSaveEdit: (id: string, field: 'category' | 'notes') => void;
+  onStartEdit: (id: string, field: EditableField, currentValue: string) => void;
+  onSaveEdit: (id: string, field: EditableField) => void;
   onCancelEdit: () => void;
   onEditValueChange: (value: string) => void;
 }
 
 export const TransactionsTable = ({ accountId }: { accountId: UserAccountId }) => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const loading = useMinimumLoadingDelay();
+  const [page, setPage] = useState(1);
+  const [pagedAccountId, setPagedAccountId] = useState(accountId);
   const account = STATIC_ACCOUNTS.find((a) => a.id === accountId);
-  const transactions = account?.transactions || [];
-  const { expandedRowId, editingField, editValue, isSaving, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit } = useTransactionEdit(accountId);
+  const { expandedRowId, editingField, editValue, isSaving, edits, setEditValue, toggleRow, startEdit, saveEdit, cancelEdit } = useTransactionEdit();
+  const transactions = (account?.transactions || []).map((tx) => ({ ...tx, ...edits[tx.id] }));
+  const totalPages = Math.max(1, Math.ceil(transactions.length / TRANSACTIONS_PER_PAGE));
 
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
+  if (accountId !== pagedAccountId) {
+    setPagedAccountId(accountId);
+    setPage(1);
+  }
+
+  const pagedTransactions = transactions.slice((page - 1) * TRANSACTIONS_PER_PAGE, page * TRANSACTIONS_PER_PAGE);
 
   return (
     <div className="transaction-content">
@@ -79,7 +87,7 @@ export const TransactionsTable = ({ accountId }: { accountId: UserAccountId }) =
               </tr>
             </thead>
             <tbody>
-              {transactions.map((tx: Transaction) => (
+              {pagedTransactions.map((tx: Transaction) => (
                 <TransactionsRow
                   key={tx.id}
                   tx={tx}
@@ -97,8 +105,10 @@ export const TransactionsTable = ({ accountId }: { accountId: UserAccountId }) =
             </tbody>
           </table>
           <Pagination
-            currentPage={1}
-            totalPages={5}
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+            itemsPerPage={TRANSACTIONS_PER_PAGE}
             totalItems={transactions.length}
             leftElement={
               <button className="btn btn-secondary btn-sm back-button" onClick={() => navigate(ROUTES.PROFILE)}>
@@ -114,7 +124,7 @@ export const TransactionsTable = ({ accountId }: { accountId: UserAccountId }) =
 };
 
 export const TransactionsRow = React.memo(({ tx, isExpanded, editingField, editValue, isSaving, onToggleRow, onStartEdit, onSaveEdit, onCancelEdit, onEditValueChange }: TransactionsRowProps) => (
-  <React.Fragment key={tx.id}>
+  <React.Fragment>
     <tr
       className="transaction-row"
       onClick={() => onToggleRow(tx.id)}

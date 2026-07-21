@@ -26,13 +26,7 @@ class TokenStorageManager {
 
   /** Detect token location (used on app initialization) */
   detectTokenLocation(): StorageStrategy {
-    if (localStorage.getItem('authToken')) {
-      return 'local';
-    }
-    if (sessionStorage.getItem('authToken')) {
-      return 'session';
-    }
-    return 'session';
+    return localStorage.getItem('authToken') ? 'local' : 'session';
   }
 
   /** Set auth token */

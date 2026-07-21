@@ -3,6 +3,7 @@ import { useEffect, useRef } from 'react';
 import {
   DEG_TO_RAD,
   TWO_PI,
+  GLOBE_COLOR,
   ARC_RESOLUTION,
   MERIDIAN_COUNT,
   PARALLEL_COUNT,
@@ -96,7 +97,7 @@ export const HeroGlobe = ({ className }: Props) => {
         ctx!.beginPath();
         ctx!.moveTo(a.sx, a.sy);
         ctx!.lineTo(b.sx, b.sy);
-        ctx!.strokeStyle = `rgba(0, 188, 119, ${alpha})`;
+        ctx!.strokeStyle = `rgba(${GLOBE_COLOR}, ${alpha})`;
         ctx!.stroke();
       }
 
@@ -108,12 +109,12 @@ export const HeroGlobe = ({ className }: Props) => {
 
         ctx!.beginPath();
         ctx!.arc(p.sx, p.sy, r * 2, 0, TWO_PI);
-        ctx!.fillStyle = `rgba(0, 188, 119, ${nodeAlpha * 0.1})`;
+        ctx!.fillStyle = `rgba(${GLOBE_COLOR}, ${nodeAlpha * 0.1})`;
         ctx!.fill();
 
         ctx!.beginPath();
         ctx!.arc(p.sx, p.sy, r, 0, TWO_PI);
-        ctx!.fillStyle = `rgba(0, 188, 119, ${nodeAlpha})`;
+        ctx!.fillStyle = `rgba(${GLOBE_COLOR}, ${nodeAlpha})`;
         ctx!.fill();
       }
 

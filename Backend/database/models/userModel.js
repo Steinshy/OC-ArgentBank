@@ -2,15 +2,33 @@ const mongoose = require('mongoose')
 
 const userSchema = new mongoose.Schema(
   {
-    email: String,
-    password: String,
-    firstName: String,
-    lastName: String
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      match: [/^\S+@\S+\.\S+$/, 'Invalid email address']
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    firstName: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    lastName: {
+      type: String,
+      required: true,
+      trim: true
+    }
   },
   {
     timestamps: true,
     toObject: {
-      transform: (doc, ret, options) => {
+      transform: (doc, ret) => {
         ret.id = ret._id
         delete ret._id
         delete ret.password

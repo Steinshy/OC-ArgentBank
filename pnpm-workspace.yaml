@@ -1,0 +1,5 @@
+packages:
+  - 'Backend'
+allowBuilds:
+  '@scarf/scarf': true
+  bcrypt: true

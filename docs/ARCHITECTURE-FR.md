@@ -93,7 +93,7 @@ Le code doit rester navigable à mesure que les fonctionnalités grossissent.
 
 Placer les slices Redux liés à un domaine dans des **dossiers feature sous `src/features/`**. L’UI partagée reste dans `components/`, les écrans routés dans `pages/`, les primitives HTTP dans `api/`.
 
-**État actuel :** `features/Auth/` et `features/Transactions/` existent. Chaque feature encapsule sa logique métier, avec l’UI et les hooks des transactions co-localisés sous `features/Transactions/`.
+**État actuel :** seul `features/Auth/` existe (`authSlice.ts` + `authThunks.ts`). Les transactions n’ont pas de slice Redux : leur UI, leurs hooks et leurs données statiques sont co-localisés sous `pages/Users/Transactions/`, faute d’endpoint backend à interroger pour l’instant (voir ADR-013).
 
 ### Justification
 
@@ -270,7 +270,7 @@ Les écrans ont besoin du token, du nom affiché, de la connexion, de la déconn
 
 ### Décision
 
-Implémenter **`useAuth`** dans `hooks/useAuth.ts` : lit le slice `auth`, s’abonne à `useGetProfileQuery` (ignoré hors session), expose `updateProfile` via `useUpdateProfileMutation`, et encapsule le dispatch de `signInUser` / `logoutUser`.
+Implémenter **`useAuth`** dans `hooks/useAuth.ts` : lit le slice `auth`, s’abonne à `useGetProfileQuery` (ignoré hors session, expose `isProfileLoading`/`isProfileError`), expose `updateProfile` via `useUpdateProfileMutation`, et encapsule le dispatch de `signInUser` / `logoutUser`. `Profile` et `Settings` l’utilisent directement ; `Layout`, `ProtectedRoute` et `App` appellent `useGetProfileQuery`/les sélecteurs directement car leur logique de chargement/redirection au niveau du garde de route diffère du contrat simple du hook.
 
 ### Justification
 
@@ -279,7 +279,7 @@ Implémenter **`useAuth`** dans `hooks/useAuth.ts` : lit le slice `auth`, s’ab
 
 ### Conséquences
 
-- Il n’existe **pas** de hook séparé `useTransactions` ; les pages transactions utilisent directement les hooks RTK Query (`useGetTransactionsQuery`, etc.).
+- Il n’existe **pas** de hook séparé `useTransactions` ; la page Transactions lit des données statiques (voir ADR-013) faute d’endpoint backend.
 
 ---
 
@@ -320,7 +320,8 @@ Les données de profil et de transaction profitent du cache, de l’invalidation
 Définir **`argentBankApi`** avec `createApi`, `reducerPath: 'argentBankApi'`, `fakeBaseQuery`, et des endpoints implémentés via **`queryFn`** :
 
 - `getProfile` / `updateProfile` — POST/PUT profil
-- `getTransactions` / `patchTransaction` — GET/PATCH ressources transaction
+
+Il n’y a pas d’endpoints `getTransactions`/`patchTransaction` : `Backend/routes` n’implémente pas comptes/transactions (voir ADR-013), donc la page Transactions lit `pages/Users/Transactions/staticAccounts.ts` et garde les modifications en état local de composant.
 
 Enregistrer `argentBankApi.reducer` et `argentBankApi.middleware` dans `store.ts`. Appeler **`argentBankApi.util.resetApiState()`** à la déconnexion pour vider le cache utilisateur.
 
@@ -350,11 +351,12 @@ L’API doit rester testable et extensible pour le cours et la maintenance.
 Suivre **route → controller → service → model** dans `Backend/` :
 
 - Les **routes** déclarent les chemins et attachent le middleware (p. ex. validation JWT).
-- Les **controllers** lisent les requêtes et renvoient les réponses HTTP.
-- Les **services** concentrent bcrypt/JWT et la logique métier.
-- Les **modèles Mongoose** définissent la persistance.
+- Le **middleware** (`tokenValidation.js`) vérifie le JWT une seule fois et attache `req.userId` ; les services ne reparsent jamais l’en-tête `Authorization`.
+- Les **controllers** sont un simple wrapper `runService` : appellent un service avec des données brutes, transforment le résultat/l’erreur en réponse HTTP (`error.statusCode` si le service l’a défini, sinon `500`).
+- Les **services** concentrent bcrypt/JWT et la logique métier, prennent toujours un objet de données brut (jamais le `req` Express), et valident les entrées de type chaîne avant qu’elles n’atteignent une requête Mongoose (protection contre l’injection d’opérateurs NoSQL, p. ex. `{ email: { $ne: null } }`). `mongoose.set('sanitizeFilter', true)` (`database/connection.js`) ajoute une seconde couche.
+- Les **modèles Mongoose** définissent la persistance et la validation des champs requis/uniques.
 
-Exposer **Swagger UI** sur `/api-docs` lorsque `NODE_ENV !== 'production'`, alimenté par `swagger.yaml`.
+Exposer **Swagger UI** sur `/api-docs` lorsque `NODE_ENV !== 'production'`, alimenté par `Backend/swagger.yaml` (source unique — `docs/swagger.yaml` était une copie synchronisée à la main et a été supprimé).
 
 ### Justification
 
@@ -363,12 +365,14 @@ Exposer **Swagger UI** sur `/api-docs` lorsque `NODE_ENV !== 'production'`, alim
 
 ### Conséquences
 
-- `swagger.yaml` peut décrire des endpoints pas encore branchés dans `routes/` ; garder doc et code alignés lors des livraisons.
+- `swagger.yaml` documente `GET /accounts`, `GET/PATCH /accounts/:id/transactions/...` qui ne sont pas implémentés dans `routes/` — le frontend utilise des données statiques en attendant (voir « Pistes futures »).
+- `JWT_SECRET` est requis au démarrage (pas de valeur par défaut codée en dur) ; les requêtes échouent s’il est absent plutôt que de signer silencieusement avec une valeur connue.
 
 ---
 
 ## Notes sur la chaîne de build
 
+- **Workspace pnpm** : `pnpm-workspace.yaml` inclut `Backend/`, donc un seul `pnpm install` à la racine installe le frontend et le backend. Lancer les scripts backend seuls avec `pnpm --filter argent-bank-api <script>` ou `cd Backend && pnpm <script>`.
 - **Vite 8** avec `@vitejs/plugin-react`, minification **oxc**, **rollup-plugin-visualizer** optionnel en build production (`dist/stats.html`).
 - **vite-plugin-checker** exécute la vérification TypeScript en développement.
 - **ESLint** + **Prettier** + **Stylelint** — voir les scripts dans `package.json` à la racine.
@@ -378,7 +382,6 @@ Exposer **Swagger UI** sur `/api-docs` lorsque `NODE_ENV !== 'production'`, alim
 ## Pistes futures
 
 1. **Tests** — Tests unitaires pour thunks/reducers et tests d’intégration pour `ProtectedRoute` + slice API ; Playwright optionnel pour les parcours critiques.
-2. **Parité API** — Implémenter ou retirer des entrées `swagger.yaml` pour que comptes/transactions correspondent aux routes de production.
+2. **Parité API** — Implémenter les routes `Backend/routes` pour comptes/transactions afin que `swagger.yaml` corresponde aux routes de production et que la page Transactions abandonne ses données statiques.
 3. **i18n** — Si besoin, faire transiter les chaînes de `constants/ui.ts` par une bibliothèque (p. ex. react-i18next).
-4. **Découpage au niveau des routes** — `React.lazy` pour les pages lourdes si le bundle grossit.
-5. **Centraliser la clé `authToken`** — Déplacer le littéral vers `constants/` si plusieurs modules en ont besoin.
+4. **Centraliser la clé `authToken`** — Déplacer le littéral `'authToken'` vers `constants/` si plusieurs modules en ont besoin.

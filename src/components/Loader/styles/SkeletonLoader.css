@@ -21,16 +21,6 @@
   border-radius: var(--radius-md);
 }
 
-.skeleton-text {
-  height: var(--font-size-base);
-  width: 100%;
-}
-
-.skeleton-heading {
-  height: var(--font-size-2xl);
-  width: 80%;
-}
-
 .skeleton-avatar {
   border-radius: 50%;
   height: 48px;
@@ -264,22 +254,6 @@
   }
 }
 
-.skeleton-form-field {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-md);
-}
-
-.skeleton-form-field .skeleton-label {
-  height: 1rem;
-  width: 40%;
-}
-
-.skeleton-form-field .skeleton-input {
-  height: 44px;
-}
-
 .skeleton-transaction-block {
   border-radius: var(--radius-sm);
   display: flex;
@@ -410,10 +384,6 @@
 .skeleton-settings-form-field .skeleton-input {
   height: 44px;
   width: 100%;
-}
-
-.skeleton-hint {
-  border-radius: var(--radius-md);
 }
 
 .skeleton-settings-form-row {

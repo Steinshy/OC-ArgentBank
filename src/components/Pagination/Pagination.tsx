@@ -4,13 +4,14 @@ import './styles/Pagination.css';
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
+  onPageChange: (page: number) => void;
   maxVisiblePages?: number;
   itemsPerPage?: number;
   totalItems?: number;
   leftElement?: React.ReactNode;
 }
 
-export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, itemsPerPage = 7, totalItems, leftElement }: PaginationProps) => {
+export const Pagination = ({ currentPage, totalPages, onPageChange, maxVisiblePages = 5, itemsPerPage = 7, totalItems, leftElement }: PaginationProps) => {
   const isFirstPage = currentPage === 1;
   const isLastPage = currentPage === totalPages;
 
@@ -49,12 +50,14 @@ export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, items
   };
 
   const pages = getPageNumbers();
-  const displayTotal = totalItems || itemsPerPage * totalPages;
+  const total = totalItems ?? itemsPerPage * totalPages;
+  const rangeStart = total === 0 ? 0 : (currentPage - 1) * itemsPerPage + 1;
+  const rangeEnd = Math.min(currentPage * itemsPerPage, total);
 
   return (
     <nav className="pagination" aria-label="Pagination">
       <div className="pagination-controls">
-        <button className="pagination-btn pagination-arrow" disabled={isFirstPage} aria-label="Previous page">
+        <button className="pagination-btn pagination-arrow" disabled={isFirstPage} aria-label="Previous page" onClick={() => onPageChange(currentPage - 1)}>
           <ChevronLeft className="pagination-icon" aria-hidden="true" strokeWidth={2} />
         </button>
 
@@ -64,7 +67,12 @@ export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, items
               {page === '...' ? (
                 <span className="pagination-ellipsis">{page}</span>
               ) : (
-                <button className={`pagination-btn pagination-number ${page === currentPage ? 'active' : ''}`} disabled={page === currentPage}>
+                <button
+                  className={`pagination-btn pagination-number ${page === currentPage ? 'active' : ''}`}
+                  disabled={page === currentPage}
+                  aria-current={page === currentPage ? 'page' : undefined}
+                  onClick={() => onPageChange(page as number)}
+                >
                   {page}
                 </button>
               )}
@@ -72,7 +80,7 @@ export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, items
           ))}
         </div>
 
-        <button className="pagination-btn pagination-arrow" disabled={isLastPage} aria-label="Next page">
+        <button className="pagination-btn pagination-arrow" disabled={isLastPage} aria-label="Next page" onClick={() => onPageChange(currentPage + 1)}>
           <ChevronRight className="pagination-icon" aria-hidden="true" strokeWidth={2} />
         </button>
       </div>
@@ -80,7 +88,7 @@ export const Pagination = ({ currentPage, totalPages, maxVisiblePages = 5, items
       <div className="pagination-info">
         {leftElement}
         <span>
-          Showing {displayTotal} of {displayTotal} results
+          Showing {rangeStart}-{rangeEnd} of {total} results
         </span>
       </div>
     </nav>

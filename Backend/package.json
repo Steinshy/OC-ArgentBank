@@ -4,17 +4,19 @@
   "private": true,
   "description": "Project #10 - Argent Bank",
   "keywords": [],
-  "main": "index.js",
+  "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
-    "axios": "1.14.0",
     "bcrypt": "6.0.0",
     "cors": "2.8.6",
     "dotenv": "17.4.0",
     "express": "5.2.1",
-    "jsonwebtoken": "^9.0.3",
+    "jsonwebtoken": "9.0.3",
     "mongoose": "6.13.6",
     "swagger-ui-express": "5.0.1",
-    "yamljs": "^0.3.0"
+    "yamljs": "0.3.0"
   },
   "scripts": {
     "dev:server": "nodemon ./server.js",
@@ -22,6 +24,7 @@
     "server": "node ./server.js"
   },
   "devDependencies": {
+    "axios": "1.14.0",
     "nodemon": "3.1.14"
   },
   "overrides": {

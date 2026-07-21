@@ -2,95 +2,81 @@ const User = require('../database/models/userModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 
-module.exports.createUser = async serviceData => {
-  try {
-    const user = await User.findOne({ email: serviceData.email })
-    if (user) {
-      throw new Error('Email already exists')
-    }
+const isNonEmptyString = value => typeof value === 'string' && value.trim().length > 0
 
-    const hashPassword = await bcrypt.hash(serviceData.password, 12)
-
-    const newUser = new User({
-      email: serviceData.email,
-      password: hashPassword,
-      firstName: serviceData.firstName,
-      lastName: serviceData.lastName
-    })
-
-    let result = await newUser.save()
-
-    return result
-  } catch (error) {
-    console.error('Error in userService.js', error)
-    throw new Error(error)
-  }
+const invalidInputError = () => {
+  const error = new Error('Email, password, first name and last name are required')
+  error.statusCode = 400
+  return error
 }
 
-module.exports.getUserProfile = async serviceData => {
-  try {
-    const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
-    const decodedJwtToken = jwt.decode(jwtToken)
-    const user = await User.findOne({ _id: decodedJwtToken.id })
-
-    if (!user) {
-      throw new Error('User not found!')
-    }
-
-    return user.toObject()
-  } catch (error) {
-    console.error('Error in userService.js', error)
-    throw new Error(error)
-  }
+const invalidCredentialsError = () => {
+  const error = new Error('Invalid email or password')
+  error.statusCode = 401
+  return error
 }
 
-module.exports.loginUser = async serviceData => {
-  try {
-    const user = await User.findOne({ email: serviceData.email })
-
-    if (!user) {
-      throw new Error('User not found!')
-    }
-
-    const isValid = await bcrypt.compare(serviceData.password, user.password)
-
-    if (!isValid) {
-      throw new Error('Password is invalid')
-    }
-
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.SECRET_KEY || 'default-secret-key',
-      { expiresIn: '1d' }
-    )
-
-    return { token }
-  } catch (error) {
-    console.error('Error in userService.js', error)
-    throw new Error(error)
-  }
+const notFoundError = () => {
+  const error = new Error('User not found')
+  error.statusCode = 404
+  return error
 }
 
-module.exports.updateUserProfile = async serviceData => {
-  try {
-    const jwtToken = serviceData.headers.authorization.split('Bearer')[1].trim()
-    const decodedJwtToken = jwt.decode(jwtToken)
-    const user = await User.findOneAndUpdate(
-      { _id: decodedJwtToken.id },
-      {
-        firstName: serviceData.body.firstName,
-        lastName: serviceData.body.lastName
-      },
-      { new: true }
-    )
-
-    if (!user) {
-      throw new Error('User not found!')
-    }
-
-    return user.toObject()
-  } catch (error) {
-    console.error('Error in userService.js', error)
-    throw new Error(error)
+module.exports.createUser = async ({ email, password, firstName, lastName }) => {
+  if (!isNonEmptyString(email) || !isNonEmptyString(password) || !isNonEmptyString(firstName) || !isNonEmptyString(lastName)) {
+    throw invalidInputError()
   }
+
+  const existingUser = await User.findOne({ email })
+  if (existingUser) {
+    const error = new Error('Email already exists')
+    error.statusCode = 409
+    throw error
+  }
+
+  const hashPassword = await bcrypt.hash(password, 12)
+  const newUser = new User({ email, password: hashPassword, firstName, lastName })
+  const result = await newUser.save()
+
+  return result.toObject()
+}
+
+module.exports.loginUser = async ({ email, password }) => {
+  if (!isNonEmptyString(email) || !isNonEmptyString(password)) {
+    throw invalidCredentialsError()
+  }
+
+  const user = await User.findOne({ email })
+  if (!user) {
+    throw invalidCredentialsError()
+  }
+
+  const isValid = await bcrypt.compare(password, user.password)
+  if (!isValid) {
+    throw invalidCredentialsError()
+  }
+
+  const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' })
+
+  return { token }
+}
+
+module.exports.getUserProfile = async ({ userId }) => {
+  const user = await User.findOne({ _id: userId })
+
+  if (!user) {
+    throw notFoundError()
+  }
+
+  return user.toObject()
+}
+
+module.exports.updateUserProfile = async ({ userId, firstName, lastName }) => {
+  const user = await User.findOneAndUpdate({ _id: userId }, { firstName, lastName }, { new: true })
+
+  if (!user) {
+    throw notFoundError()
+  }
+
+  return user.toObject()
 }

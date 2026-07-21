@@ -2,9 +2,9 @@
 
 A RESTful API for Argent Bank financial dashboard, built with Node.js, Express, and MongoDB.
 
-![Node.js](https://img.shields.io/badge/Node.js-14%2B-green)
-![Express](https://img.shields.io/badge/Express-4.17-blue)
-![MongoDB](https://img.shields.io/badge/MongoDB-5.0%2B-green)
+![Node.js](https://img.shields.io/badge/Node.js-18%2B-green)
+![Express](https://img.shields.io/badge/Express-5.2-blue)
+![MongoDB](https://img.shields.io/badge/MongoDB-6%2B-green)
 ![JWT](https://img.shields.io/badge/JWT-9.0-orange)
 
 ## 📋 Table of Contents
@@ -38,24 +38,24 @@ The Argent Bank API provides secure authentication and user management services 
 
 ## 🛠️ Tech Stack
 
-- **Runtime:** Node.js (v14+)
-- **Framework:** Express.js 4.17
-- **Database:** MongoDB (v5.0+)
-- **ODM:** Mongoose 5.9
+- **Runtime:** Node.js (v18+)
+- **Framework:** Express.js 5.2
+- **Database:** MongoDB (v6+)
+- **ODM:** Mongoose 6.13
 - **Authentication:** JSON Web Tokens (JWT) 9.0
-- **Password Security:** bcrypt 5.0
-- **Documentation:** Swagger UI Express 4.1
+- **Password Security:** bcrypt 6.0
+- **Documentation:** Swagger UI Express 5.0
 - **YAML Parser:** yamljs 0.3
-- **HTTP Client:** axios 0.19 (for scripts)
-- **Dev Tools:** nodemon 2.0
+- **HTTP Client:** axios 1.14 (dev-only, used by `scripts/populateDatabase.js`)
+- **Dev Tools:** nodemon 3.1
 
 ## 📦 Prerequisites
 
 Before running the API, ensure you have the following installed:
 
-- **Node.js:** v14.0.0 or higher
-- **npm:** v6.0.0 or higher
-- **MongoDB:** v5.0 or higher (running locally or remote connection)
+- **Node.js:** v18.0.0 or higher
+- **npm:** v9.0.0 or higher (or **pnpm**, see root [README](../README.md))
+- **MongoDB:** v6.0 or higher (running locally or remote connection)
 
 Verify your installations:
 
@@ -63,12 +63,7 @@ Verify your installations:
 # Check Node.js version
 node --version
 
-# Check npm version
-npm --version
-
 # Check MongoDB version (if running locally)
-mongo --version
-# or for newer MongoDB versions
 mongosh --version
 ```
 
@@ -79,7 +74,7 @@ mongosh --version
 cd Backend
 
 # Install dependencies
-npm install
+pnpm install
 
 # Create environment file
 cp .env.example .env
@@ -92,10 +87,10 @@ cp .env.example .env
 
 ```bash
 # Start with auto-reload (recommended for development)
-npm run dev:server
+pnpm dev:server
 
 # Or start without auto-reload
-npm run server
+pnpm server
 ```
 
 The API will be available at **http://localhost:3001**
@@ -104,7 +99,7 @@ The API will be available at **http://localhost:3001**
 
 ```bash
 # Run database population script
-npm run populate-db
+pnpm populate-db
 ```
 
 This creates two test users:
@@ -228,7 +223,6 @@ Create a `.env` file in the Backend directory with the following variables:
 DATABASE_URL=mongodb://localhost/argentBankDB
 
 # JWT Configuration
-SECRET_KEY=your_super_secret_jwt_key_change_in_production
 JWT_SECRET=your_super_secret_jwt_key_change_in_production
 
 # Server Configuration
@@ -241,7 +235,8 @@ CORS_ORIGIN=http://localhost:5173
 
 **Security Notes:**
 
-- Change `SECRET_KEY` and `JWT_SECRET` to strong random values in production
+- `JWT_SECRET` is required — the server has no insecure fallback, so requests to sign/verify tokens fail fast if it's unset
+- Change `JWT_SECRET` to a strong random value in production
 - Never commit `.env` file to version control
 - Use `.env.example` as template
 
@@ -290,7 +285,7 @@ Users are stored with the following schema:
 
 ```bash
 # Run population script (creates 2 test users)
-npm run populate-db
+pnpm populate-db
 ```
 
 **Test Users:**
@@ -303,9 +298,9 @@ npm run populate-db
 ### Available Scripts
 
 ```bash
-npm run dev:server    # Start with nodemon (auto-reload)
-npm run server        # Start production server
-npm run populate-db   # Seed database with test users
+pnpm dev:server    # Start with nodemon (auto-reload)
+pnpm server        # Start production server
+pnpm populate-db   # Seed database with test users
 ```
 
 ### Architecture Pattern
@@ -336,12 +331,4 @@ The API follows a layered architecture:
 
 ### CORS Configuration
 
-CORS is enabled for all origins by default. To restrict to specific origins, modify `server.js`:
-
-```javascript
-app.use(
-  cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
-  })
-);
-```
+`server.js` reads `CORS_ORIGIN` from the environment and passes it to the `cors()` middleware. If `CORS_ORIGIN` is unset, the origin of the incoming request is reflected (development-friendly default). Set `CORS_ORIGIN` to a specific origin in production.

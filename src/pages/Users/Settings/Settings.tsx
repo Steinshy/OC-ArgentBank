@@ -4,32 +4,28 @@ import { useNavigate } from 'react-router';
 import { useToast } from '@/components/Toast/ToastContext';
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
-import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
 import { validateName } from '@/helpers/validator';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { selectIsAuthenticated } from '@/store/selectors';
+import { joinDescribedBy } from '@/helpers/formUtils';
+import { useAuth } from '@/hooks/useAuth';
+import { useMinimumLoadingDelay } from '@/hooks/useMinimumLoadingDelay';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
-import { logoutUser } from '@/features/Auth/authThunks';
 import './styles/Settings.css';
 
 export const Settings = () => {
-  const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const { data: user, isError } = useGetProfileQuery(undefined, { skip: !isAuthenticated });
+  const { user, isProfileError, logout, updateProfile } = useAuth();
   const [formData, setFormData] = useState({ firstName: '', lastName: '' });
   const [firstNameError, setFirstNameError] = useState<string | null>(null);
   const [lastNameError, setLastNameError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [updateProfile] = useUpdateProfileMutation();
+  const loading = useMinimumLoadingDelay();
   const toast = useToast();
 
   useEffect(() => {
-    if (isError) {
-      dispatch(logoutUser());
+    if (isProfileError) {
+      logout();
       navigate(ROUTES.LOGIN);
     }
-  }, [isError, dispatch, navigate]);
+  }, [isProfileError, logout, navigate]);
 
   useLayoutEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -38,11 +34,6 @@ export const Settings = () => {
       lastName: user?.lastName ?? '',
     });
   }, [user?.firstName, user?.lastName]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 500);
-    return () => clearTimeout(timer);
-  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -85,6 +76,8 @@ export const Settings = () => {
   }
 
   const initials = `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
+  const firstNameDescribedBy = joinDescribedBy(firstNameError && 'settings-firstName-error');
+  const lastNameDescribedBy = joinDescribedBy(lastNameError && 'settings-lastName-error');
 
   return (
     <div className="settings-page">
@@ -125,7 +118,7 @@ export const Settings = () => {
                 if (firstNameError) setFirstNameError(null);
               }}
               aria-invalid={firstNameError ? true : undefined}
-              aria-describedby={firstNameError ? 'settings-firstName-error' : undefined}
+              aria-describedby={firstNameDescribedBy}
               required
             />
             {firstNameError && (
@@ -147,7 +140,7 @@ export const Settings = () => {
                 if (lastNameError) setLastNameError(null);
               }}
               aria-invalid={lastNameError ? true : undefined}
-              aria-describedby={lastNameError ? 'settings-lastName-error' : undefined}
+              aria-describedby={lastNameDescribedBy}
               required
             />
             {lastNameError && (
