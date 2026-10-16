@@ -1,11 +1,38 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
+    paths:
+      - 'src/**'
+      - 'Backend/**'
+      - 'public/**'
+      - 'index.html'
+      - '*.config.*'
+      - 'tsconfig.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/ci.yml'
   pull_request:
+    paths:
+      - 'src/**'
+      - 'Backend/**'
+      - 'public/**'
+      - 'index.html'
+      - '*.config.*'
+      - 'tsconfig.json'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - 'pnpm-workspace.yaml'
+      - '.github/workflows/ci.yml'
 
 permissions:
   contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   quality:
@@ -15,13 +42,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v4.4.0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
         with:
           node-version: '24'
           cache: 'pnpm'
@@ -29,17 +56,13 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Check
+        run: pnpm check
+
       - name: Build project
         run: pnpm run build
 
-      - name: Type check
-        run: pnpm run type-check
-
-      - name: Lint TypeScript/React
-        run: pnpm run lint
-
-      - name: Lint styles
-        run: pnpm run lint:styles
-
-      - name: Check formatting
-        run: pnpm run format:check
+      # Non-blocking until the open advisories (proxy-addr, mongoose, react-router, ...) are upgraded.
+      - name: Audit production dependencies
+        run: pnpm audit --prod
+        continue-on-error: true
