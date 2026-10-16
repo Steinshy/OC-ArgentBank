@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 
 import { apiCall } from '@/api/client';
 import { argentBankApi } from '@/api/argentBankApi';
-import { SignInRequest, SignUpRequest, AuthTokenResponse } from '@/types';
+import type { SignInRequest, SignUpRequest, AuthTokenResponse } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { API_ENDPOINTS } from '@/constants';
 import { storage } from '@/utils/storage';

@@ -6,7 +6,7 @@ import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS, FORMS, TRANSACTION_CATEGORIES } from '@/constants';
 import { useMinimumLoadingDelay } from '@/hooks/useMinimumLoadingDelay';
-import { Transaction, UserAccountId } from '@/types';
+import type { Transaction, UserAccountId } from '@/types';
 import { useTransactionEdit, type EditableField } from './useTransactionEdit';
 import { STATIC_ACCOUNTS } from './staticAccounts';
 

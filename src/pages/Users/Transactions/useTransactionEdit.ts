@@ -34,7 +34,7 @@ export const useTransactionEdit = () => {
         setIsSaving(false);
       }, 300);
     },
-    [editValue]
+    [editValue],
   );
 
   const cancelEdit = useCallback(() => {

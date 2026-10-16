@@ -65,6 +65,6 @@ export const ToastContainer = ({ toasts, onDismiss, onPause, onResume }: ToastCo
         );
       })}
     </div>,
-    document.body
+    document.body,
   );
 };

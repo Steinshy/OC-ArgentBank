@@ -2,25 +2,16 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import checker from 'vite-plugin-checker';
 import { visualizer } from 'rollup-plugin-visualizer';
-import { resolve } from 'path';
+import { resolve } from 'node:path';
 
 export default defineConfig(({ mode }) => {
   const basePath = process.env.VITE_BASE_PATH || '/';
 
   const buildOptions = {
-    target: 'esnext',
-    outDir: 'dist',
-    assetsDir: 'assets',
-    sourcemap: mode === 'production' ? false : true,
-    cssCodeSplit: true,
+    sourcemap: mode !== 'production',
     cssMinify: 'lightningcss' as const,
-    assetsInlineLimit: 4096,
     chunkSizeWarningLimit: 1000,
     minify: 'oxc' as const,
-    reportCompressedSize: true,
-    modulePreload: {
-      polyfill: true,
-    },
     rolldownOptions: {
       output: {
         codeSplitting: {
@@ -43,12 +34,8 @@ export default defineConfig(({ mode }) => {
     },
   };
 
-  // Production Mode
   if (mode === 'production') {
-    Object.assign(buildOptions, {
-      sourcemap: false,
-      manifest: true,
-    });
+    Object.assign(buildOptions, { manifest: true });
   }
 
   return {
@@ -68,11 +55,10 @@ export default defineConfig(({ mode }) => {
     ].filter(Boolean),
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src'),
+        '@': resolve(import.meta.dirname, 'src'),
       },
     },
     base: basePath,
-    publicDir: './public',
     build: buildOptions,
     optimizeDeps: {
       include: ['lucide-react', 'react', 'react-dom', 'react-router', '@reduxjs/toolkit', 'react-redux'],

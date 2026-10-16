@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
-import { ToastAction, ToastItem, ToastType } from '@/types';
+import type { ToastAction, ToastItem, ToastType } from '@/types';
 
 const DISMISS_ANIMATION_DURATION = 250;
 const DEFAULT_DURATIONS: Record<ToastType, number> = {
@@ -37,7 +37,7 @@ export const useToast = () => {
       startRefs.current.set(id, Date.now());
       remainingRefs.current.set(id, delay);
     },
-    [dismiss]
+    [dismiss],
   );
 
   const pause = useCallback((id: number) => {
@@ -59,7 +59,7 @@ export const useToast = () => {
       scheduleTimer(id, remaining);
       setToasts((prev) => prev.map((t) => (t.id === id ? { ...t, paused: false } : t)));
     },
-    [scheduleTimer]
+    [scheduleTimer],
   );
 
   const show = useCallback(
@@ -84,7 +84,7 @@ export const useToast = () => {
 
       scheduleTimer(id, duration);
     },
-    [scheduleTimer]
+    [scheduleTimer],
   );
 
   return { toasts, show, dismiss, pause, resume };

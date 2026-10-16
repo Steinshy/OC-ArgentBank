@@ -1,15 +1,11 @@
+# Build output and dependencies
 node_modules
 dist
-build
 coverage
-*.lock
-package-lock.json
-yarn.lock
+
+# Generated lockfile
 pnpm-lock.yaml
-.cache
-.DS_Store
-*.log
-.env
-.env.local
-.env.*.local
-*.local
+
+# Course deliverables and assets, not source
+.oc
+public

@@ -1,7 +1,8 @@
 {
 	"folders": [
 		{
-			"path": "."
+      "name": "ArgentBank",
+			"path": "/home/Steinshy/Projects/OpenClassroom/ArgentBank"
 		}
   ],
   "settings": {}

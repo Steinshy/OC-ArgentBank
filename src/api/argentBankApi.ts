@@ -1,8 +1,8 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 
 import { apiCall } from './client';
-import { RootState } from '@/store/store';
-import { UserProfile, UserProfileResponse } from '@/types';
+import type { RootState } from '@/store/store';
+import type { UserProfile, UserProfileResponse } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
 import { API_ENDPOINTS } from '@/constants';
 

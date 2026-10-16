@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import type { ReactNode } from 'react';
 import { CircleUser, LogOut, Settings } from 'lucide-react';
 import { Link, useNavigate, useLocation } from 'react-router';
 

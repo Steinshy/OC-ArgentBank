@@ -1,4 +1,4 @@
-import { FieldValidationResult } from '@/types';
+import type { FieldValidationResult } from '@/types';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const NAME_REGEX = /^[\p{L}\s'-]+$/u;

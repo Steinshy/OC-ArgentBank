@@ -11,14 +11,5 @@ export default {
     'declaration-block-single-line-max-declarations': null,
     'rule-empty-line-before': null,
   },
-  ignoreFiles: [
-    '**/*.js',
-    '**/*.jsx',
-    '**/*.ts',
-    '**/*.tsx',
-    'node_modules/**',
-    '.oc/**',
-    'dist/**',
-    'public/**',
-  ],
+  ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx', 'node_modules/**', '.oc/**', 'dist/**', 'public/**'],
 };

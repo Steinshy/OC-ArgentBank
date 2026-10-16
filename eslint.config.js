@@ -10,6 +10,7 @@ export default [
   {
     ignores: ['dist', 'node_modules', 'build', '*.config.js', '*.config.mjs', '.lighthouserc.*', '.oc/**', 'public/**'],
   },
+  { linterOptions: { noInlineConfig: true, reportUnusedDisableDirectives: 'error' } },
   js.configs.recommended,
   {
     files: ['**/*.{js,ts,tsx}'],
@@ -48,6 +49,7 @@ export default [
     },
     rules: {
       'no-unused-vars': 'off',
+      '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/no-unused-vars': [
         'error',
         {

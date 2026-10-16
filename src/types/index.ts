@@ -87,7 +87,7 @@ export interface ToastItem {
   dismissing: boolean;
   paused: boolean;
   duration: number;
-  action?: ToastAction;
+  action?: ToastAction | undefined;
 }
 
 // === API Response Types ===

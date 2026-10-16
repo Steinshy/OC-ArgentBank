@@ -1,4 +1,4 @@
-import { useState, useEffect, useLayoutEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { useToast } from '@/components/Toast/ToastContext';
@@ -14,7 +14,8 @@ import './styles/Settings.css';
 export const Settings = () => {
   const navigate = useNavigate();
   const { user, isProfileError, logout, updateProfile } = useAuth();
-  const [formData, setFormData] = useState({ firstName: '', lastName: '' });
+  const [edits, setEdits] = useState<{ firstName?: string; lastName?: string }>({});
+  const formData = { firstName: edits.firstName ?? user?.firstName ?? '', lastName: edits.lastName ?? user?.lastName ?? '' };
   const [firstNameError, setFirstNameError] = useState<string | null>(null);
   const [lastNameError, setLastNameError] = useState<string | null>(null);
   const loading = useMinimumLoadingDelay();
@@ -26,14 +27,6 @@ export const Settings = () => {
       navigate(ROUTES.LOGIN);
     }
   }, [isProfileError, logout, navigate]);
-
-  useLayoutEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setFormData({
-      firstName: user?.firstName ?? '',
-      lastName: user?.lastName ?? '',
-    });
-  }, [user?.firstName, user?.lastName]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -114,7 +107,7 @@ export const Settings = () => {
               autoComplete="given-name"
               value={formData.firstName}
               onChange={(e) => {
-                setFormData({ ...formData, firstName: e.target.value });
+                setEdits((prev) => ({ ...prev, firstName: e.target.value }));
                 if (firstNameError) setFirstNameError(null);
               }}
               aria-invalid={firstNameError ? true : undefined}
@@ -136,7 +129,7 @@ export const Settings = () => {
               autoComplete="family-name"
               value={formData.lastName}
               onChange={(e) => {
-                setFormData({ ...formData, lastName: e.target.value });
+                setEdits((prev) => ({ ...prev, lastName: e.target.value }));
                 if (lastNameError) setLastNameError(null);
               }}
               aria-invalid={lastNameError ? true : undefined}

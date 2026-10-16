@@ -1,4 +1,4 @@
-import { ApiErrorResponse } from '@/types';
+import type { ApiErrorResponse } from '@/types';
 
 const isApiErrorResponse = (value: unknown): value is ApiErrorResponse => {
   if (typeof value !== 'object' || value === null) return false;
