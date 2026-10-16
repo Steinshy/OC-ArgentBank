@@ -119,10 +119,10 @@ Route paths, API paths, and user-visible copy should not be duplicated as raw st
 
 Centralize configuration in `src/constants/`:
 
-| File        | Role |
-| ----------- | ---- |
-| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `API_CONFIG` |
-| `routes.ts` | `ROUTES`, `buildTransactionsRoute` |
+| File        | Role                                                                         |
+| ----------- | ---------------------------------------------------------------------------- |
+| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `API_CONFIG`                                |
+| `routes.ts` | `ROUTES`, `buildTransactionsRoute`                                           |
 | `ui.ts`     | Labels, messages, nav copy, transaction categories/types, home feature cards |
 
 Re-export from `constants/index.ts` for `import { … } from '@/constants'`.

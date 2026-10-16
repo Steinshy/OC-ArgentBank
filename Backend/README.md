@@ -38,7 +38,7 @@ The Argent Bank API provides secure authentication and user management services 
 
 ## 🛠️ Tech Stack
 
-- **Runtime:** Node.js (v18+)
+- **Runtime:** Node.js (v24)
 - **Framework:** Express.js 5.2
 - **Database:** MongoDB (v6+)
 - **ODM:** Mongoose 6.13
@@ -53,8 +53,8 @@ The Argent Bank API provides secure authentication and user management services 
 
 Before running the API, ensure you have the following installed:
 
-- **Node.js:** v18.0.0 or higher
-- **npm:** v9.0.0 or higher (or **pnpm**, see root [README](../README.md))
+- **Node.js:** v24
+- **pnpm:** see root [README](../README.md) (`corepack enable` installs the pinned version)
 - **MongoDB:** v6.0 or higher (running locally or remote connection)
 
 Verify your installations:

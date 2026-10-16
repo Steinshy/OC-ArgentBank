@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19+-61DAFB?style=flat-square&logo=react" alt="React" /></a>
   <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-6.0+-3178C6?style=flat-square&logo=typescript" alt="TypeScript" /></a>
-  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js" alt="Node.js" /></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-24-339933?style=flat-square&logo=node.js" alt="Node.js" /></a>
   <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/Vite-8+-646CFF?style=flat-square&logo=vite" alt="Vite" /></a>
   <a href="https://redux-toolkit.js.org"><img src="https://img.shields.io/badge/Redux_Toolkit-2+-764ABC?style=flat-square&logo=redux" alt="Redux Toolkit" /></a>
   <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Express-5-000000?style=flat-square&logo=express&logoColor=white" alt="Express" /></a>
@@ -26,13 +26,13 @@ Argent Bank est une application web complète de tableau de bord bancaire : conn
 - ✅ Authentification JWT (connexion, inscription) et routes protégées
 - ✅ Lecture et mise à jour du profil utilisateur
 - ✅ Interface liste et détail des transactions avec édition catégorie/notes
-- ⏳ Routes REST comptes/transactions : le frontend affiche des données statiques (`src/pages/Users/Transactions/staticAccounts.ts`) car `Backend/routes` n’implémente pas encore comptes/transactions, bien que `Backend/swagger.yaml` documente ce contrat — voir [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) ADR-013
+- ⏳ Routes REST comptes/transactions : le frontend affiche des données statiques (`src/pages/Users/Transactions/staticAccounts.ts`) car `Backend/routes` n’implémente pas encore comptes/transactions, bien que `Backend/swagger.yaml` documente ce contrat — voir [ARCHITECTURE-FR.md](./ARCHITECTURE-FR.md) ADR-013
 
 ## 🚀 Démarrage
 
 ### Prérequis
 
-- Node.js 18+ et [pnpm](https://pnpm.io) (`corepack enable` installe la version épinglée dans `package.json`)
+- Node.js 24 et [pnpm](https://pnpm.io) (`corepack enable` installe la version épinglée dans `package.json`)
 - MongoDB (local ou distant) pour le backend
 - API backend sur le port **3001** (ou adapter `VITE_API_BASE_URL`)
 
@@ -121,7 +121,7 @@ Backend/
 
 ## 📚 Documentation
 
-- **[Notes d’architecture →](./docs/ARCHITECTURE.md)** — ADR et choix structurels
+- **[Notes d’architecture →](./ARCHITECTURE-FR.md)** — ADR et choix structurels
 - **Swagger UI** (hors production) : `http://localhost:3001/api-docs` (spec : [Backend/swagger.yaml](./Backend/swagger.yaml))
 - **Détails backend** → [Backend/README.md](./Backend/README.md)
 
@@ -208,18 +208,18 @@ Transaction {
 
 ## 📚 Scripts disponibles
 
-| Commande               | Rôle                                                      |
-| ---------------------- | --------------------------------------------------------- |
-| `pnpm dev`             | Serveur de dev Vite                                       |
-| `pnpm dev:all`         | Frontend + backend (arrête d’autres Vite/nodemon d’abord) |
-| `pnpm build`           | Build production dans `dist/`                             |
-| `pnpm preview`         | Prévisualiser le build                                    |
-| `pnpm type-check`      | `tsc --noEmit`                                            |
-| `pnpm lint`            | ESLint sur `src/`                                         |
-| `pnpm lint:fix`        | ESLint avec correctifs                                    |
-| `pnpm lint:styles`     | Stylelint sur CSS/SCSS                                    |
-| `pnpm format`          | Prettier en écriture                                      |
-| `pnpm format:check`    | Vérification Prettier                                     |
+| Commande            | Rôle                                                      |
+| ------------------- | --------------------------------------------------------- |
+| `pnpm dev`          | Serveur de dev Vite                                       |
+| `pnpm dev:all`      | Frontend + backend (arrête d’autres Vite/nodemon d’abord) |
+| `pnpm build`        | Build production dans `dist/`                             |
+| `pnpm preview`      | Prévisualiser le build                                    |
+| `pnpm type-check`   | `tsc --noEmit`                                            |
+| `pnpm lint`         | ESLint sur `src/`                                         |
+| `pnpm lint:fix`     | ESLint avec correctifs                                    |
+| `pnpm lint:styles`  | Stylelint sur CSS/SCSS                                    |
+| `pnpm format`       | Prettier en écriture                                      |
+| `pnpm format:check` | Vérification Prettier                                     |
 
 ## 🚀 Déploiement
 

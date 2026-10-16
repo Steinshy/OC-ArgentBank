@@ -5,7 +5,7 @@
 <p align="center">
   <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19+-61DAFB?style=flat-square&logo=react" alt="React" /></a>
   <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-6.0+-3178C6?style=flat-square&logo=typescript" alt="TypeScript" /></a>
-  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-18+-339933?style=flat-square&logo=node.js" alt="Node.js" /></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-24-339933?style=flat-square&logo=node.js" alt="Node.js" /></a>
   <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/Vite-8+-646CFF?style=flat-square&logo=vite" alt="Vite" /></a>
   <a href="https://redux-toolkit.js.org"><img src="https://img.shields.io/badge/Redux_Toolkit-2+-764ABC?style=flat-square&logo=redux" alt="Redux Toolkit" /></a>
   <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Express-5-000000?style=flat-square&logo=express&logoColor=white" alt="Express" /></a>
@@ -26,13 +26,13 @@ Argent Bank is a full-stack banking dashboard SPA: users sign in, manage their p
 - ✅ JWT authentication (login, register) with protected routes
 - ✅ User profile read/update
 - ✅ Transaction list and detail UI with category/notes editing
-- ⏳ Account/transaction REST routes: the frontend renders static seed data (`src/pages/Users/Transactions/staticAccounts.ts`) because `Backend/routes` doesn't implement accounts/transactions yet, even though `Backend/swagger.yaml` documents the contract — see [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) ADR-013
+- ⏳ Account/transaction REST routes: the frontend renders static seed data (`src/pages/Users/Transactions/staticAccounts.ts`) because `Backend/routes` doesn't implement accounts/transactions yet, even though `Backend/swagger.yaml` documents the contract — see [ARCHITECTURE.md](./ARCHITECTURE.md) ADR-013
 
 ## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js 18+ and [pnpm](https://pnpm.io) (`corepack enable` gives you the version pinned in `package.json`)
+- Node.js 24 and [pnpm](https://pnpm.io) (`corepack enable` gives you the version pinned in `package.json`)
 - MongoDB (local or remote) when running the backend
 - Backend running on port **3001** (or set `VITE_API_BASE_URL` accordingly)
 
@@ -121,7 +121,7 @@ Backend/
 
 ## 📚 Documentation
 
-- **[Architecture notes →](./docs/ARCHITECTURE.md)** — ADRs and structural decisions
+- **[Architecture notes →](./ARCHITECTURE.md)** — ADRs and structural decisions
 - **Swagger UI** (non-production): `http://localhost:3001/api-docs` (spec: [Backend/swagger.yaml](./Backend/swagger.yaml))
 - **Backend deep dive** → [Backend/README.md](./Backend/README.md)
 
@@ -208,18 +208,18 @@ Transaction {
 
 ## 📚 Available Scripts
 
-| Command                | Purpose                                             |
-| ---------------------- | --------------------------------------------------- |
-| `pnpm dev`             | Vite dev server                                     |
-| `pnpm dev:all`         | Frontend + backend (stops other Vite/nodemon first) |
-| `pnpm build`           | Production build to `dist/`                         |
-| `pnpm preview`         | Preview production build                            |
-| `pnpm type-check`      | `tsc --noEmit`                                      |
-| `pnpm lint`            | ESLint on `src/`                                    |
-| `pnpm lint:fix`        | ESLint with fix                                     |
-| `pnpm lint:styles`     | Stylelint on CSS/SCSS                               |
-| `pnpm format`          | Prettier write                                      |
-| `pnpm format:check`    | Prettier check                                      |
+| Command             | Purpose                                             |
+| ------------------- | --------------------------------------------------- |
+| `pnpm dev`          | Vite dev server                                     |
+| `pnpm dev:all`      | Frontend + backend (stops other Vite/nodemon first) |
+| `pnpm build`        | Production build to `dist/`                         |
+| `pnpm preview`      | Preview production build                            |
+| `pnpm type-check`   | `tsc --noEmit`                                      |
+| `pnpm lint`         | ESLint on `src/`                                    |
+| `pnpm lint:fix`     | ESLint with fix                                     |
+| `pnpm lint:styles`  | Stylelint on CSS/SCSS                               |
+| `pnpm format`       | Prettier write                                      |
+| `pnpm format:check` | Prettier check                                      |
 
 ## 🚀 Deployment
 

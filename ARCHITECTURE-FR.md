@@ -119,10 +119,10 @@ Les chemins de route, les chemins d’API et les textes visibles ne doivent pas 
 
 Centraliser la configuration dans `src/constants/` :
 
-| Fichier     | Rôle |
-| ----------- | ---- |
-| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `API_CONFIG` |
-| `routes.ts` | `ROUTES`, `buildTransactionsRoute` |
+| Fichier     | Rôle                                                                                        |
+| ----------- | ------------------------------------------------------------------------------------------- |
+| `api.ts`    | `API_BASE_URL`, `API_ENDPOINTS`, `API_CONFIG`                                               |
+| `routes.ts` | `ROUTES`, `buildTransactionsRoute`                                                          |
 | `ui.ts`     | Libellés, messages, textes de navigation, catégories/types de transaction, cartes d’accueil |
 
 Réexporter depuis `constants/index.ts` pour `import { … } from '@/constants'`.
