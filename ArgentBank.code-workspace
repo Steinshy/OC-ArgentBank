@@ -1,9 +1,9 @@
 {
-	"folders": [
-		{
+  "folders": [
+    {
       "name": "ArgentBank",
-			"path": "/home/Steinshy/Projects/OpenClassroom/ArgentBank"
-		}
+      "path": "/home/Steinshy/Projects/OpenClassroom/ArgentBank",
+    },
   ],
-  "settings": {}
+  "settings": {},
 }

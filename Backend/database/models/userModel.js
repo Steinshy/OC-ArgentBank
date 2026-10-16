@@ -1,4 +1,4 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema(
   {
@@ -8,35 +8,35 @@ const userSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       lowercase: true,
-      match: [/^\S+@\S+\.\S+$/, 'Invalid email address']
+      match: [/^\S+@\S+\.\S+$/, 'Invalid email address'],
     },
     password: {
       type: String,
-      required: true
+      required: true,
     },
     firstName: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     lastName: {
       type: String,
       required: true,
-      trim: true
-    }
+      trim: true,
+    },
   },
   {
     timestamps: true,
     toObject: {
       transform: (doc, ret) => {
-        ret.id = ret._id
-        delete ret._id
-        delete ret.password
-        delete ret.__v
-        return ret
-      }
-    }
-  }
-)
+        ret.id = ret._id;
+        delete ret._id;
+        delete ret.password;
+        delete ret.__v;
+        return ret;
+      },
+    },
+  },
+);
 
-module.exports = mongoose.model('User', userSchema)
+module.exports = mongoose.model('User', userSchema);
