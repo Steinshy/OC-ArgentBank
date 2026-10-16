@@ -9,17 +9,14 @@
   },
   "scripts": {
     "dev": "vite",
-    "dev:all": "pkill -f \"vite\" || true; pkill -f \"nodemon\" || true; concurrently \"pnpm dev\" \"pnpm --filter argent-bank-api dev:server\"",
+    "dev:all": "pnpm db:up && concurrently \"pnpm dev\" \"pnpm --filter argent-bank-api dev:server\" \"pnpm --filter argent-bank-api populate-db\"",
+    "db:up": "podman compose up -d --wait mongo",
+    "db:down": "podman compose down",
     "build": "vite build",
     "preview": "vite preview",
-    "type-check": "tsc --noEmit",
-    "lint": "eslint src",
+    "lint": "eslint src && stylelint \"src/**/*.{css,scss}\"",
     "fix": "eslint src --fix && prettier --write .",
-    "check": "pnpm type-check && pnpm lint && pnpm lint:styles && pnpm format:check",
-    "lint:fix": "eslint src --fix",
-    "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
-    "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "check": "tsc --noEmit && pnpm lint && prettier --check ."
   },
   "dependencies": {
     "@csstools/css-parser-algorithms": "^4.0.0",
