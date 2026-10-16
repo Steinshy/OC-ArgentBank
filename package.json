@@ -5,7 +5,7 @@
   "type": "module",
   "packageManager": "pnpm@11.15.1",
   "engines": {
-    "node": ">=18"
+    "node": ">=24 <25"
   },
   "scripts": {
     "dev": "vite",
@@ -14,10 +14,12 @@
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "lint": "eslint src",
+    "fix": "eslint src --fix && prettier --write src \"*.{js,mjs,ts,json}\" .github",
+    "check": "pnpm type-check && pnpm lint && pnpm lint:styles && pnpm format:check",
     "lint:fix": "eslint src --fix",
     "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
-    "format": "prettier --write \"src/**/*.{js,ts,tsx,css,scss}\"",
-    "format:check": "prettier --check \"src/**/*.{js,ts,tsx,css,scss}\""
+    "format": "prettier --write src \"*.{js,mjs,ts,json}\" .github",
+    "format:check": "prettier --check src \"*.{js,mjs,ts,json}\" .github"
   },
   "dependencies": {
     "@csstools/css-parser-algorithms": "^4.0.0",
@@ -56,9 +58,13 @@
     "vite": "^8.1.5",
     "vite-plugin-checker": "^0.14.4"
   },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "bcrypt"
+  "devEngines": {
+    "runtime": [
+      {
+        "name": "node",
+        "version": "24",
+        "onFail": "download"
+      }
     ]
   }
 }

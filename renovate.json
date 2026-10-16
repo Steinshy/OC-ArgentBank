@@ -1,0 +1,23 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:best-practices"],
+  "timezone": "Europe/Paris",
+  "schedule": ["before 6am on monday"],
+  "prConcurrentLimit": 5,
+  "prHourlyLimit": 2,
+  "labels": ["renovate"],
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "semanticCommits": "disabled",
+  "commitMessagePrefix": "ArgentBank:",
+  "lockFileMaintenance": { "enabled": true, "schedule": ["before 6am on monday"] },
+  "vulnerabilityAlerts": { "labels": ["security"], "schedule": [] },
+  "osvVulnerabilityAlerts": true,
+  "packageRules": [
+    {
+      "description": "pyproject uses >= floors, which the default range strategy never rewrites; bump the floor so updates get PRs.",
+      "matchManagers": ["pep621"],
+      "rangeStrategy": "bump"
+    }
+  ]
+}
