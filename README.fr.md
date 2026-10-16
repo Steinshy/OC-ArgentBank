@@ -63,7 +63,7 @@ pnpm dev
 # Backend seul (depuis Backend/)
 pnpm dev:server
 
-# Frontend + backend (arrête d’autres processus Vite/nodemon au préalable)
+# Frontend + backend (démarre MongoDB et crée les utilisateurs de test)
 pnpm dev:all
 ```
 
@@ -72,11 +72,9 @@ pnpm dev:all
 ```bash
 pnpm build
 pnpm preview
-pnpm type-check
-pnpm lint
-pnpm lint:fix
-pnpm lint:styles
-pnpm format:check
+pnpm lint     # ESLint + Stylelint
+pnpm fix      # ESLint --fix + Prettier --write
+pnpm check    # tsc + lint + Prettier --check
 ```
 
 ## 📁 Structure du projet
@@ -208,18 +206,15 @@ Transaction {
 
 ## 📚 Scripts disponibles
 
-| Commande            | Rôle                                                      |
-| ------------------- | --------------------------------------------------------- |
-| `pnpm dev`          | Serveur de dev Vite                                       |
-| `pnpm dev:all`      | Frontend + backend (arrête d’autres Vite/nodemon d’abord) |
-| `pnpm build`        | Build production dans `dist/`                             |
-| `pnpm preview`      | Prévisualiser le build                                    |
-| `pnpm type-check`   | `tsc --noEmit`                                            |
-| `pnpm lint`         | ESLint sur `src/`                                         |
-| `pnpm lint:fix`     | ESLint avec correctifs                                    |
-| `pnpm lint:styles`  | Stylelint sur CSS/SCSS                                    |
-| `pnpm format`       | Prettier en écriture                                      |
-| `pnpm format:check` | Vérification Prettier                                     |
+| Commande       | Rôle                            |
+| -------------- | ------------------------------- |
+| `pnpm dev`     | Serveur de dev Vite             |
+| `pnpm dev:all` | Frontend + backend              |
+| `pnpm build`   | Build production dans `dist/`   |
+| `pnpm preview` | Prévisualiser le build          |
+| `pnpm lint`    | ESLint + Stylelint              |
+| `pnpm fix`     | ESLint --fix + Prettier --write |
+| `pnpm check`   | tsc + lint + Prettier --check   |
 
 ## 🚀 Déploiement
 

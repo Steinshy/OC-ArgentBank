@@ -51,16 +51,11 @@ Backend/
 **Frontend (repo root)**
 
 - `pnpm run dev`: Frontend (localhost:5173)
-- `pnpm run dev:all`: Frontend + backend
-
-> ⚠️ `dev:all` kills any running Vite/nodemon processes on your machine before starting.
-
-- `pnpm run type-check`: Type-check without emit (run before PR)
-- `pnpm run lint`: Lint without fixing
-- `pnpm run lint:fix`: Fix lint errors
-- `pnpm run lint:styles`: Lint CSS/SCSS
-- `pnpm run format`: Apply Prettier (writes)
-- `pnpm run format:check`: Check formatting without writing
+- `pnpm run dev:all`: Frontend + backend (starts MongoDB and seeds test users)
+- `pnpm run db:up` / `db:down`: Start/stop local MongoDB via `compose.yaml` (podman compose)
+- `pnpm run lint`: ESLint + Stylelint
+- `pnpm run fix`: ESLint --fix + Prettier --write
+- `pnpm run check`: tsc + lint + Prettier --check (run before PR)
 - `pnpm run build` + `pnpm run preview`: Production build + local preview
 
 **Backend (`Backend/`)**

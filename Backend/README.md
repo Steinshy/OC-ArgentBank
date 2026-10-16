@@ -102,7 +102,7 @@ The API will be available at **http://localhost:3001**
 pnpm populate-db
 ```
 
-This creates two test users:
+Safe to re-run: existing users are skipped, and the script waits for the API to come up. `pnpm dev:all` runs it automatically. It creates two test users:
 
 | User             | Email              | Password      |
 | ---------------- | ------------------ | ------------- |
@@ -244,7 +244,14 @@ CORS_ORIGIN=http://localhost:5173
 
 ### MongoDB Setup
 
-#### Local MongoDB
+#### Docker / Podman (recommended)
+
+```bash
+pnpm db:up    # starts MongoDB 6 from compose.yaml on 127.0.0.1:27017
+pnpm db:down  # stops it (data is kept in the mongo-data volume)
+```
+
+#### Local MongoDB (macOS)
 
 ```bash
 # Install MongoDB (macOS)

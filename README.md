@@ -63,7 +63,7 @@ pnpm dev
 # Backend only (from Backend/)
 pnpm dev:server
 
-# Frontend + backend (stops other Vite/nodemon processes first)
+# Frontend + backend (starts MongoDB and seeds test users)
 pnpm dev:all
 ```
 
@@ -72,11 +72,9 @@ pnpm dev:all
 ```bash
 pnpm build
 pnpm preview
-pnpm type-check
-pnpm lint
-pnpm lint:fix
-pnpm lint:styles
-pnpm format:check
+pnpm lint     # ESLint + Stylelint
+pnpm fix      # ESLint --fix + Prettier --write
+pnpm check    # tsc + lint + Prettier --check
 ```
 
 ## 📁 Project Structure
@@ -208,18 +206,15 @@ Transaction {
 
 ## 📚 Available Scripts
 
-| Command             | Purpose                                             |
-| ------------------- | --------------------------------------------------- |
-| `pnpm dev`          | Vite dev server                                     |
-| `pnpm dev:all`      | Frontend + backend (stops other Vite/nodemon first) |
-| `pnpm build`        | Production build to `dist/`                         |
-| `pnpm preview`      | Preview production build                            |
-| `pnpm type-check`   | `tsc --noEmit`                                      |
-| `pnpm lint`         | ESLint on `src/`                                    |
-| `pnpm lint:fix`     | ESLint with fix                                     |
-| `pnpm lint:styles`  | Stylelint on CSS/SCSS                               |
-| `pnpm format`       | Prettier write                                      |
-| `pnpm format:check` | Prettier check                                      |
+| Command        | Purpose                         |
+| -------------- | ------------------------------- |
+| `pnpm dev`     | Vite dev server                 |
+| `pnpm dev:all` | Frontend + backend              |
+| `pnpm build`   | Production build to `dist/`     |
+| `pnpm preview` | Preview production build        |
+| `pnpm lint`    | ESLint + Stylelint              |
+| `pnpm fix`     | ESLint --fix + Prettier --write |
+| `pnpm check`   | tsc + lint + Prettier --check   |
 
 ## 🚀 Deployment
 

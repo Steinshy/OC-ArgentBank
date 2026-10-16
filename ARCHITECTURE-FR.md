@@ -223,7 +223,7 @@ Le style doit rester maintenable sans adopter une pile CSS-in-JS.
 
 - Les **jetons globaux** et règles de base vivent dans `src/index.css` sous `:root` (couleurs, rayons, anneau de focus, breakpoints documentés en commentaires).
 - Les styles **composant** sont co-localisés : `ComponentName/styles/ComponentName.css`.
-- **Stylelint** impose la cohérence (`npm run lint:styles`).
+- **Stylelint** impose la cohérence (`pnpm lint`).
 
 ### Justification
 

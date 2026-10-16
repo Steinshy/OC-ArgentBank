@@ -223,7 +223,7 @@ Styling should stay maintainable without adopting a CSS-in-JS stack.
 
 - **Global** tokens and base rules live in `src/index.css` under `:root` (colors, radii, focus ring, breakpoints documented in comments).
 - **Component** styles live beside components: `ComponentName/styles/ComponentName.css`.
-- **Stylelint** enforces consistency (`npm run lint:styles`).
+- **Stylelint** enforces consistency (`pnpm lint`).
 
 ### Rationale
 
