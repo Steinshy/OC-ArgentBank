@@ -14,12 +14,12 @@
     "preview": "vite preview",
     "type-check": "tsc --noEmit",
     "lint": "eslint src",
-    "fix": "eslint src --fix && prettier --write src \"*.{js,mjs,ts,json}\" .github",
+    "fix": "eslint src --fix && prettier --write .",
     "check": "pnpm type-check && pnpm lint && pnpm lint:styles && pnpm format:check",
     "lint:fix": "eslint src --fix",
     "lint:styles": "stylelint \"src/**/*.{css,scss}\"",
-    "format": "prettier --write src \"*.{js,mjs,ts,json}\" .github",
-    "format:check": "prettier --check src \"*.{js,mjs,ts,json}\" .github"
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
   },
   "dependencies": {
     "@csstools/css-parser-algorithms": "^4.0.0",
