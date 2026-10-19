@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - dev
+      - main
 
 permissions:
   contents: read
@@ -14,9 +14,6 @@ permissions:
 concurrency:
   group: pages
   cancel-in-progress: true
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
@@ -40,13 +37,16 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # VITE_API_BASE_URL should point at a deployed backend; unset, it falls back to
-      # http://localhost:3001 (see src/constants/api.ts), which only works locally.
+      # Pages has no backend: the app serves data from the in-browser mock API (src/api/mockApi.ts).
       - name: Build for GitHub Pages
         env:
           VITE_BASE_PATH: /${{ github.event.repository.name }}/
-          VITE_API_BASE_URL: ${{ vars.VITE_API_BASE_URL }}
+          VITE_USE_MOCK: 'true'
         run: pnpm run build
+
+      # Pages has no SPA fallback: serve index.html for deep links and refreshes.
+      - name: Add SPA fallback
+        run: cp dist/index.html dist/404.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0

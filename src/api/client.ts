@@ -1,7 +1,12 @@
-import { API_BASE_URL, API_CONFIG } from '@/constants';
+import { API_BASE_URL, API_CONFIG, USE_MOCK } from '@/constants';
 import { handleHttpError } from '@/utils/errorHandler';
 
 export const apiCall = async <T>(endpoint: string, options: RequestInit & { token?: string } = {}): Promise<T> => {
+  if (USE_MOCK) {
+    const { mockApiCall } = await import('./mockApi');
+    return mockApiCall<T>(endpoint, options);
+  }
+
   const { token, ...fetchOptions } = options;
   const headers = new Headers(fetchOptions.headers || {});
 
