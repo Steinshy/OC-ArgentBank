@@ -294,7 +294,7 @@ L’URL de base de l’API et le chemin de base optionnel pour GitHub Pages doiv
 
 ### Décision
 
-Utiliser les variables d’environnement Vite avec le **préfixe `VITE_`** pour le code client. Documenter les clés attendues dans `.env.example`. Déclarer les types dans `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_BASE_PATH`).
+Utiliser les variables d’environnement Vite avec le **préfixe `VITE_`** pour le code client. Documenter les clés attendues dans `.env.example`. Déclarer les types dans `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_USE_MOCK`, `VITE_BASE_PATH`).
 
 ### Justification
 

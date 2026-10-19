@@ -1,238 +1,99 @@
-<h1 align="center">Argent Bank — Financial Dashboard</h1>
+<h1 align="center">Argent Bank</h1>
 
 <p align="center"><strong>Languages:</strong> <a href="README.md">English</a> | <a href="README.fr.md">Français</a></p>
 
 <p align="center">
-  <a href="https://react.dev"><img src="https://img.shields.io/badge/React-19+-61DAFB?style=flat-square&logo=react" alt="React" /></a>
-  <a href="https://www.typescriptlang.org"><img src="https://img.shields.io/badge/TypeScript-6.0+-3178C6?style=flat-square&logo=typescript" alt="TypeScript" /></a>
-  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-24-339933?style=flat-square&logo=node.js" alt="Node.js" /></a>
-  <a href="https://vitejs.dev"><img src="https://img.shields.io/badge/Vite-8+-646CFF?style=flat-square&logo=vite" alt="Vite" /></a>
-  <a href="https://redux-toolkit.js.org"><img src="https://img.shields.io/badge/Redux_Toolkit-2+-764ABC?style=flat-square&logo=redux" alt="Redux Toolkit" /></a>
-  <a href="https://expressjs.com"><img src="https://img.shields.io/badge/Express-5-000000?style=flat-square&logo=express&logoColor=white" alt="Express" /></a>
-  <a href="https://www.mongodb.com"><img src="https://img.shields.io/badge/MongoDB-6+-47A248?style=flat-square&logo=mongodb&logoColor=white" alt="MongoDB" /></a>
-  <a href="https://github.com/steinshy/ArgentBank"><img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" alt="Status" /></a>
+  <a href="https://steinshy.github.io/OC-ArgentBank/"><strong>Live demo →</strong></a>
 </p>
 
 <p align="center">
-  <img src="public/assets/mockup/mockup.png" alt="Argent-Bank responsive mockup" width="1024" />
+  <img src=".github/assets/mockup.png" alt="Argent Bank responsive mockup" width="1024" />
 </p>
 
-## 📋 Overview
+Banking dashboard SPA built for the OpenClassrooms front-end path: sign in, manage your profile, browse account transactions.
 
-Argent Bank is a full-stack banking dashboard SPA: users sign in, manage their profile, and browse account transactions. The frontend is **React 19 + TypeScript + Vite** with **Redux Toolkit** (auth slice + RTK Query-style API layer). The backend is **Express** + **MongoDB** with JWT auth and Swagger docs.
+## Live demo
 
-### Current Scope
-
-- ✅ JWT authentication (login, register) with protected routes
-- ✅ User profile read/update
-- ✅ Transaction list and detail UI with category/notes editing
-- ⏳ Account/transaction REST routes: the frontend renders static seed data (`src/pages/Users/Transactions/staticAccounts.ts`) because `Backend/routes` doesn't implement accounts/transactions yet, even though `Backend/swagger.yaml` documents the contract — see [ARCHITECTURE.md](./ARCHITECTURE.md) ADR-013
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- Node.js 24 and [pnpm](https://pnpm.io) (`corepack enable` gives you the version pinned in `package.json`)
-- MongoDB (local or remote) when running the backend
-- Backend running on port **3001** (or set `VITE_API_BASE_URL` accordingly)
-
-### Installation
-
-```bash
-git clone https://github.com/steinshy/ArgentBank.git
-cd ArgentBank
-pnpm install   # installs both the frontend (root) and Backend/ via the pnpm workspace
-
-cp .env.example .env.local
-# VITE_API_BASE_URL=http://localhost:3001
-
-cd Backend
-cp .env.example .env
-# DATABASE_URL, JWT_SECRET, PORT=3001
-
-pnpm populate-db
-cd ..
-```
-
-### Run
-
-```bash
-# Frontend only (http://localhost:5173)
-pnpm dev
-
-# Backend only (from Backend/)
-pnpm dev:server
-
-# Frontend + backend (starts MongoDB and seeds test users)
-pnpm dev:all
-```
-
-### Build & quality
-
-```bash
-pnpm build
-pnpm preview
-pnpm lint     # ESLint + Stylelint
-pnpm fix      # ESLint --fix + Prettier --write
-pnpm check    # tsc + lint + Prettier --check
-```
-
-## 📁 Project Structure
-
-```
-src/
-├── api/                 # fetch client + RTK Query API slice (argentBankApi)
-├── components/          # Layout, ProtectedRoute, Toast, Loader, ErrorBoundary, …
-├── constants/           # Routes, API endpoints, UI constants
-├── features/Auth/       # Redux slice & thunks for authentication
-├── helpers/             # Validators, form helpers
-├── hooks/               # useAuth, useMinimumLoadingDelay, …
-├── pages/               # Home, SignIn, Register, Profile, Settings, Transactions, …
-├── store/               # Redux store configuration
-├── types/               # Shared TypeScript contracts (API + UI)
-└── utils/               # Storage, errors, a11y helpers
-
-Backend/
-├── server.js            # Express entry
-├── routes/              # HTTP routes (e.g. /api/v1/user)
-├── controllers/         # Request handlers
-├── services/            # Auth & user logic
-├── middleware/          # JWT validation
-├── database/            # Connection + Mongoose models
-├── swagger.yaml         # OpenAPI spec (Swagger UI in dev)
-└── scripts/             # populateDatabase, …
-```
-
-## 🎯 Key Features
-
-### Authentication & routing
-
-- Sign in and register with JWT persistence (local storage)
-- Protected routes for profile, settings, and transactions
-- Central layout and navigation
-
-### User area
-
-- Profile: load and update first/last name
-- Settings placeholder page
-- Transactions: list by account, detail view, edit category/notes
-
-## 📚 Documentation
-
-- **[Architecture notes →](./ARCHITECTURE.md)** — ADRs and structural decisions
-- **Swagger UI** (non-production): `http://localhost:3001/api-docs` (spec: [Backend/swagger.yaml](./Backend/swagger.yaml))
-- **Backend deep dive** → [Backend/README.md](./Backend/README.md)
-
-## 🔌 API Integration
-
-### Auth & profile (implemented in `Backend/routes/userRoutes.js`)
-
-```typescript
-POST /api/v1/user/signup
-→ Body: email, password, firstName, lastName
-
-POST /api/v1/user/login
-→ Body: email, password → JWT in response body
-
-POST /api/v1/user/profile   (Authorization: Bearer <token>)
-→ Returns user profile in response body
-
-PUT /api/v1/user/profile
-→ Body: firstName, lastName
-```
-
-### Accounts & transactions (documented, not yet implemented)
-
-`Backend/swagger.yaml` documents `GET /api/v1/user/accounts/:accountId/transactions` and a `PATCH` on a transaction resource, but `Backend/routes` doesn't implement them. The Transactions UI renders static seed data (`src/pages/Users/Transactions/staticAccounts.ts`) instead; edits are local-only and reset on reload. Implement those routes in `Backend/` to wire real persistence.
-
-## 🛠️ Development Guidelines
-
-### Data flow
-
-1. Auth thunks update the Redux auth slice (token, user id).
-2. `argentBankApi` endpoints use `apiCall` (fetch wrapper) to call the backend.
-3. Pages consume hooks from RTK Query and/or `useAuth`.
-
-### Adding features
-
-- Pages under `src/pages/`, routes in `src/App.tsx` via `ROUTES` in `src/constants/`.
-- New async flows: prefer `createAsyncThunk` for auth-style flows; extend `src/api/argentBankApi.ts` for cached server state.
-- Types per endpoint in `src/types/index.ts`.
-
-### Code standards
-
-- TypeScript strict, no `any`
-- Functional components; shared UI under `src/components/`
-- Styles: `Component/styles/Component.css` next to the component
-
-## 🔄 Data Models
-
-```typescript
-// Profile (API body)
-UserProfile {
-  id: string
-  email: string
-  firstName: string
-  lastName: string
-}
-
-// Transactions (list items)
-Transaction {
-  id: string
-  date: string
-  description: string
-  amount: number
-  balance: number
-  type: TransactionType
-  category: string
-  notes?: string
-}
-```
-
-## 🌍 Browser Support
-
-- Modern evergreen browsers (ES modules)
-- Desktop-first dashboard; responsive layout where implemented
-
-## 📝 Dependencies (high level)
-
-| Area    | Packages                                        |
-| ------- | ----------------------------------------------- |
-| UI      | React 19, React Router 7, Lucide React          |
-| State   | Redux Toolkit, React Redux                      |
-| HTTP    | Fetch via `src/api/client.ts`                   |
-| Build   | Vite 8, TypeScript, ESLint, Prettier, Stylelint |
-| Backend | Express 5, Mongoose, JWT, bcrypt, Swagger UI    |
-
-## 📚 Available Scripts
-
-| Command        | Purpose                         |
-| -------------- | ------------------------------- |
-| `pnpm dev`     | Vite dev server                 |
-| `pnpm dev:all` | Frontend + backend              |
-| `pnpm build`   | Production build to `dist/`     |
-| `pnpm preview` | Preview production build        |
-| `pnpm lint`    | ESLint + Stylelint              |
-| `pnpm fix`     | ESLint --fix + Prettier --write |
-| `pnpm check`   | tsc + lint + Prettier --check   |
-
-## 🚀 Deployment
-
-```bash
-pnpm build
-```
-
-Serve the `dist/` folder behind any static host; set `VITE_API_BASE_URL` and `VITE_BASE_PATH` at build time for your environment.
-
-## 🧪 Manual testing
+The demo runs without a backend: an in-browser mock API (`src/api/mockApi.ts`) answers the same endpoints as the Express server.
 
 | Email              | Password      |
 | ------------------ | ------------- |
 | `tony@stark.com`   | `password123` |
 | `steve@rogers.com` | `password456` |
 
-Create users with `pnpm populate-db` in `Backend/`.
+Accounts you register and profile edits are kept in your browser's `localStorage`.
 
----
+## Features
 
-**Built with React, TypeScript, Redux Toolkit, and Express**
+- Sign in, register and sign out, with optional "remember me"
+- Protected profile, settings and transactions pages
+- Profile name editing
+- Account transactions with detail view and category/notes editing (local only)
+
+## Tech stack
+
+| Area     | Stack                                                       |
+| -------- | ----------------------------------------------------------- |
+| Frontend | React 19, TypeScript, Vite 8, Redux Toolkit, React Router 8 |
+| Backend  | Express 5, MongoDB (Mongoose), JWT, Swagger UI              |
+| Tooling  | pnpm workspace, ESLint, Stylelint, Prettier                 |
+
+## Getting started
+
+Requires Node.js 24 and pnpm (`corepack enable` picks the version pinned in `package.json`).
+
+```bash
+git clone https://github.com/Steinshy/OC-ArgentBank.git
+cd OC-ArgentBank
+pnpm install
+```
+
+### Frontend only (mock API)
+
+```bash
+VITE_USE_MOCK=true pnpm dev
+```
+
+### Full stack
+
+Requires Podman with `podman compose` for the local MongoDB.
+
+```bash
+cp Backend/.env.example Backend/.env   # set JWT_SECRET
+pnpm dev:all                           # MongoDB + API on :3001 + seeded users + frontend on :5173
+podman compose down                    # stop MongoDB when done
+```
+
+API reference and Swagger UI: [Backend/README.md](./Backend/README.md).
+
+## Configuration
+
+| Variable            | Default                 | Purpose                                         |
+| ------------------- | ----------------------- | ----------------------------------------------- |
+| `VITE_API_BASE_URL` | `http://localhost:3001` | Backend URL                                     |
+| `VITE_USE_MOCK`     | unset                   | `true` serves data from the in-browser mock API |
+| `VITE_BASE_PATH`    | `/`                     | Base path when hosted in a subfolder            |
+
+## Scripts
+
+| Command        | Purpose                             |
+| -------------- | ----------------------------------- |
+| `pnpm dev`     | Vite dev server                     |
+| `pnpm dev:all` | MongoDB + backend + seed + frontend |
+| `pnpm build`   | Production build to `dist/`         |
+| `pnpm preview` | Preview the production build        |
+| `pnpm lint`    | ESLint + Stylelint                  |
+| `pnpm fix`     | ESLint --fix + Prettier --write     |
+| `pnpm check`   | tsc + lint + Prettier --check       |
+
+## Deployment
+
+Both targets build in mock mode, so no backend is deployed.
+
+- **GitHub Pages:** `.github/workflows/deploy.yml` builds and publishes on every push to `main`.
+- **Coolify:** the `Dockerfile` builds the app and serves it with nginx.
+
+## Documentation
+
+- [ARCHITECTURE.md](./ARCHITECTURE.md): architecture decisions
+- [Backend/README.md](./Backend/README.md): API, environment and database setup

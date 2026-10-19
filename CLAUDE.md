@@ -1,72 +1,25 @@
 # Argent Bank
 
-React 19 + TypeScript + Vite SPA with Redux Toolkit. Backend is Express.js + MongoDB.
+React 19 + TypeScript + Vite SPA with Redux Toolkit; Express 5 + MongoDB backend in `Backend/` (pnpm workspace).
 
-## Conventions
+Path-scoped rules live in `.claude/rules/` (frontend, backend, deployment). `ARCHITECTURE.md` owns structure and decisions.
 
-Type safety (no `any`).
+## Commands
 
-**Style:** Minimal comments, self-documenting
+- `pnpm dev`: frontend on :5173; `VITE_USE_MOCK=true pnpm dev` runs it without the backend.
+- `pnpm dev:all`: MongoDB (podman compose) + API on :3001 + seeded users + frontend; `podman compose down` stops MongoDB.
+- `pnpm check`: tsc + ESLint + Stylelint + Prettier --check; run before committing.
+- `pnpm fix`: ESLint --fix + Prettier --write.
+- `pnpm build` + `pnpm preview`: production build and local preview.
 
-**Output Requirements**
+## Run modes
 
-- API response: typed interfaces per endpoint (e.g. `SignInResponse`, `UserProfileResponse`) — see `src/types/index.ts`
-- Component: Functional with Props interface (e.g., `interface Props { id: string; }`)
-- Constants: SCREAMING_SNAKE_CASE (e.g., `API_ENDPOINTS.AUTH_LOGIN`)
+- Local dev: real backend at `VITE_API_BASE_URL` (defaults to `http://localhost:3001`).
+- Releases (GitHub Pages, Coolify): `VITE_USE_MOCK=true`, no backend; `src/api/mockApi.ts` answers in-browser.
+- Seeded users: `tony@stark.com` / `password123`, `steve@rogers.com` / `password456` (backend seed and mock).
 
-**Naming Conventions**: Use the format `ComponentName/ComponentName.tsx`, `useFeatureName.ts`, and types in `src/types/`.
+## Rules
 
-## Data layer
-
-- **Auth (login / register / logout):** `createAsyncThunk` — `src/features/Auth/authThunks.ts`
-- **Profile / Accounts / Transactions API:** RTK Query `createApi` — `src/api/argentBankApi.ts` (typed endpoints, calls `apiCall` for all requests)
-
-## Architecture
-
-```
-src/
-├── api/
-├── components/
-├── constants/
-├── features/
-├── helpers/       # validators, server message helpers
-├── hooks/
-├── pages/
-├── store/
-├── types/
-└── utils/
-
-Backend/
-├── server.js, controllers/, routes/, middleware/, services/, database/, scripts/
-```
-
-## Environment
-
-- Frontend: copy `.env.example` → `.env.local`. `VITE_API_BASE_URL=http://localhost:3001` (required).
-- Backend: copy `Backend/.env.example` → `Backend/.env` (`DATABASE_URL`, `JWT_SECRET`, `PORT=3001`). Do not commit real secrets; use a strong `JWT_SECRET` in production.
-- Deploy: point `VITE_API_BASE_URL` at the live API; tune backend CORS/env per host.
-
-## Quick Reference
-
-**Frontend (repo root)**
-
-- `pnpm run dev`: Frontend (localhost:5173)
-- `pnpm run dev:all`: Frontend + backend (starts MongoDB and seeds test users)
-- `pnpm run db:up` / `db:down`: Start/stop local MongoDB via `compose.yaml` (podman compose)
-- `pnpm run lint`: ESLint + Stylelint
-- `pnpm run fix`: ESLint --fix + Prettier --write
-- `pnpm run check`: tsc + lint + Prettier --check (run before PR)
-- `pnpm run build` + `pnpm run preview`: Production build + local preview
-
-**Backend (`Backend/`)**
-
-- `pnpm run dev:server`: API with nodemon
-- `pnpm run populate-db`: Seed database
-
-See `Backend/README.md` for API details.
-
-## Notes
-
-- Use `@/` for import alias.
-- Maintain 200 char line limits using Prettier.
-- Styles should follow `Component/styles/Component.css` convention.
+- No `any`; minimal comments, self-documenting code.
+- Use the `@/` import alias; Prettier enforces a 200-char line width.
+- Never commit real secrets; `Backend/.env` and `.env.local` are git-ignored.

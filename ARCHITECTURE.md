@@ -294,7 +294,7 @@ API base URL and optional GitHub Pages base path must vary by environment.
 
 ### Decision
 
-Use Vite env with **`VITE_` prefix** for client code. Document expected keys in `.env.example`. Declare typings in `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_BASE_PATH`).
+Use Vite env with **`VITE_` prefix** for client code. Document expected keys in `.env.example`. Declare typings in `src/types/env.d.ts` (`VITE_API_BASE_URL`, `VITE_USE_MOCK`, `VITE_BASE_PATH`).
 
 ### Rationale
 
