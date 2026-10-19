@@ -1,12 +1,12 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { apiCall } from '@/api/client';
 import { argentBankApi } from '@/api/argentBankApi';
+import { apiCall } from '@/api/client';
+import { API_ENDPOINTS } from '@/constants';
+import type { AppDispatch } from '@/store/store';
 import type { SignInRequest, SignUpRequest, AuthTokenResponse } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
-import { API_ENDPOINTS } from '@/constants';
 import { storage } from '@/utils/storage';
-import type { AppDispatch } from '@/store/store';
 
 export const signInUser = createAsyncThunk<{ token: string }, SignInRequest, { rejectValue: string }>('auth/signInUser', async (credentials, { rejectWithValue }) => {
   try {

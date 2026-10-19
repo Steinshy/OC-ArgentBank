@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import { ChevronDown, ChevronUp, ArrowLeft, Edit } from 'lucide-react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
@@ -7,8 +7,9 @@ import { Pagination } from '@/components/Pagination/Pagination';
 import { ROUTES, MESSAGES, TRANSACTION_TYPES, BUTTONS, FORMS, TRANSACTION_CATEGORIES } from '@/constants';
 import { useMinimumLoadingDelay } from '@/hooks/useMinimumLoadingDelay';
 import type { Transaction, UserAccountId } from '@/types';
-import { useTransactionEdit, type EditableField } from './useTransactionEdit';
+
 import { STATIC_ACCOUNTS } from './staticAccounts';
+import { useTransactionEdit, type EditableField } from './useTransactionEdit';
 
 const TRANSACTIONS_PER_PAGE = 7;
 

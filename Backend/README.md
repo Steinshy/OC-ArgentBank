@@ -247,8 +247,8 @@ CORS_ORIGIN=http://localhost:5173
 #### Docker / Podman (recommended)
 
 ```bash
-pnpm db:up    # starts MongoDB 6 from compose.yaml on 127.0.0.1:27017
-pnpm db:down  # stops it (data is kept in the mongo-data volume)
+podman compose up -d --wait mongo  # starts MongoDB 6 from compose.yaml on 127.0.0.1:27017 (also run by pnpm dev:all)
+podman compose down                # stops it (data is kept in the mongo-data volume)
 ```
 
 #### Local MongoDB (macOS)

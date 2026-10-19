@@ -1,7 +1,7 @@
-import { signInUser, logoutUser } from '@/features/Auth/authThunks';
 import { useGetProfileQuery, useUpdateProfileMutation } from '@/api/argentBankApi';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { signInUser, logoutUser } from '@/features/Auth/authThunks';
 import { selectAuthToken, selectAuthLoading, selectAuthError, selectIsAuthenticated } from '@/store/selectors';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import type { SignInRequest, UpdateProfileData } from '@/types';
 
 export const useAuth = () => {

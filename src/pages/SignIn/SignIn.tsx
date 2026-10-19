@@ -4,11 +4,11 @@ import { Link, useNavigate } from 'react-router';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { signInUser } from '@/features/Auth/authThunks';
-import { classifySignInError } from '@/utils/errorHandler';
-import { validateEmail, validateSignInPassword } from '@/helpers/validator';
 import { joinDescribedBy, makeFieldChangeHandler } from '@/helpers/formUtils';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { validateEmail, validateSignInPassword } from '@/helpers/validator';
 import { selectAuthLoading, selectAuthError, selectAuthToken } from '@/store/selectors';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { classifySignInError } from '@/utils/errorHandler';
 import { storage } from '@/utils/storage';
 import './styles/SignIn.css';
 

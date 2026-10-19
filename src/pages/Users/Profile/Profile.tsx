@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router';
 
 import { SkeletonLoader } from '@/components/Loader/SkeletonLoader';
+import { ROUTES, buildTransactionsRoute } from '@/constants';
 import { useAuth } from '@/hooks/useAuth';
 import { useMinimumLoadingDelay } from '@/hooks/useMinimumLoadingDelay';
-import { ROUTES, buildTransactionsRoute } from '@/constants';
 import { STATIC_ACCOUNTS } from '@/pages/Users/Transactions/staticAccounts';
 import './styles/Profile.css';
 

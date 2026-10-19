@@ -2,12 +2,12 @@ import type { ReactNode } from 'react';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router';
 
-import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
 import { useGetProfileQuery } from '@/api/argentBankApi';
+import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
 import { ROUTES, MESSAGES } from '@/constants';
-import { useAppDispatch, useAppSelector } from '@/store/store';
-import { selectIsAuthenticated } from '@/store/selectors';
 import { logoutUser } from '@/features/Auth/authThunks';
+import { selectIsAuthenticated } from '@/store/selectors';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 
 interface ProtectedRouteProps {
   children: ReactNode;

@@ -5,11 +5,11 @@ import { useToast } from '@/components/Toast/ToastContext';
 import { ROUTES, BUTTONS, MESSAGES } from '@/constants';
 import { clearError } from '@/features/Auth/authSlice';
 import { signUpUser } from '@/features/Auth/authThunks';
-import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
-import { validateEmail, validatePassword, validateName } from '@/helpers/validator';
 import { joinDescribedBy, makeFieldChangeHandler } from '@/helpers/formUtils';
-import { useAppDispatch, useAppSelector } from '@/store/store';
+import { validateEmail, validatePassword, validateName } from '@/helpers/validator';
 import { selectAuthLoading, selectAuthError, selectAuthToken } from '@/store/selectors';
+import { useAppDispatch, useAppSelector } from '@/store/store';
+import { classifySignUpError, SERVER_ERROR_MESSAGES } from '@/utils/errorHandler';
 import './styles/Register.css';
 
 export const Register = () => {

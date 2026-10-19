@@ -2,20 +2,22 @@ import js from '@eslint/js';
 import globals from 'globals';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
-import prettier from 'eslint-config-prettier';
-import importPlugin from 'eslint-plugin-import';
+import { importX } from 'eslint-plugin-import-x';
 import tseslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['dist', 'node_modules', 'build', '*.config.js', '*.config.mjs', '.lighthouserc.*', '.oc/**', 'public/**'],
+    ignores: ['dist', 'node_modules', 'build', '*.config.js', '*.config.mjs', '.lighthouserc.*', '.oc/**'],
   },
   { linterOptions: { noInlineConfig: true, reportUnusedDisableDirectives: 'error' } },
   js.configs.recommended,
   {
     files: ['**/*.{js,ts,tsx}'],
     plugins: {
-      import: importPlugin,
+      'import-x': importX,
+    },
+    settings: {
+      'import-x/internal-regex': '^@/',
     },
     languageOptions: {
       ecmaVersion: 2020,
@@ -35,7 +37,14 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
-      'import/order': 'off',
+      'import-x/order': [
+        'error',
+        {
+          groups: ['builtin', 'external', 'internal', ['parent', 'sibling', 'index']],
+          'newlines-between': 'always',
+          alphabetize: { order: 'asc', caseInsensitive: true },
+        },
+      ],
     },
   },
   ...tseslint.configs.recommended,
@@ -75,5 +84,4 @@ export default [
       react: { version: 'detect' },
     },
   },
-  prettier,
 ];

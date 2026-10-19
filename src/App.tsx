@@ -2,15 +2,15 @@ import { lazy, Suspense } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter, Routes, Route } from 'react-router';
 
+import { useGetProfileQuery } from '@/api/argentBankApi';
 import { ErrorBoundary } from '@/components/ErrorBoundary/ErrorBoundary';
 import { Layout } from '@/components/Layout/Layout';
 import { LoadingSpinner } from '@/components/Loader/LoadingSpinner';
-import { ToastProvider } from '@/components/Toast/ToastProvider';
 import { ProtectedRoute } from '@/components/ProtectedRoute/ProtectedRoute';
+import { ToastProvider } from '@/components/Toast/ToastProvider';
 import { ROUTES } from '@/constants';
-import { useGetProfileQuery } from '@/api/argentBankApi';
-import { store, useAppSelector } from '@/store/store';
 import { selectIsAuthenticated } from '@/store/selectors';
+import { store, useAppSelector } from '@/store/store';
 import '@/index.css';
 
 const Home = lazy(() => import('@/pages/Home/Home').then((m) => ({ default: m.Home })));

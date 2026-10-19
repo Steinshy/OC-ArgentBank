@@ -2,8 +2,8 @@ import { Link } from 'react-router';
 
 import { HeroGlobe } from '@/components/HeroGlobe/HeroGlobe';
 import { ROUTES, BUTTONS, FEATURES } from '@/constants';
-import { useAppSelector } from '@/store/store';
 import { selectIsAuthenticated } from '@/store/selectors';
+import { useAppSelector } from '@/store/store';
 import './styles/Home.css';
 
 export const Home = () => {

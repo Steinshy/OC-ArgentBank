@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+
 import type { ToastAction, ToastItem, ToastType } from '@/types';
 
 const DISMISS_ANIMATION_DURATION = 250;

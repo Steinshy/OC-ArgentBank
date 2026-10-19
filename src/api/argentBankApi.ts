@@ -1,10 +1,11 @@
 import { createApi, fakeBaseQuery } from '@reduxjs/toolkit/query/react';
 
-import { apiCall } from './client';
+import { API_ENDPOINTS } from '@/constants';
 import type { RootState } from '@/store/store';
 import type { UserProfile, UserProfileResponse } from '@/types';
 import { extractErrorMessage, ERROR_MESSAGES } from '@/utils/errorHandler';
-import { API_ENDPOINTS } from '@/constants';
+
+import { apiCall } from './client';
 
 const getAuthToken = (getState: () => unknown): string => (getState() as RootState).auth.token ?? '';
 
