@@ -1,6 +1,6 @@
 {
   "name": "argentbank",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Argent Bank financial dashboard",
   "type": "module",
   "packageManager": "pnpm@11.15.1",
