@@ -6,6 +6,5 @@ coverage
 # Generated lockfile
 pnpm-lock.yaml
 
-# Course deliverables and assets, not source
+# Course deliverables, not source
 .oc
-public

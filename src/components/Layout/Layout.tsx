@@ -1,13 +1,13 @@
-import type { ReactNode } from 'react';
 import { CircleUser, LogOut, Settings } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
 
-import argentBankLogo from '@/assets/img/argentBankLogo-60x40.png';
+import { useGetProfileQuery } from '@/api/argentBankApi';
+import argentBankLogo from '@/assets/logo.svg';
 import { ROUTES, BUTTONS, NAVIGATION, getCopyrightText } from '@/constants';
 import { logoutUser } from '@/features/Auth/authThunks';
-import { useGetProfileQuery } from '@/api/argentBankApi';
-import { useAppDispatch, useAppSelector } from '@/store/store';
 import { selectIsAuthenticated } from '@/store/selectors';
+import { useAppDispatch, useAppSelector } from '@/store/store';
 import './styles/Layout.css';
 
 interface LayoutProps {

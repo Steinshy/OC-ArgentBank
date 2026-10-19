@@ -6,7 +6,6 @@ on:
     paths:
       - 'src/**'
       - 'Backend/**'
-      - 'public/**'
       - 'index.html'
       - '*.config.*'
       - 'tsconfig.json'
@@ -18,7 +17,6 @@ on:
     paths:
       - 'src/**'
       - 'Backend/**'
-      - 'public/**'
       - 'index.html'
       - '*.config.*'
       - 'tsconfig.json'
