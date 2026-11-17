@@ -52,7 +52,7 @@ export const Profile = () => {
                 <p className="account-amount-description">{account.description}</p>
               </div>
               <div className="account-content-wrapper cta">
-                <button className="btn btn-primary transaction-button" onClick={() => navigate(buildTransactionsRoute(account.id))}>
+                <button type="button" className="btn btn-primary transaction-button" onClick={() => navigate(buildTransactionsRoute(account.id))}>
                   View Transactions
                 </button>
               </div>

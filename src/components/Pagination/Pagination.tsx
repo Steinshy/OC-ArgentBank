@@ -57,17 +57,18 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, maxVisiblePa
   return (
     <nav className="pagination" aria-label="Pagination">
       <div className="pagination-controls">
-        <button className="pagination-btn pagination-arrow" disabled={isFirstPage} aria-label="Previous page" onClick={() => onPageChange(currentPage - 1)}>
+        <button type="button" className="pagination-btn pagination-arrow" disabled={isFirstPage} aria-label="Previous page" onClick={() => onPageChange(currentPage - 1)}>
           <ChevronLeft className="pagination-icon" aria-hidden="true" strokeWidth={2} />
         </button>
 
         <div className="pagination-numbers">
           {pages.map((page, idx) => (
-            <div key={`${page}-${idx}`}>
+            <div key={page === '...' ? (pages.slice(0, idx).includes('...') ? 'ellipsis-end' : 'ellipsis-start') : page}>
               {page === '...' ? (
                 <span className="pagination-ellipsis">{page}</span>
               ) : (
                 <button
+                  type="button"
                   className={`pagination-btn pagination-number ${page === currentPage ? 'active' : ''}`}
                   disabled={page === currentPage}
                   aria-current={page === currentPage ? 'page' : undefined}
@@ -80,7 +81,7 @@ export const Pagination = ({ currentPage, totalPages, onPageChange, maxVisiblePa
           ))}
         </div>
 
-        <button className="pagination-btn pagination-arrow" disabled={isLastPage} aria-label="Next page" onClick={() => onPageChange(currentPage + 1)}>
+        <button type="button" className="pagination-btn pagination-arrow" disabled={isLastPage} aria-label="Next page" onClick={() => onPageChange(currentPage + 1)}>
           <ChevronRight className="pagination-icon" aria-hidden="true" strokeWidth={2} />
         </button>
       </div>

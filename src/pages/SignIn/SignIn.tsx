@@ -13,7 +13,7 @@ import { storage } from '@/utils/storage';
 import './styles/SignIn.css';
 
 export const SignIn = () => {
-  const savedEmail = localStorage.getItem('rememberMeEmail');
+  const [savedEmail] = useState(() => localStorage.getItem('rememberMeEmail'));
   const [email, setEmail] = useState(savedEmail ?? '');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(!!savedEmail);

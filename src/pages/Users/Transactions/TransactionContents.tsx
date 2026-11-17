@@ -112,7 +112,7 @@ export const TransactionsTable = ({ accountId }: { accountId: UserAccountId }) =
             itemsPerPage={TRANSACTIONS_PER_PAGE}
             totalItems={transactions.length}
             leftElement={
-              <button className="btn btn-secondary btn-sm back-button" onClick={() => navigate(ROUTES.PROFILE)}>
+              <button type="button" className="btn btn-secondary btn-sm back-button" onClick={() => navigate(ROUTES.PROFILE)}>
                 <ArrowLeft className="transaction-icon" aria-hidden strokeWidth={2} />
                 {BUTTONS.BACK_TO_ACCOUNTS}
               </button>
@@ -142,7 +142,7 @@ export const TransactionsRow = React.memo(({ tx, isExpanded, editingField, editV
       <td>{tx.date}</td>
       <td>{tx.description}</td>
       <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
-        {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}${Math.abs(tx.amount).toFixed(2)}
+        {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}{'$'}{Math.abs(tx.amount).toFixed(2)}
       </td>
       <td className={tx.balance < 0 ? 'amount-debit' : ''}>${tx.balance.toFixed(2)}</td>
       <td className="table-action-column">
@@ -211,17 +211,17 @@ export const TransactionsDetail = ({ tx, editingField, editValue, isSaving = fal
                       </option>
                     ))}
                   </select>
-                  <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'category')} disabled={isSaving} aria-busy={isSaving}>
+                  <button type="button" className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'category')} disabled={isSaving} aria-busy={isSaving}>
                     {isSaving ? '…' : BUTTONS.SAVE}
                   </button>
-                  <button className="btn btn-secondary btn-sm" onClick={onCancelEdit} disabled={isSaving}>
+                  <button type="button" className="btn btn-secondary btn-sm" onClick={onCancelEdit} disabled={isSaving}>
                     {BUTTONS.CANCEL}
                   </button>
                 </div>
               ) : (
                 <>
                   {tx.category}
-                  <button className="edit-pencil" onClick={() => onStartEdit(tx.id, 'category', tx.category)} aria-label={FORMS.EDIT_CATEGORY_TITLE}>
+                  <button type="button" className="edit-pencil" onClick={() => onStartEdit(tx.id, 'category', tx.category)} aria-label={FORMS.EDIT_CATEGORY_TITLE}>
                     <Edit className="edit-pencil-icon" aria-hidden strokeWidth={2} />
                   </button>
                 </>
@@ -246,17 +246,17 @@ export const TransactionsDetail = ({ tx, editingField, editValue, isSaving = fal
                     aria-labelledby={`notes-label-${tx.id}`}
                     placeholder={FORMS.ADD_NOTE_PLACEHOLDER}
                   />
-                  <button className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'notes')} disabled={isSaving} aria-busy={isSaving}>
+                  <button type="button" className="btn btn-primary btn-sm" onClick={() => onSaveEdit(tx.id, 'notes')} disabled={isSaving} aria-busy={isSaving}>
                     {isSaving ? '…' : BUTTONS.SAVE}
                   </button>
-                  <button className="btn btn-secondary btn-sm" onClick={onCancelEdit} disabled={isSaving}>
+                  <button type="button" className="btn btn-secondary btn-sm" onClick={onCancelEdit} disabled={isSaving}>
                     {BUTTONS.CANCEL}
                   </button>
                 </div>
               ) : (
                 <>
                   {tx.notes || '-'}
-                  <button className="edit-pencil" onClick={() => onStartEdit(tx.id, 'notes', tx.notes || '')} aria-label={FORMS.EDIT_NOTES_TITLE}>
+                  <button type="button" className="edit-pencil" onClick={() => onStartEdit(tx.id, 'notes', tx.notes || '')} aria-label={FORMS.EDIT_NOTES_TITLE}>
                     <Edit className="edit-pencil-icon" aria-hidden strokeWidth={2} />
                   </button>
                 </>
