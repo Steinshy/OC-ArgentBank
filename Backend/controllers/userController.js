@@ -5,8 +5,8 @@ const runService = (serviceCall, successMessage) => async (req, res) => {
     const body = await serviceCall(req);
     return res.status(200).send({ status: 200, message: successMessage, body });
   } catch (error) {
-    console.error('Error in userController.js', error);
     const status = error.statusCode || 500;
+    if (status >= 500) console.error('Error in userController.js', error);
     return res.status(status).send({ status, message: error.message });
   }
 };

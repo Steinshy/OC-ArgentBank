@@ -142,7 +142,9 @@ export const TransactionsRow = React.memo(({ tx, isExpanded, editingField, editV
       <td>{tx.date}</td>
       <td>{tx.description}</td>
       <td className={tx.type === TRANSACTION_TYPES.DEBIT ? 'amount-debit' : 'amount-credit'}>
-        {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}{'$'}{Math.abs(tx.amount).toFixed(2)}
+        {tx.type === TRANSACTION_TYPES.DEBIT ? '-' : '+'}
+        {'$'}
+        {Math.abs(tx.amount).toFixed(2)}
       </td>
       <td className={tx.balance < 0 ? 'amount-debit' : ''}>${tx.balance.toFixed(2)}</td>
       <td className="table-action-column">
