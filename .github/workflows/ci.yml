@@ -60,7 +60,5 @@ jobs:
       - name: Build project
         run: pnpm run build
 
-      # Non-blocking until the open advisories (proxy-addr, mongoose, react-router, ...) are upgraded.
       - name: Audit production dependencies
         run: pnpm audit --prod
-        continue-on-error: true

@@ -8,6 +8,11 @@ const dbConnection = require('./database/connection');
 
 dotEnv.config();
 
+if (!process.env.JWT_SECRET) {
+  console.error('JWT_SECRET is not set; refusing to start.');
+  process.exit(1);
+}
+
 const swaggerDocs = yaml.load(path.join(__dirname, 'swagger.yaml'));
 
 const app = express();

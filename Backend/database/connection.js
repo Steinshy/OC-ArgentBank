@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const databaseUrl = process.env.DATABASE_URL || 'mongodb://localhost/argentBankDB';
 
+mongoose.set('strictQuery', true);
 mongoose.set('sanitizeFilter', true);
 
 module.exports = async () => {

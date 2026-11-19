@@ -15,7 +15,7 @@ Path-scoped rules live in `.claude/rules/` (frontend, backend, deployment). `ARC
 ## Run modes
 
 - Local dev: real backend at `VITE_API_BASE_URL` (defaults to `http://localhost:3001`).
-- Releases (GitHub Pages, Coolify): `VITE_USE_MOCK=true`, no backend; `src/api/mockApi.ts` answers in-browser.
+- Releases (GitHub Pages, Docker): `VITE_USE_MOCK=true`, no backend; `src/api/mockApi.ts` answers in-browser.
 - Seeded users: `tony@stark.com` / `password123`, `steve@rogers.com` / `password456` (backend seed and mock).
 
 ## Rules

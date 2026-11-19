@@ -91,7 +91,7 @@ Référence de l'API et Swagger UI : [Backend/README.md](./Backend/README.md).
 Les deux cibles sont buildées en mode simulé : aucun backend n'est déployé.
 
 - **GitHub Pages :** `.github/workflows/deploy.yml` builde et publie à chaque push sur `main`.
-- **Coolify :** le `Dockerfile` builde l'app et la sert avec nginx.
+- **Docker :** le `Dockerfile` builde l'app et la sert avec nginx.
 
 ## Documentation
 
